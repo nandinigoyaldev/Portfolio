@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import * as React from "react";
 
-function Icon({ name }: { name: "github" | "linkedin" | "email" | "resume" | "x" }) {
+function Icon({ name }: { name: "github" | "linkedin" | "youtube" | "resume" | "x" }) {
   const common = {
     fill: "none",
     stroke: "currentColor",
@@ -30,11 +30,14 @@ function Icon({ name }: { name: "github" | "linkedin" | "email" | "resume" | "x"
           <path d="M4 4a2 2 0 1 0 0.01 0" {...common} />
         </svg>
       );
-    case "email":
+    case "youtube":
       return (
         <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path d="M4 4h16v16H4z" {...common} />
-          <path d="m4 6 8 7 8-7" {...common} />
+          <path
+            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"
+            {...common}
+          />
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" {...common} />
         </svg>
       );
     case "resume":
@@ -69,9 +72,9 @@ const socials = [
     href: "https://linkedin.com/in/goyaljiiiiii",
   },
   {
-    key: "email" as const,
-    label: "Email",
-    href: "mailto:nandini@example.com",
+    key: "youtube" as const,
+    label: "YouTube",
+    href: "https://youtube.com/@self_taught_bob",
   },
   {
     key: "resume" as const,
@@ -248,8 +251,8 @@ function Orbit({
               key={s.key}
               ref={setRef(s.key)}
               href={s.href}
-              target={s.key === "email" ? undefined : "_blank"}
-              rel={s.key === "email" ? undefined : "noopener noreferrer"}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label={s.label}
               className="absolute left-1/2 top-1/2 -ml-6 -mt-6 block h-12 w-12 rounded-full outline-none"
               style={{

@@ -36,7 +36,7 @@ export default function Hero() {
 
       <section
         id="hero"
-        className="relative min-h-screen overflow-hidden bg-[#070b14] px-6 pb-20 pt-28 text-white"
+        className="relative min-h-screen overflow-hidden bg-[#070b14] px-6 pb-20 pt-24 text-white"
         aria-label="Hero"
       >
         <div className="pointer-events-none absolute inset-0">
@@ -46,7 +46,7 @@ export default function Hero() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05)_1px,_transparent_1px)] [background-size:30px_30px] opacity-30" />
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-7rem)] max-w-6xl items-center gap-14 lg:grid-cols-[1.02fr_0.98fr]">
+        <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-6xl items-center gap-14 lg:gap-20 lg:grid-cols-[1.05fr_0.95fr] lg:-translate-y-10 py-4">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 28 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -60,16 +60,16 @@ export default function Hero() {
               Open source, community, and real projects
             </div>
 
-            <h1 className="max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight text-white sm:text-7xl lg:text-8xl">
+            <h1 className="max-w-4xl text-lg font-bold leading-tight text-white sm:text-2xl lg:text-3xl">
               Building software, communities, and a path forward.
             </h1>
 
-            <p className="mt-7 max-w-2xl text-xl leading-8 text-white/72">
+            <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-white/72">
               I&apos;m Nandini, a BCA and MDCE student growing in public through open source,
               CDN IGNOU, mentoring, and projects that start small but teach something real.
             </p>
 
-            <p className="mt-5 max-w-xl text-base leading-7 text-white/54">
+            <p className="mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-white/54">
               My work sits between code and community: contributing, hosting, teaching,
               documenting, and building the kind of opportunities I once had to search for.
             </p>
@@ -100,14 +100,14 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <div className="relative mx-auto h-[420px] w-full max-w-[430px] sm:h-[520px]">
+          <div className="relative mx-auto lg:mr-0 lg:ml-auto lg:translate-x-8 lg:translate-y-6 h-[320px] w-full max-w-[340px] sm:h-[420px]">
             <motion.div
               className="absolute inset-0"
               animate={reduceMotion ? undefined : { y: [0, -12, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             >
-              <div className="absolute left-1/2 top-1/2 h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-200/12 sm:h-[430px] sm:w-[430px]" />
-              <div className="absolute left-1/2 top-1/2 h-[250px] w-[250px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-fuchsia-200/12 sm:h-[340px] sm:w-[340px]" />
+              <div className="absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-200/12 sm:h-[350px] sm:w-[350px]" />
+              <div className="absolute left-1/2 top-1/2 h-[190px] w-[190px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-fuchsia-200/12 sm:h-[260px] sm:w-[260px]" />
 
               {orbitTech.map((tech, index) => {
                 const angle = (index / orbitTech.length) * 360;
@@ -117,7 +117,7 @@ export default function Hero() {
                     key={tech}
                     className="absolute left-1/2 top-1/2 -ml-12 -mt-5 grid h-10 w-24 place-items-center rounded-full border border-white/10 bg-white/[0.07] text-xs text-white/78 shadow-[0_0_24px_rgba(34,211,238,0.12)] backdrop-blur-xl"
                     style={{
-                      transform: `rotate(${angle}deg) translateX(190px) rotate(${-angle}deg)`,
+                      transform: `rotate(${angle}deg) translateX(145px) rotate(${-angle}deg)`,
                     }}
                     animate={reduceMotion ? undefined : { opacity: [0.55, 1, 0.55] }}
                     transition={{ duration: 3.4, delay: index * 0.24, repeat: Infinity }}
@@ -142,7 +142,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.div
-              className="absolute left-1/2 top-1/2 z-10 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/12 bg-white/[0.06] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35),0_0_42px_rgba(34,211,238,0.14)] backdrop-blur-2xl sm:h-[380px] sm:w-[380px]"
+              className="absolute left-1/2 top-1/2 z-10 h-[210px] w-[210px] -translate-x-1/2 -translate-y-1/2 rounded-[1.5rem] border border-white/12 bg-white/[0.06] p-2.5 shadow-[0_20px_60px_rgba(0,0,0,0.35),0_0_30px_rgba(34,211,238,0.12)] backdrop-blur-2xl sm:h-[270px] sm:w-[270px]"
               onMouseMove={handleMouseMove}
               onMouseLeave={() => setTilt({ x: 0, y: 0 })}
               style={{
@@ -150,8 +150,8 @@ export default function Hero() {
               }}
               transition={{ type: "spring", stiffness: 180, damping: 18 }}
             >
-              <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.22),_transparent_48%)]" />
-              <div className="relative h-full overflow-hidden rounded-[1.55rem] border border-white/10 bg-[#101827]">
+              <div className="absolute inset-0 rounded-[1.5rem] bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.22),_transparent_48%)]" />
+              <div className="relative h-full overflow-hidden rounded-[1.2rem] border border-white/10 bg-[#101827]">
                 <Image
                   alt="Nandini"
                   src="/assets/picture.jpeg"

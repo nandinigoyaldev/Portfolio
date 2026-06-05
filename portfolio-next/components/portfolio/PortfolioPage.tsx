@@ -7,8 +7,7 @@ import Skills from "./Skills";
 import Education from "./Education";
 import Contact from "./Contact";
 import Footer from "./Footer";
-
-
+import ChatWidget from "../chat/ChatWidget";
 
 export default function PortfolioPage() {
   // Keeps parity with the original HTML behavior:
@@ -52,6 +51,7 @@ export default function PortfolioPage() {
       </main>
 
       <Footer />
+      <ChatWidget />
     </div>
   );
 }

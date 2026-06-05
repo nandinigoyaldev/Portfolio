@@ -11,7 +11,7 @@ export default function ChatInput({
 
   return (
     <form
-      className="flex gap-2 items-center"
+      className="flex gap-2 items-center w-full"
       onSubmit={(e) => {
         e.preventDefault();
         const text = value.trim();
@@ -24,13 +24,13 @@ export default function ChatInput({
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Type a message..."
-        className="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm outline-none focus:border-brand"
+        placeholder="Ask about my projects, communities..."
+        className="flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-cyan-400/40 focus:bg-white/[0.06] focus:ring-2 focus:ring-cyan-400/10 placeholder:text-white/30 transition-all"
         aria-label="Message"
       />
       <button
         type="submit"
-        className="rounded-xl bg-brand text-white px-4 py-3 text-sm font-medium hover:bg-brand-dark transition-colors"
+        className="flex h-11 px-4 items-center justify-center rounded-2xl bg-brand hover:bg-brand-dark text-white text-sm font-semibold shadow-[0_4px_15px_rgba(213,83,77,0.25)] hover:shadow-[0_4px_20px_rgba(213,83,77,0.35)] transition-all cursor-pointer shrink-0"
         aria-label="Send message"
       >
         Send
@@ -38,4 +38,3 @@ export default function ChatInput({
     </form>
   );
 }
-

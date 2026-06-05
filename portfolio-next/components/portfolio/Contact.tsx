@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 type Channel = {
-  key: "github" | "linkedin" | "email" | "resume";
+  key: "github" | "linkedin" | "youtube" | "resume";
   label: string;
   description: string;
   href: string;
@@ -23,10 +23,10 @@ const channels: Channel[] = [
     href: "https://linkedin.com/in/goyaljiiiiii",
   },
   {
-    key: "email",
-    label: "Email",
-    description: "Send a direct note for projects, mentorship, or opportunities.",
-    href: "mailto:nandini@example.com",
+    key: "youtube",
+    label: "YouTube",
+    description: "Watch tech guides, mentoring sessions, and learning content.",
+    href: "https://youtube.com/@self_taught_bob",
   },
   {
     key: "resume",
@@ -63,11 +63,14 @@ function ChannelIcon({ name }: { name: Channel["key"] }) {
           <path d="M4 4a2 2 0 1 0 0.01 0" {...common} />
         </svg>
       );
-    case "email":
+    case "youtube":
       return (
         <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path d="M4 4h16v16H4z" {...common} />
-          <path d="m4 6 8 7 8-7" {...common} />
+          <path
+            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"
+            {...common}
+          />
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" {...common} />
         </svg>
       );
     case "resume":
@@ -128,8 +131,8 @@ export default function Contact() {
               <motion.a
                 key={channel.key}
                 href={channel.href}
-                target={channel.key === "email" ? undefined : "_blank"}
-                rel={channel.key === "email" ? undefined : "noopener noreferrer"}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={
                   "group relative min-h-[190px] overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.055] p-5 " +
                   "outline-none backdrop-blur-2xl transition-colors hover:border-cyan-200/35 hover:bg-white/[0.075] " +
