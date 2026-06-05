@@ -1,106 +1,193 @@
-# 👩‍💻 Nandini — Portfolio & Mentorship
+# Nandini — Portfolio & Mentorship ✨
 
-<p align="left">
-  <img src="https://img.shields.io/badge/Status-Active-16a34a?style=for-the-badge" alt="Status"/>
-  <img src="https://img.shields.io/badge/Type-Personal%20Portfolio-2563eb?style=for-the-badge" alt="Type"/>
-  <img src="https://img.shields.io/badge/Built%20With-HTML%2FCSS%2FJS-f97316?style=for-the-badge" alt="Built With"/>
-  <img src="https://img.shields.io/badge/License-MIT-a855f7?style=for-the-badge" alt="License"/>
-</p>
+![Portfolio Preview](./public/assets/picture.jpeg)
 
-A modern, single-page portfolio focused on **full-stack development**, **community impact**, **mentorship**, and **collaboration**.
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.7-black?style=flat&logo=next.js)](#)
+[![React](https://img.shields.io/badge/React-19.2.4-61dafb?style=flat&logo=react)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat&logo=typescript)](#)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-^4-38bdf8?style=flat&logo=tailwindcss)](#)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](#license)
 
----
+A modern, interactive personal portfolio built with **Next.js (App Router)**, styled with **Tailwind CSS**, and featuring:
 
-## ✨ Highlights
-
-- 🎬 Animated hero with gradient branding
-- 🧭 Smooth section navigation: **About**, **Skills**, **Education**, **Connect**
-- 🖱️ Interactive UI: custom cursor, reveal-on-scroll animations, floating blobs, marquee strip
-- 🧠 Clear focus areas across frontend, backend, and community work
-- 🎓 Education cards & structured highlights
-- 💌 Contact section (Formspree) + direct social CTAs
+- 🎯 **Sections**: About, Skills, Education, Projects, Contact
+- 🧠 **Chat Widget (UI + API placeholders)**
+- 🎨 **Custom cursor & effects**
+- 📬 **Contact form endpoint (placeholder)**
+- 📈 **Professional UI/UX with smooth scrolling + reveal animations**
 
 ---
 
-## 🧰 Tech Stack
+## 📋 Quick Start
 
-- **Frontend:** HTML, CSS, JavaScript (Tailwind runtime)
-- **Icons:** Lucide
-- **Assets:** local fonts, favicon set, profile/hero asset
+### Prerequisites
+- Node.js **18+** recommended
 
----
-
-## ▶️ Run Locally
-
-No build step required.
+### Install & Run
 
 ```bash
-git clone https://github.com/goyaljiiiiii/Portfolio.git
-cd Portfolio
+cd portfolio-next
+npm install
+npm run dev
 ```
 
-Open directly:
-
-- macOS/Linux: `open index.html`
-
-Or serve locally:
-
-```bash
-python3 -m http.server 8080
-```
-
-Then visit: **http://localhost:8080**
+Open:
+- http://localhost:3000
 
 ---
 
-## 📄 Resume
+## 🧱 Tech Stack
 
-- **Resume (PDF):** [`assets/Nandini.pdf`](./assets/Nandini.pdf)
+- **Next.js** (App Router)
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **ESLint**
 
 ---
 
-## 🗂 Repository Structure
+## 🗂️ Project Structure (Directory Tree)
 
 ```text
-.
-|-- index.html
-|-- README.md
-|-- LICENSE
-|-- CODE_OF_CONDUCT.md
-|-- CONTRIBUTING.md
-|-- SECURITY.md
-|-- .gitignore
-|-- .editorconfig
-|-- .gitattributes
-|-- assets/
-|   |-- Nandini.pdf
-|   |-- lucide.js
-|   |-- tailwind.js
-|   |-- twemoji-2728.svg
-|   |-- favicon/
-|   `-- fonts/
-`-- TODO.md
+portfolio-next/
+├─ app/
+│  ├─ api/
+│  │  ├─ chat/
+│  │  │  └─ route.ts
+│  │  └─ contact/
+│  │     └─ route.ts
+│  ├─ favicon.ico
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components/
+│  ├─ chat/
+│  │  ├─ ChatInput.tsx
+│  │  ├─ ChatMessage.tsx
+│  │  ├─ ChatWidget.tsx
+│  │  ├─ ChatWindow.tsx
+│  │  └─ (chat UI)
+│  └─ portfolio/
+│     ├─ About.tsx
+│     ├─ Contact.tsx
+│     ├─ CursorAndEffects.tsx
+│     ├─ Education.tsx
+│     ├─ Footer.tsx
+│     ├─ Hero.tsx
+│     ├─ Navbar.tsx
+│     ├─ PortfolioMarquee.tsx
+│     ├─ PortfolioPage.tsx
+│     ├─ Projects.tsx
+│     └─ Skills.tsx
+├─ public/
+│  ├─ assets/
+│  │  ├─ (images, fonts, pdf, favicon set, vendor assets)
+│  │  └─ Nandini.pdf
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ next.svg
+│  └─ vercel.svg
+├─ eslint.config.mjs
+├─ next.config.ts
+├─ package.json
+└─ tsconfig.json
 ```
 
+(High-level mapping)
+- `app/` — Next.js routes and layout
+  - `app/page.tsx` — portfolio entry page
+  - `app/layout.tsx` — root layout + metadata
+  - `app/api/contact/route.ts` — contact form handler (placeholder)
+  - `app/api/chat/route.ts` — chat handler (placeholder)
+- `components/portfolio/` — main portfolio UI sections
+- `components/chat/` — chat widget UI components
+- `public/` — images, icons, and assets
+
+
 ---
 
-## 🎨 Customization Guide
+## 🚀 Features
 
-- Update intro/bio and content in **`index.html`**
-- Update the hero/profile image source in **`index.html`** (`assets/Nandini.pdf` is referenced)
-- Update colors in the Tailwind config block inside **`index.html`**
-- Update Formspree endpoint in the contact form (`form action="..."`)
-- Update social links in the footer
+### 🧩 Portfolio Sections
+- **Hero** (headline + CTA + imagery)
+- **About** (bio and experience)
+- **Skills** (skill categories)
+- **Education** (timeline)
+- **Projects** (showcase)
+- **Contact** (form + social links)
+- **Footer** (closing links/info)
+
+### ✨ UI Effects
+- Custom cursor + grain/blobs style effects
+- Intersection-based reveal animations for headings/paragraphs
+- Marquee/animated highlights in the UI
+
+### 🤖 Chat & Contact (API placeholders)
+The app includes working API endpoints for future integration:
+- `POST /api/chat` — currently returns `{ ok: true, reply: "" }`
+- `POST /api/contact` — currently returns `{ ok: true }`
+
+These endpoints are ready to be wired to:
+- an AI provider (OpenAI/Anthropic/etc.) for chat
+- an email service (Formspree/Resend/SMTP) for contact
+- a DB for conversation history (optional)
 
 ---
 
-## 🤝 Connect
+## 🔧 Scripts
 
-Use the **Connect** section on the site, or update the social links in `index.html`.
+From `portfolio-next/package.json`:
+
+- `npm run dev` — run development server
+- `npm run build` — build for production
+- `npm start` — start production server
+- `npm run lint` — run ESLint
+
+---
+
+## 🧪 Testing
+
+No automated tests are configured in this repo yet.
+
+Recommended manual checks:
+- Run `npm run dev`
+- Verify navigation + section reveal animations
+- Validate contact form submission
+- Validate chat widget submission (currently placeholder response)
+
+---
+
+## 🌍 Deployment
+
+Works well with **Vercel**.
+
+### Vercel Steps (typical)
+1. Import the repo
+2. Set build command to `npm run build`
+3. Set output directory (default for Next.js)
+4. Deploy
+
+---
+
+## 🛡️ Security & Privacy Notes
+
+- API routes are currently placeholders.
+- When integrating real services, avoid exposing secrets in the client.
+- Use environment variables (`.env.local`) and server-side handling.
 
 ---
 
 ## 📄 License
 
-MIT — see [`LICENSE`](./LICENSE).
+MIT. See `LICENSE`.
+
+---
+
+## 🤝 Contributing
+
+If you’d like to improve features (chat integration, email delivery, DB persistence), open a PR and reference the relevant file areas in:
+- `app/api/chat/route.ts`
+- `app/api/contact/route.ts`
+- `components/chat/*`
+- `components/portfolio/*`
 
