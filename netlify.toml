@@ -1,4 +1,3 @@
 [build]
-  base = "portfolio-next"
-  publish = "portfolio-next/.next"
+  publish = ".next"
   command = "npm run build"

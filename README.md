@@ -59,20 +59,20 @@ sequenceDiagram
 
 ```text
 Portfolio/                     # Repository Root
-├── portfolio-next/            # Next.js Application Core
-│   ├── app/                   # App Router Directory
-│   │   ├── api/               # API Endpoints
-│   │   │   ├── chat/          # Smart conversational search route
-│   │   │   ├── contact/       # Contact form receiver (stub)
-│   │   │   └── sync/          # Manual/Cron GitHub cache rebuilder
-│   │   ├── globals.css        # Global CSS + Tailwind v4 theme mapping
-│   │   ├── layout.tsx         # Root layout HTML structure
-│   │   └── page.tsx           # Portfolio landing page loader
-│   ├── components/            # React Components
-│   │   ├── chat/              # Chat assistant widget files
-│   │   └── portfolio/         # Hero, Skills, Education, Footer, etc.
-│   ├── data/                  # Cached local JSON files
-│   └── lib/                   # Utility helpers and core RAG stubs
+├── app/                       # App Router Directory
+│   ├── api/                   # API Endpoints
+│   │   ├── chat/              # Smart conversational search route
+│   │   ├── contact/           # Contact form receiver (stub)
+│   │   └── sync/              # Manual/Cron GitHub cache rebuilder
+│   ├── globals.css            # Global CSS + Tailwind v4 theme mapping
+│   ├── layout.tsx             # Root layout HTML structure
+│   └── page.tsx               # Portfolio landing page loader
+├── components/                # React Components
+│   ├── chat/                  # Chat assistant widget files
+│   └── portfolio/             # Hero, Skills, Education, Footer, etc.
+├── data/                      # Cached local JSON files
+├── lib/                       # Utility helpers and core RAG stubs
+├── netlify.toml               # Netlify Deployment settings
 └── README.md                  # Project Documentation
 ```
 
@@ -85,53 +85,31 @@ Portfolio/                     # Repository Root
 - npm **10.0.0+**
 
 ### Steps to Run
-1. Clone the repository and navigate into the app folder:
-   ```bash
-   cd portfolio-next
-   ```
-2. Install the dependencies:
+1. Install the dependencies:
    ```bash
    npm install
    ```
-3. Boot up the local development server:
+2. Boot up the local development server:
    ```bash
    npm run dev
    ```
-4. Build the repository cache from GitHub:
-   Open your browser and navigate to `http://localhost:3000/api/sync`. This triggers the GitHub API sync and builds your local repository index in `portfolio-next/data/github-cache.json`.
+3. Build the repository cache from GitHub:
+   Open your browser and navigate to `http://localhost:3000/api/sync`. This triggers the GitHub API sync and builds your local repository index in `data/github-cache.json`.
 
 ---
 
-## 🚀 Deployment Troubleshooting (Vercel & Netlify)
+## 🚀 Deployment (Vercel & Netlify)
 
-If your deployments are failing or returning broken pages on Vercel or Netlify, it is likely because **the Next.js project is inside the `portfolio-next` subdirectory**, not the repository root. Sourcing builds from the root directly will fail because there is no `package.json` at that level.
-
-Follow these instructions to configure subdirectory builds:
+This project is fully configured for out-of-the-box deployment to Vercel and Netlify since all files are located at the repository root.
 
 ### 📐 Vercel Configuration
 1. In the Vercel Dashboard, select **New Project** and import the repository.
-2. In the **Configure Project** screen, locate the **Root Directory** option.
-3. Click **Edit** next to Root Directory and select the `portfolio-next` folder.
-4. Keep the Framework Preset as **Next.js**.
-5. Click **Deploy**. Vercel will now automatically build from the correct folder.
+2. Vercel will automatically detect the Framework Preset as **Next.js**.
+3. Click **Deploy**. Vercel will build and serve your site instantly.
 
 ### 📐 Netlify Configuration
-To deploy on Netlify, either set the directory settings in the Netlify Dashboard, or add a configuration file.
+This project includes a root-level `netlify.toml` file that specifies the publish and build commands:
+- **Build command**: `npm run build`
+- **Publish directory**: `.next`
 
-#### Option A: Dashboard Settings
-1. In Netlify, import the repository.
-2. Under **Build settings**, set:
-   - **Base directory**: `portfolio-next`
-   - **Build command**: `npm run build`
-   - **Publish directory**: `portfolio-next/.next`
-3. Save and click **Deploy**.
-
-#### Option B: Configuration File (Recommended)
-You can create a `netlify.toml` file in the **repository root folder** (parallel to this README) containing these rules:
-```toml
-[build]
-  base = "portfolio-next"
-  publish = "portfolio-next/.next"
-  command = "npm run build"
-```
-Netlify will read this file and build from the subdirectory without requiring any dashboard adjustments.
+Simply import the repository in Netlify, and Netlify will deploy it automatically without requiring any manual dashboard settings!
