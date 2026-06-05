@@ -1,193 +1,137 @@
-# Nandini — Portfolio & Mentorship ✨
+# Nandini — Personal Portfolio & AI Digital Twin 🚀
 
-![Portfolio Preview](./public/assets/picture.jpeg)
+[![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.2.7-black?style=flat&logo=next.js)](#)
-[![React](https://img.shields.io/badge/React-19.2.4-61dafb?style=flat&logo=react)](#)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=flat&logo=typescript)](#)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-^4-38bdf8?style=flat&logo=tailwindcss)](#)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](#license)
-
-A modern, interactive personal portfolio built with **Next.js (App Router)**, styled with **Tailwind CSS**, and featuring:
-
-- 🎯 **Sections**: About, Skills, Education, Projects, Contact
-- 🧠 **Chat Widget (UI + API placeholders)**
-- 🎨 **Custom cursor & effects**
-- 📬 **Contact form endpoint (placeholder)**
-- 📈 **Professional UI/UX with smooth scrolling + reveal animations**
+A premium, interactive personal portfolio website featuring a future-ready **AI Portfolio Assistant** acting as a digital twin. Built on **Next.js (App Router)** and styled using **Tailwind CSS v4** with hardware-accelerated **Framer Motion** animations.
 
 ---
 
-## 📋 Quick Start
+## ✨ Features
 
-### Prerequisites
-- Node.js **18+** recommended
+### 🎨 Portfolio Ecosystem
+- **Futuristic Dark Aesthetic**: Immersive glassmorphic design utilizing cyan and fuchsia gradients.
+- **Neural Learning Timeline**: Interactive education and credentials pathway with custom status metrics.
+- **Wins Grid**: Clean, hover-activated achievements dashboard showcasing Hackathon and Open Source milestones.
+- **Social Orbit Loop**: Rotating interactive socials console tracking cursor signals to map connections.
+- **Custom Cursor & Noise Overlays**: Smooth custom magnetic cursor and subtle film-grain texture.
 
-### Install & Run
+### 🤖 AI Digital Twin (Portfolio Assistant)
+- **Glassmorphic Chat Interface**: Responsive widget floating in the layout with entry scale animations.
+- **Quick Action Cards**: Tap-to-explore triggers (Projects, Resume, GitHub, Community, Wins, Contact) allowing zero-type navigation.
+- **RAG Architecture & Mock Vector DB**: Local query semantic-matching search library mapping requests to indexed portfolio documents.
+- **YouTube Linkage**: Seamless links pointing to Youtube channel `@self_taught_bob` for mentorship content.
+- **Voice Mode Visualizer**: Interactive speech panel with animated SVG equalizer wave patterns.
 
-```bash
-cd portfolio-next
-npm install
-npm run dev
+---
+
+## 🏗️ Architecture
+
+The personal assistant runs on a modular, future-ready structure separating client interfaces, caching rules, and document vector mappings.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as Visitor
+    participant Widget as Chat Widget (UI)
+    participant API as Chat API (/api/chat)
+    participant DB as Mock Vector DB
+    participant Cache as Sync Cache (JSON)
+    participant GitHub as GitHub API
+    
+    User->>Widget: Asks: "What is AutoBotX?"
+    Widget->>API: POST /api/chat { message }
+    Note over API: Load Local Facts
+    API->>Cache: Read Cache (github-cache.json)
+    Cache-->>API: Return Repos Data
+    API->>DB: Index Facts & Repo Documents
+    API->>DB: Query Term Search
+    DB-->>API: Match Ranked Documents
+    API-->>Widget: Return Conversational Markdown Response
+    Widget-->>User: Renders Answer with Clickable Links
 ```
 
-Open:
-- http://localhost:3000
-
 ---
 
-## 🧱 Tech Stack
-
-- **Next.js** (App Router)
-- **React**
-- **TypeScript**
-- **Tailwind CSS**
-- **ESLint**
-
----
-
-## 🗂️ Project Structure (Directory Tree)
+## 📂 Project Structure
 
 ```text
-portfolio-next/
-├─ app/
-│  ├─ api/
-│  │  ├─ chat/
-│  │  │  └─ route.ts
-│  │  └─ contact/
-│  │     └─ route.ts
-│  ├─ favicon.ico
-│  ├─ globals.css
-│  ├─ layout.tsx
-│  └─ page.tsx
-├─ components/
-│  ├─ chat/
-│  │  ├─ ChatInput.tsx
-│  │  ├─ ChatMessage.tsx
-│  │  ├─ ChatWidget.tsx
-│  │  ├─ ChatWindow.tsx
-│  │  └─ (chat UI)
-│  └─ portfolio/
-│     ├─ About.tsx
-│     ├─ Contact.tsx
-│     ├─ CursorAndEffects.tsx
-│     ├─ Education.tsx
-│     ├─ Footer.tsx
-│     ├─ Hero.tsx
-│     ├─ Navbar.tsx
-│     ├─ PortfolioMarquee.tsx
-│     ├─ PortfolioPage.tsx
-│     ├─ Projects.tsx
-│     └─ Skills.tsx
-├─ public/
-│  ├─ assets/
-│  │  ├─ (images, fonts, pdf, favicon set, vendor assets)
-│  │  └─ Nandini.pdf
-│  ├─ file.svg
-│  ├─ globe.svg
-│  ├─ next.svg
-│  └─ vercel.svg
-├─ eslint.config.mjs
-├─ next.config.ts
-├─ package.json
-└─ tsconfig.json
+Portfolio/                     # Repository Root
+├── portfolio-next/            # Next.js Application Core
+│   ├── app/                   # App Router Directory
+│   │   ├── api/               # API Endpoints
+│   │   │   ├── chat/          # Smart conversational search route
+│   │   │   ├── contact/       # Contact form receiver (stub)
+│   │   │   └── sync/          # Manual/Cron GitHub cache rebuilder
+│   │   ├── globals.css        # Global CSS + Tailwind v4 theme mapping
+│   │   ├── layout.tsx         # Root layout HTML structure
+│   │   └── page.tsx           # Portfolio landing page loader
+│   ├── components/            # React Components
+│   │   ├── chat/              # Chat assistant widget files
+│   │   └── portfolio/         # Hero, Skills, Education, Footer, etc.
+│   ├── data/                  # Cached local JSON files
+│   └── lib/                   # Utility helpers and core RAG stubs
+└── README.md                  # Project Documentation
 ```
 
-(High-level mapping)
-- `app/` — Next.js routes and layout
-  - `app/page.tsx` — portfolio entry page
-  - `app/layout.tsx` — root layout + metadata
-  - `app/api/contact/route.ts` — contact form handler (placeholder)
-  - `app/api/chat/route.ts` — chat handler (placeholder)
-- `components/portfolio/` — main portfolio UI sections
-- `components/chat/` — chat widget UI components
-- `public/` — images, icons, and assets
+---
 
+## 🛠️ Quick Start & Local Development
+
+### Prerequisites
+- Node.js **18.0.0+**
+- npm **10.0.0+**
+
+### Steps to Run
+1. Clone the repository and navigate into the app folder:
+   ```bash
+   cd portfolio-next
+   ```
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+3. Boot up the local development server:
+   ```bash
+   npm run dev
+   ```
+4. Build the repository cache from GitHub:
+   Open your browser and navigate to `http://localhost:3000/api/sync`. This triggers the GitHub API sync and builds your local repository index in `portfolio-next/data/github-cache.json`.
 
 ---
 
-## 🚀 Features
+## 🚀 Deployment Troubleshooting (Vercel & Netlify)
 
-### 🧩 Portfolio Sections
-- **Hero** (headline + CTA + imagery)
-- **About** (bio and experience)
-- **Skills** (skill categories)
-- **Education** (timeline)
-- **Projects** (showcase)
-- **Contact** (form + social links)
-- **Footer** (closing links/info)
+If your deployments are failing or returning broken pages on Vercel or Netlify, it is likely because **the Next.js project is inside the `portfolio-next` subdirectory**, not the repository root. Sourcing builds from the root directly will fail because there is no `package.json` at that level.
 
-### ✨ UI Effects
-- Custom cursor + grain/blobs style effects
-- Intersection-based reveal animations for headings/paragraphs
-- Marquee/animated highlights in the UI
+Follow these instructions to configure subdirectory builds:
 
-### 🤖 Chat & Contact (API placeholders)
-The app includes working API endpoints for future integration:
-- `POST /api/chat` — currently returns `{ ok: true, reply: "" }`
-- `POST /api/contact` — currently returns `{ ok: true }`
+### 📐 Vercel Configuration
+1. In the Vercel Dashboard, select **New Project** and import the repository.
+2. In the **Configure Project** screen, locate the **Root Directory** option.
+3. Click **Edit** next to Root Directory and select the `portfolio-next` folder.
+4. Keep the Framework Preset as **Next.js**.
+5. Click **Deploy**. Vercel will now automatically build from the correct folder.
 
-These endpoints are ready to be wired to:
-- an AI provider (OpenAI/Anthropic/etc.) for chat
-- an email service (Formspree/Resend/SMTP) for contact
-- a DB for conversation history (optional)
+### 📐 Netlify Configuration
+To deploy on Netlify, either set the directory settings in the Netlify Dashboard, or add a configuration file.
 
----
+#### Option A: Dashboard Settings
+1. In Netlify, import the repository.
+2. Under **Build settings**, set:
+   - **Base directory**: `portfolio-next`
+   - **Build command**: `npm run build`
+   - **Publish directory**: `portfolio-next/.next`
+3. Save and click **Deploy**.
 
-## 🔧 Scripts
-
-From `portfolio-next/package.json`:
-
-- `npm run dev` — run development server
-- `npm run build` — build for production
-- `npm start` — start production server
-- `npm run lint` — run ESLint
-
----
-
-## 🧪 Testing
-
-No automated tests are configured in this repo yet.
-
-Recommended manual checks:
-- Run `npm run dev`
-- Verify navigation + section reveal animations
-- Validate contact form submission
-- Validate chat widget submission (currently placeholder response)
-
----
-
-## 🌍 Deployment
-
-Works well with **Vercel**.
-
-### Vercel Steps (typical)
-1. Import the repo
-2. Set build command to `npm run build`
-3. Set output directory (default for Next.js)
-4. Deploy
-
----
-
-## 🛡️ Security & Privacy Notes
-
-- API routes are currently placeholders.
-- When integrating real services, avoid exposing secrets in the client.
-- Use environment variables (`.env.local`) and server-side handling.
-
----
-
-## 📄 License
-
-MIT. See `LICENSE`.
-
----
-
-## 🤝 Contributing
-
-If you’d like to improve features (chat integration, email delivery, DB persistence), open a PR and reference the relevant file areas in:
-- `app/api/chat/route.ts`
-- `app/api/contact/route.ts`
-- `components/chat/*`
-- `components/portfolio/*`
-
+#### Option B: Configuration File (Recommended)
+You can create a `netlify.toml` file in the **repository root folder** (parallel to this README) containing these rules:
+```toml
+[build]
+  base = "portfolio-next"
+  publish = "portfolio-next/.next"
+  command = "npm run build"
+```
+Netlify will read this file and build from the subdirectory without requiring any dashboard adjustments.
