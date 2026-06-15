@@ -75,7 +75,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="relative w-[385px] max-w-[90vw] h-[550px] rounded-3xl border border-white/10 bg-[#070b14]/85 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45),0_0_30px_rgba(34,211,238,0.12)] backdrop-blur-2xl flex flex-col overflow-hidden select-none"
+      className="relative w-[385px] max-w-[90vw] h-[550px] max-h-[85dvh] rounded-3xl border border-white/10 bg-[#070b14]/85 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45),0_0_30px_rgba(34,211,238,0.12)] backdrop-blur-2xl flex flex-col overflow-hidden select-none"
       role="dialog"
       aria-modal="true"
       aria-label="Nandini AI Assistant"

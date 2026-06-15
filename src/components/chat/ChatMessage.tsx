@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export type ChatMessage = {
   id: string;
@@ -84,9 +85,26 @@ export default function ChatMessageView({
   content: string;
 }) {
   const isUser = role === "user";
+  const [displayedContent, setDisplayedContent] = useState(isUser ? content : "");
+
+  useEffect(() => {
+    if (isUser) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedContent(content.substring(0, i + 1));
+      i += 2;
+      if (i >= content.length) {
+        setDisplayedContent(content);
+        clearInterval(interval);
+      }
+    }, 15);
+    return () => clearInterval(interval);
+  }, [content, isUser]);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       className={
         isUser
           ? "flex justify-end w-full"
@@ -96,15 +114,18 @@ export default function ChatMessageView({
       <div
         className={
           isUser
-            ? "max-w-[85%] rounded-2xl rounded-tr-none bg-brand/20 text-white px-4 py-3 text-sm border border-brand/35 shadow-[0_4px_15px_rgba(213,83,77,0.15)] leading-relaxed select-text"
+            ? "max-w-[85%] rounded-2xl rounded-tr-none bg-cyan-400/20 text-white px-4 py-3 text-sm border border-cyan-400/35 shadow-[0_4px_15px_rgba(34,211,238,0.15)] leading-relaxed select-text"
             : "max-w-[85%] rounded-2xl rounded-tl-none bg-white/[0.06] px-4 py-3 text-sm text-white/90 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.15)] leading-relaxed select-text"
         }
         aria-label={isUser ? "User message" : "Assistant message"}
       >
         <div className="whitespace-pre-wrap">
-          {parseMessageContent(content)}
+          {parseMessageContent(displayedContent)}
+          {!isUser && displayedContent.length < content.length && (
+            <span className="ml-[2px] inline-block w-1.5 h-3.5 bg-cyan-400 animate-pulse align-middle" />
+          )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

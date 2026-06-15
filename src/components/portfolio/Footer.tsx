@@ -138,7 +138,7 @@ export default function Footer() {
         <div
           ref={containerRef}
           className={
-            "relative mx-auto h-[360px] w-full max-w-[520px] select-none overflow-visible rounded-3xl " +
+            "relative mx-auto h-[360px] w-full max-w-full sm:max-w-[520px] select-none overflow-hidden sm:overflow-visible rounded-3xl " +
             "bg-[radial-gradient(circle_at_top,_rgba(64,255,198,0.16),_transparent_55%),_radial-gradient(circle_at_bottom,_rgba(99,102,241,0.16),_transparent_55%)] " +
             "backdrop-blur-md border border-white/10"
           }
@@ -299,7 +299,13 @@ function Orbit({
 
         @media (max-width: 520px) {
           .orbit-mobile-scale {
-            transform: translate(-50%, -50%) scale(0.86);
+            transform: translate(-50%, -50%) scale(0.75);
+          }
+        }
+
+        @media (max-width: 380px) {
+          .orbit-mobile-scale {
+            transform: translate(-50%, -50%) scale(0.65);
           }
         }
       `}</style>
