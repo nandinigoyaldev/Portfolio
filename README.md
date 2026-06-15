@@ -1,84 +1,169 @@
-# 🌟 Nandini Goyal — Personal Portfolio & AI Digital Twin 🚀
+# Nandini Goyal — Portfolio & AI Portfolio Assistant
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.0-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1cdd8a3f-3447-4071-8935-02febb091b07/deploy-status)](https://app.netlify.com/projects/nandini-goyal/deploys)
 
-Welcome to my **Personal Portfolio Website**! It’s designed to be a premium, highly interactive digital twin, bringing together my achievements, projects, and an integrated **AI Portfolio Assistant** that can answer your questions right on the site.
+[![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=for-the-badge\&logo=next.js\&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-61dafb?style=for-the-badge\&logo=react\&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6?style=for-the-badge\&logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38bdf8?style=for-the-badge\&logo=tailwindcss\&logoColor=white)](https://tailwindcss.com/)
 
-🌍 **Live Deployment:** [nandini-goyal.netlify.app](https://nandini-goyal.netlify.app/)
+Personal portfolio built with Next.js, React, TypeScript, and Tailwind CSS. The site showcases my projects, open-source work, community initiatives, achievements, and includes an AI-powered portfolio assistant that can answer questions about my work and experience.
 
----
+### Live Site
 
-## ✨ What's Inside?
-
-### 🎨 Portfolio Ecosystem
-* 🌌 **Futuristic Dark Aesthetic**: Immersive glassmorphic design utilizing beautiful cyan and fuchsia gradients.
-* 🎓 **Neural Learning Timeline**: An interactive pathway showcasing my education and credentials with custom metrics.
-* 🏆 **Wins Grid**: A clean, hover-activated dashboard to highlight my Hackathon and Open Source milestones.
-* 💫 **Social Orbit Loop**: A fun, rotating interactive socials console that reacts to your cursor.
-* 🖱️ **Custom Touches**: Smooth magnetic custom cursor and a subtle film-grain texture for that premium feel.
-
-### 🤖 AI Digital Twin (Portfolio Assistant)
-* 💬 **Glassmorphic Chat Interface**: A sleek, responsive widget that floats in the layout with satisfying entry animations.
-* ⚡ **Quick Action Cards**: Tap-to-explore triggers (Projects, Resume, GitHub, Community, Wins, Contact) allowing you to navigate effortlessly.
-* 🧠 **Smart Search Architecture**: Uses local semantic-matching to answer your questions based on my portfolio documents.
-* 🎥 **YouTube Integration**: Direct links pointing to my YouTube channel (`@self_taught_bob`) for mentorship and content.
-* 🎙️ **Voice Mode Visualizer**: An interactive speech panel featuring animated SVG equalizer wave patterns.
+🌐 https://nandini-goyal.netlify.app/
 
 ---
 
-## 📂 Project Structure
+## Features
 
-I've organized the project neatly inside a `src/` directory to keep the root clean and readable!
+### Portfolio
+
+* Responsive portfolio experience built with Next.js App Router
+* Custom space-inspired visual design
+* Interactive education journey
+* Experience and leadership showcase
+* Achievement archive
+* Project portfolio
+* Community and open-source contributions
+* Social and contact integrations
+
+### AI Portfolio Assistant
+
+* Chat-based portfolio assistant
+* Quick action shortcuts
+* Semantic search across portfolio content
+* GitHub repository awareness
+* Resume and project discovery
+* YouTube integration for content and mentorship resources
+* Voice-mode interface with visual feedback
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* Next.js 15
+* React 19
+* TypeScript
+* Tailwind CSS
+
+### Backend & APIs
+
+* Next.js API Routes
+* REST APIs
+
+### Tooling
+
+* Git
+* GitHub
+* Netlify
+* Postman
+
+---
+
+## Project Structure
 
 ```text
 Portfolio/
-├── public/                    # 🖼️ Static assets (images, icons)
+├── public/
 ├── src/
-│   ├── app/                   # 🚀 App Router Directory (Pages, API, Layouts)
-│   ├── components/            # 🧩 Reusable React Components (Chat, Portfolio UI)
-│   └── lib/                   # 🛠️ Utility helpers and core logic
-├── .gitignore                 # 🙈 Git ignore rules
-├── package.json               # 📦 Project dependencies
-├── next.config.ts             # ⚙️ Next.js configuration
-├── netlify.toml               # ⚙️ Netlify deployment configuration
-└── README.md                  # 📖 You are reading this right now!
+│   ├── app/
+│   ├── components/
+│   └── lib/
+├── .gitignore
+├── package.json
+├── next.config.ts
+├── netlify.toml
+└── README.md
 ```
 
-> **Note:** Important configuration files like `package.json`, `tsconfig.json`, `netlify.toml`, and other `.config` files are deliberately kept in the root folder because Next.js and deployment platforms (like Netlify) require them there to function correctly! 🚀
+### Directory Overview
+
+* `app/` — Pages, layouts, API routes, and routing logic
+* `components/` — Reusable UI components
+* `lib/` — Utilities, helpers, search logic, and supporting code
+* `public/` — Static assets and media
 
 ---
 
-## 🛠️ Quick Start & Local Development
+## Local Development
 
 ### Prerequisites
-* 🟢 Node.js **18.0.0+**
-* 📦 npm **10.0.0+**
 
-### Let's Run It!
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-2. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-3. **Sync GitHub Cache (Optional):**
-   Open your browser and visit `http://localhost:3000/api/sync` to trigger the GitHub API sync and build your local repository index.
+* Node.js 18+
+* npm 10+
+
+### Installation
+
+```bash
+npm install
+```
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+### Optional GitHub Sync
+
+```text
+http://localhost:3000/api/sync
+```
+
+Triggers the GitHub sync process and updates the local repository index used by the assistant.
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
-The site is fully configured and live! 
-Check it out here: **[nandini-goyal.netlify.app](https://nandini-goyal.netlify.app/)**
+The project is configured for deployment on Netlify.
 
-If you want to deploy your own version:
-* **Vercel**: Just import the repo and it automatically detects Next.js.
-* **Netlify**: The `netlify.toml` file is already set up (Build command: `npm run build`, Publish directory: `.next`). Just import and deploy!
+### Netlify
+
+```bash
+npm run build
+```
+
+Publish directory:
+
+```text
+.next
+```
+
+Configuration:
+
+```text
+netlify.toml
+```
+
+### Vercel
+
+Import the repository and deploy. Next.js settings are detected automatically.
 
 ---
-Made with ❤️ by Nandini
+
+## About Me
+
+I'm Nandini Goyal, a BCA student, community builder, open-source contributor, and aspiring software engineer.
+
+Areas of interest:
+
+* Software Engineering
+* Web Development
+* AI Applications
+* Computer Vision
+* Developer Communities
+* Open Source
+
+---
+
+Made by Nandini Goyal

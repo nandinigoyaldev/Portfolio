@@ -1,249 +1,99 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-
-type Channel = {
-  key: "github" | "linkedin" | "youtube" | "resume";
-  label: string;
-  description: string;
-  href: string;
-};
-
-const channels: Channel[] = [
-  {
-    key: "github",
-    label: "GitHub",
-    description: "Explore repositories, experiments, and open-source work.",
-    href: "https://github.com/goyaljiiiiii",
-  },
-  {
-    key: "linkedin",
-    label: "LinkedIn",
-    description: "Connect for collaborations, roles, and professional updates.",
-    href: "https://linkedin.com/in/goyaljiiiiii",
-  },
-  {
-    key: "youtube",
-    label: "YouTube",
-    description: "Watch tech guides, mentoring sessions, and learning content.",
-    href: "https://youtube.com/@self_taught_bob",
-  },
-  {
-    key: "resume",
-    label: "Resume",
-    description: "Download the latest profile and experience snapshot.",
-    href: "/assets/Nandini.pdf",
-  },
-];
-
-function ChannelIcon({ name }: { name: Channel["key"] }) {
-  const common = {
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-
-  switch (name) {
-    case "github":
-      return (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path
-            d="M9 19c-4 1.5-4-2-5-2m10 4v-3.5c0-1 .1-1.4-.5-2 2-.2 4-.9 4-4.5 0-1-.3-2-1-2.7.1-.3.4-1.3-.1-2.7 0 0-1-.3-3 .9-.9-.2-1.9-.2-2.8 0-2-1.2-3-.9-3-.9-.5 1.4-.2 2.4-.1 2.7-.7.7-1 1.7-1 2.7 0 3.6 2 4.3 4 4.5-.3.3-.5.7-.5 1.5V21"
-            {...common}
-          />
-        </svg>
-      );
-    case "linkedin":
-      return (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V9h4v2" {...common} />
-          <path d="M2 9h4v12H2z" {...common} />
-          <path d="M4 4a2 2 0 1 0 0.01 0" {...common} />
-        </svg>
-      );
-    case "youtube":
-      return (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path
-            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"
-            {...common}
-          />
-          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" {...common} />
-        </svg>
-      );
-    case "resume":
-      return (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" {...common} />
-          <path d="M14 2v6h6" {...common} />
-          <path d="M8 13h8" {...common} />
-          <path d="M8 17h6" {...common} />
-        </svg>
-      );
-  }
-}
+import { motion } from "framer-motion";
+import * as React from "react";
 
 export default function Contact() {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <section className="relative overflow-hidden bg-[#070b14] px-6 py-24 text-white" id="connect">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-12 h-80 w-80 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl" />
-        <div className="absolute right-0 top-1/3 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:44px_44px] opacity-30" />
-      </div>
+    <section className="relative bg-[#050505] px-6 py-32 md:py-48 text-white min-h-[100dvh] flex flex-col justify-center snap-center" id="connect">
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="font-mono text-sm font-medium tracking-[0.35em] text-cyan-200/80">
-              COMMUNICATION HUB
-            </span>
-            <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">Choose a Channel</h2>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 md:text-base">
-              Open the route that fits the signal: code, career, direct mail, or a quick resume scan.
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Left Column: Typographic & Conversational */}
+          <div className="flex flex-col">
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-medium tracking-tight text-white mb-8 leading-[1.1]">
+              Let&apos;s build<br />
+              <span className="text-white/40">something together.</span>
+            </h2>
+
+            <p className="text-lg md:text-xl text-white/60 font-light leading-relaxed mb-16 max-w-md">
+              Whether you have a project in mind, want to discuss an opportunity, or just want to say hi—my inbox is always open.
             </p>
-          </div>
 
-          <div className="flex w-fit items-center gap-2 rounded-full border border-emerald-200/20 bg-emerald-300/[0.07] px-4 py-2 text-sm text-emerald-100 shadow-[0_0_28px_rgba(110,231,183,0.12)] backdrop-blur-xl">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-60 motion-reduce:animate-none" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300" />
-            </span>
-            Available for opportunities
-          </div>
-        </div>
-
-        <div className="relative mb-16">
-          <motion.div
-            className="pointer-events-none absolute left-6 right-6 top-1/2 hidden h-px bg-gradient-to-r from-transparent via-cyan-200/60 to-transparent lg:block"
-            initial={reduceMotion ? false : { scaleX: 0, opacity: 0 }}
-            whileInView={reduceMotion ? undefined : { scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.35 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-          />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {channels.map((channel, index) => (
-              <motion.a
-                key={channel.key}
-                href={channel.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={
-                  "group relative min-h-[190px] overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.055] p-5 " +
-                  "outline-none backdrop-blur-2xl transition-colors hover:border-cyan-200/35 hover:bg-white/[0.075] " +
-                  "focus-visible:ring-2 focus-visible:ring-cyan-200/70"
-                }
-                initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.35 }}
-                transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
-                whileHover={reduceMotion ? undefined : { y: -6, scale: 1.015 }}
-              >
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.16),_transparent_48%)] opacity-70 transition-opacity group-hover:opacity-100" />
-                <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-300/10 blur-2xl transition-opacity group-hover:opacity-100" />
-
-                <div className="relative flex h-full flex-col justify-between">
-                  <div>
-                    <div className="mb-6 grid h-12 w-12 place-items-center rounded-full border border-cyan-200/18 bg-cyan-300/[0.08] text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.16)] transition group-hover:scale-105 group-hover:shadow-[0_0_34px_rgba(34,211,238,0.25)]">
-                      <ChannelIcon name={channel.key} />
-                    </div>
-                    <h3 className="text-xl font-semibold tracking-tight text-white">{channel.label}</h3>
-                    <p className="mt-3 text-sm leading-6 text-white/58">{channel.description}</p>
-                  </div>
-
-                  <div className="mt-6 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-cyan-100/70">
-                    Open channel
-                    <span className="h-px w-8 bg-cyan-200/40 transition-all group-hover:w-12 group-hover:bg-cyan-200" />
-                  </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </div>
-
-        <motion.div
-          className="grid gap-8 rounded-[2rem] border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:p-8 lg:grid-cols-[0.82fr_1.18fr]"
-          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-        >
-          <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#070b14]/70 p-6">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.18),_transparent_50%)]" />
-            <div className="relative">
-              <span className="font-mono text-xs font-medium uppercase tracking-[0.3em] text-cyan-200/70">
-                Direct Message
-              </span>
-              <h3 className="mt-4 text-3xl font-semibold tracking-tight">Open a Signal</h3>
-              <p className="mt-4 text-sm leading-7 text-white/58">
-                Drop the essentials and the message routes through the contact endpoint. Short, clear signals get the fastest response.
-              </p>
-              <div className="mt-8 space-y-3 text-sm text-white/58">
-                <div className="flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.9)]" />
-                  Project collaboration
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_14px_rgba(110,231,183,0.9)]" />
-                  Roles and opportunities
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-indigo-300 shadow-[0_0_14px_rgba(165,180,252,0.9)]" />
-                  Mentorship or community work
-                </div>
-              </div>
+            <div className="flex flex-wrap gap-8 text-sm font-medium mt-auto">
+              <a href="https://github.com/goyaljiiiiii" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+                GitHub <span className="text-white/30 font-serif">↗</span>
+              </a>
+              <a href="https://linkedin.com/in/goyaljiiiiii" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+                LinkedIn <span className="text-white/30 font-serif">↗</span>
+              </a>
+              <a href="https://youtube.com/@self_taught_bob" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+                YouTube <span className="text-white/30 font-serif">↗</span>
+              </a>
+              <a href="/assets/Nandini.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+                Resume <span className="text-white/30 font-serif">↓</span>
+              </a>
             </div>
           </div>
 
-          <form className="space-y-4" method="post" action="/api/contact" aria-label="Direct message form">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.22em] text-white/48">Name</span>
+          {/* Right Column: Minimal Form */}
+          <div className="flex flex-col bg-white/[0.02] p-8 md:p-12 rounded-[2rem] border border-white/[0.05]">
+            <form className="flex flex-col gap-10 font-light" method="post" action="/api/contact">
+
+              <div className="group relative pt-2">
                 <input
+                  type="text"
                   name="name"
                   required
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-cyan-200/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-cyan-200/15"
-                  type="text"
-                  placeholder="Your name"
+                  className="w-full bg-transparent border-b border-white/10 pb-4 text-white outline-none focus:border-white transition-colors placeholder:text-transparent peer text-lg"
+                  placeholder="What's your name?"
+                  id="contact-name"
                 />
-              </label>
-              <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.22em] text-white/48">Email</span>
+                <label htmlFor="contact-name" className="absolute left-0 top-2 text-white/30 transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-white/60 peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-white/60 cursor-text">
+                  What&apos;s your name?
+                </label>
+              </div>
+
+              <div className="group relative pt-2">
                 <input
+                  type="email"
                   name="email"
                   required
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-cyan-200/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-cyan-200/15"
-                  type="email"
-                  placeholder="you@example.com"
+                  className="w-full bg-transparent border-b border-white/10 pb-4 text-white outline-none focus:border-white transition-colors placeholder:text-transparent peer text-lg"
+                  placeholder="How can I reach you?"
+                  id="contact-email"
                 />
-              </label>
-            </div>
+                <label htmlFor="contact-email" className="absolute left-0 top-2 text-white/30 transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-white/60 peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-white/60 cursor-text">
+                  How can I reach you?
+                </label>
+              </div>
 
-            <label className="block">
-              <span className="font-mono text-xs uppercase tracking-[0.22em] text-white/48">Message</span>
-              <textarea
-                name="message"
-                required
-                className="mt-2 min-h-[150px] w-full resize-y rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-white outline-none transition placeholder:text-white/28 focus:border-cyan-200/50 focus:bg-white/[0.08] focus:ring-2 focus:ring-cyan-200/15"
-                placeholder="Transmit your message..."
-              />
-            </label>
+              <div className="flex-1 flex flex-col group relative pt-2 mt-4">
+                <textarea
+                  name="message"
+                  required
+                  className="w-full flex-1 min-h-[160px] bg-transparent border-b border-white/10 pb-4 text-white outline-none focus:border-white transition-colors placeholder:text-transparent resize-none peer text-lg"
+                  placeholder="What's on your mind?"
+                  id="contact-message"
+                />
+                <label htmlFor="contact-message" className="absolute left-0 top-2 text-white/30 transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-white/60 peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-white/60 cursor-text">
+                  What&apos;s on your mind?
+                </label>
+              </div>
 
-            <motion.button
-              type="submit"
-              className="w-full rounded-full border border-cyan-200/24 bg-cyan-300/12 px-5 py-3 font-medium text-cyan-50 shadow-[0_0_30px_rgba(34,211,238,0.12)] outline-none transition hover:border-cyan-200/45 hover:bg-cyan-300/18 focus-visible:ring-2 focus-visible:ring-cyan-200/70"
-              whileHover={reduceMotion ? undefined : { y: -2 }}
-              whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-            >
-              Send Message
-            </motion.button>
-          </form>
-        </motion.div>
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="mt-6 bg-white text-black hover:bg-white/90 py-4 px-10 rounded-full transition-all text-sm font-medium w-fit"
+              >
+                Send Message
+              </motion.button>
+            </form>
+          </div>
+
+        </div>
       </div>
     </section>
   );

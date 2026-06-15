@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import SmoothScrolling from "../components/SmoothScrolling";
 export const metadata: Metadata = {
   title: "Nandini | Portfolio & Mentorship",
   description:
@@ -15,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className="h-full antialiased snap-y snap-proximity">
+      <body className="min-h-full flex flex-col">
+        <SmoothScrolling>{children}</SmoothScrolling>
+      </body>
     </html>
   );
 }

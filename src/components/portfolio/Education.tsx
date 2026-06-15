@@ -1,242 +1,170 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import * as React from "react";
 
 type Milestone = {
+  id: string;
   title: string;
   status: "Completed" | "Active" | "Planned";
   eyebrow: string;
   description: string;
-  side: "left" | "right";
   details?: string[];
+  color: "cyan" | "emerald" | "fuchsia";
 };
 
 const milestones: Milestone[] = [
   {
+    id: "diploma",
     title: "Master Diploma in Computer Engineering",
     status: "Completed",
     eyebrow: "Foundation Signal",
-    description:
-      "Completed a technical diploma path focused on computer engineering fundamentals, practical systems thinking, and applied development skills.",
-    side: "left",
+    description: "Completed a technical diploma path focused on computer engineering fundamentals, practical systems thinking, and applied development skills.",
+    color: "cyan",
   },
   {
+    id: "bca",
     title: "Bachelor of Computer Applications (BCA)",
     status: "Active",
     eyebrow: "Current Academic Core",
-    description:
-      "Currently building the academic backbone for software engineering, computer applications, and structured problem solving.",
-    side: "right",
+    description: "Currently building the academic backbone for software engineering, computer applications, and structured problem solving.",
+    color: "emerald",
   },
   {
+    id: "mca",
     title: "Master of Computer Applications (MCA)",
     status: "Planned",
     eyebrow: "Destination Node",
-    description:
-      "The next academic jump: a focused postgraduate path designed to deepen computer science, engineering, and product-building depth.",
-    side: "left",
+    description: "The next academic jump: a focused postgraduate path designed to deepen computer science, engineering, and product-building depth.",
     details: ["Target Admission: 2027", "Through NIMCET / CUET PG"],
+    color: "fuchsia",
   },
 ];
 
-const statusStyles = {
-  Completed: {
-    node: "bg-cyan-300 shadow-[0_0_26px_rgba(103,232,249,0.9)]",
-    ring: "border-cyan-200/40",
-    text: "text-cyan-200",
-  },
-  Active: {
-    node: "bg-emerald-300 shadow-[0_0_40px_rgba(110,231,183,0.95)]",
-    ring: "border-emerald-200/70",
-    text: "text-emerald-200",
-  },
-  Planned: {
-    node: "border-2 border-fuchsia-200 bg-transparent shadow-[0_0_34px_rgba(217,70,239,0.65)]",
-    ring: "border-fuchsia-200/55",
-    text: "text-fuchsia-200",
-  },
+const colorStyles = {
+  cyan: { bg: "bg-cyan-400", text: "text-cyan-300", border: "border-cyan-400/50", shadow: "shadow-[0_0_15px_rgba(34,211,238,0.5)]" },
+  emerald: { bg: "bg-emerald-400", text: "text-emerald-300", border: "border-emerald-400/50", shadow: "shadow-[0_0_15px_rgba(52,211,153,0.5)]" },
+  fuchsia: { bg: "bg-fuchsia-400", text: "text-fuchsia-300", border: "border-fuchsia-400/50", shadow: "shadow-[0_0_15px_rgba(232,121,249,0.5)]" },
 };
 
 export default function Education() {
-  const sectionRef = React.useRef<HTMLElement | null>(null);
-  const reduceMotion = useReducedMotion();
-  const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 72%", "end 44%"],
-  });
-  const pathScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const [activeId, setActiveId] = React.useState<string>("bca");
+
+  const activeMilestone = milestones.find((m) => m.id === activeId) || milestones[1];
+  const activeStyles = colorStyles[activeMilestone.color];
 
   return (
     <section
-      ref={sectionRef}
-      className="relative overflow-hidden bg-[#070b14] px-6 py-24 text-white"
+      className="relative overflow-hidden bg-[#070b14] px-6 py-16 md:py-20 text-white min-h-[50vh] flex flex-col justify-center"
       id="education"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-fuchsia-500/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.055)_1px,_transparent_1px)] [background-size:28px_28px] opacity-30" />
+      {/* Background Ambience */}
+      <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_1px,_transparent_1px)] [background-size:24px_24px]" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl">
-        <div className="mx-auto mb-16 max-w-3xl text-center">
-          <span className="font-mono text-sm font-medium tracking-[0.35em] text-cyan-200/80">
-            NEURAL ACADEMICS
+      <div className="relative mx-auto w-full max-w-5xl z-10">
+        {/* Header */}
+        <div className="mb-12 md:mb-16 flex flex-col items-center text-center">
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase mb-2">
+            Academic Trajectory
           </span>
-          <h2 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">
-            Learning Pathway
+          <h2 className="font-mono text-[clamp(1.5rem,5vw,2.25rem)] font-light tracking-widest text-white uppercase">
+            NAV.<span className="text-white/40">ROUTE</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/58 md:text-base">
-            A focused academic journey moving from technical foundation to active undergraduate depth, then toward MCA as the next destination.
-          </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute bottom-16 left-5 top-8 w-px overflow-hidden rounded-full bg-white/10 md:left-1/2 md:-translate-x-1/2">
+        {/* The Route (Horizontal on desktop, vertical-ish on mobile) */}
+        <div className="relative mb-12">
+          {/* Base Line */}
+          <div className="absolute top-1/2 left-[10%] right-[10%] h-px -translate-y-1/2 bg-white/10 hidden md:block" />
+          <div className="absolute left-[28px] top-[10%] bottom-[10%] w-px -translate-x-1/2 bg-white/10 md:hidden" />
+
+          {/* Waypoints */}
+          <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-0 px-4 md:px-[10%]">
+            {milestones.map((milestone) => {
+              const isActive = activeId === milestone.id;
+              const styles = colorStyles[milestone.color];
+
+              return (
+                <div 
+                  key={milestone.id}
+                  className="group relative flex md:flex-col items-center gap-4 cursor-pointer"
+                  onClick={() => setActiveId(milestone.id)}
+                >
+                  {/* Node */}
+                  <div className="relative flex items-center justify-center">
+                    <div className={`h-8 w-8 rounded-full border transition-all duration-300 ${isActive ? styles.border + ' bg-[#070b14] ' + styles.shadow : 'border-white/20 bg-[#0a0f1a] group-hover:border-white/40'} flex items-center justify-center`}>
+                      <div className={`h-2 w-2 rounded-full transition-colors duration-300 ${isActive ? styles.bg : 'bg-white/30'}`} />
+                    </div>
+                    {/* Ping effect for active */}
+                    {isActive && (
+                      <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${styles.bg}`} />
+                    )}
+                  </div>
+                  
+                  {/* Label */}
+                  <div className="flex flex-col md:items-center md:absolute md:top-12 md:left-1/2 md:-translate-x-1/2 md:w-40 md:text-center">
+                    <span className={`font-mono text-[10px] tracking-widest uppercase transition-colors duration-300 ${isActive ? styles.text : 'text-white/40 group-hover:text-white/60'}`}>
+                      {milestone.status}
+                    </span>
+                    <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white/90'}`}>
+                      {milestone.title.split(' (')[0]}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Single Info HUD */}
+        <div className="mx-auto max-w-2xl mt-8 md:mt-24">
+          <AnimatePresence mode="wait">
             <motion.div
-              className="h-full origin-top rounded-full bg-gradient-to-b from-cyan-300 via-emerald-300 to-fuchsia-300 shadow-[0_0_26px_rgba(103,232,249,0.65)]"
-              style={{ scaleY: reduceMotion ? 1 : pathScale }}
-            />
-          </div>
+              key={activeMilestone.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="relative rounded-xl border border-white/10 bg-[#0a0f1a] p-6 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.5)] backdrop-blur-md"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className={`absolute top-0 left-1/2 w-1/3 h-[2px] -translate-x-1/2 ${activeStyles.bg} shadow-[0_0_10px_currentColor] opacity-50`} />
+              
+              <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <span className={`font-mono text-[10px] tracking-widest uppercase ${activeStyles.text}`}>
+                    {activeMilestone.eyebrow}
+                  </span>
+                  <h3 className="text-xl md:text-2xl font-bold text-white mt-1">
+                    {activeMilestone.title}
+                  </h3>
+                </div>
+                <div className={`hidden md:flex px-3 py-1 rounded-full border border-white/10 font-mono text-[9px] uppercase tracking-widest bg-white/5`}>
+                  STATUS: {activeMilestone.status}
+                </div>
+              </div>
+              
+              <p className="font-mono text-sm leading-relaxed text-white/70">
+                &gt; {activeMilestone.description}
+              </p>
 
-          <div className="space-y-12 md:space-y-16">
-            {milestones.map((milestone, index) => (
-              <MilestoneRow
-                key={milestone.title}
-                milestone={milestone}
-                index={index}
-                isHovered={hoveredIndex === index}
-                reduceMotion={Boolean(reduceMotion)}
-                onHoverStart={() => setHoveredIndex(index)}
-                onHoverEnd={() => setHoveredIndex(null)}
-              />
-            ))}
-          </div>
+              {activeMilestone.details && (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {activeMilestone.details.map((detail) => (
+                    <span key={detail} className="px-3 py-1.5 rounded border border-white/10 bg-[#070b14] font-mono text-xs text-white/50">
+                      {detail}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
+
       </div>
     </section>
-  );
-}
-
-function MilestoneRow({
-  milestone,
-  index,
-  isHovered,
-  reduceMotion,
-  onHoverStart,
-  onHoverEnd,
-}: {
-  milestone: Milestone;
-  index: number;
-  isHovered: boolean;
-  reduceMotion: boolean;
-  onHoverStart: () => void;
-  onHoverEnd: () => void;
-}) {
-  const isLeft = milestone.side === "left";
-  const isActive = milestone.status === "Active";
-  const isPlanned = milestone.status === "Planned";
-  const styles = statusStyles[milestone.status];
-
-  return (
-    <motion.div
-      className="group relative grid gap-5 pl-14 md:grid-cols-[minmax(0,1fr)_88px_minmax(0,1fr)] md:items-center md:gap-0 md:pl-0"
-      initial={reduceMotion ? false : { opacity: 0, y: 34 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.45 }}
-      transition={{ duration: 0.58, delay: index * 0.08, ease: "easeOut" }}
-      onHoverStart={onHoverStart}
-      onHoverEnd={onHoverEnd}
-      onFocusCapture={onHoverStart}
-      onBlurCapture={onHoverEnd}
-    >
-      <div className={isLeft ? "md:col-start-1" : "md:col-start-3"}>
-        <motion.article
-          tabIndex={0}
-          className={
-            "relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.055] p-6 outline-none backdrop-blur-2xl " +
-            "shadow-[0_22px_70px_rgba(0,0,0,0.22)] transition-colors focus-visible:ring-2 focus-visible:ring-cyan-200/70 " +
-            (isHovered ? "border-cyan-200/35 bg-white/[0.075]" : "")
-          }
-          whileHover={reduceMotion ? undefined : { y: -6, scale: 1.012 }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.14),_transparent_45%)] opacity-80" />
-          {isPlanned ? (
-            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full border border-fuchsia-200/20 bg-fuchsia-400/10 blur-2xl" />
-          ) : null}
-
-          <div className="relative">
-            <div className="mb-5 flex flex-wrap items-center gap-3">
-              <span className={`rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold ${styles.text}`}>
-                {milestone.status}
-              </span>
-              <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-white/38">
-                {milestone.eyebrow}
-              </span>
-            </div>
-
-            <h3 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
-              {milestone.title}
-            </h3>
-            <p className="mt-4 text-sm leading-7 text-white/62">{milestone.description}</p>
-
-            {milestone.details ? (
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {milestone.details.map((detail) => (
-                  <div
-                    key={detail}
-                    className="rounded-2xl border border-fuchsia-200/15 bg-fuchsia-300/[0.06] px-4 py-3 text-sm text-fuchsia-50"
-                  >
-                    {detail}
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </motion.article>
-      </div>
-
-      <div className="absolute left-5 top-8 z-10 -translate-x-1/2 md:static md:col-start-2 md:flex md:translate-x-0 md:items-center md:justify-center">
-        <motion.div
-          className={`relative grid rounded-full border ${styles.ring} ${isActive ? "h-20 w-20" : "h-16 w-16"} place-items-center bg-[#070b14]`}
-          initial={reduceMotion ? false : { scale: 0.72, opacity: 0.3 }}
-          whileInView={reduceMotion ? undefined : { scale: 1, opacity: 1 }}
-          viewport={{ once: true, amount: 0.65 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.12 + index * 0.08 }}
-        >
-          <span
-            className={`absolute inset-0 rounded-full border ${styles.ring} ${
-              isPlanned ? "animate-ping opacity-50 motion-reduce:animate-none" : "opacity-30"
-            }`}
-          />
-          <span className={`relative rounded-full ${isActive ? "h-8 w-8" : "h-5 w-5"} ${styles.node}`} />
-        </motion.div>
-      </div>
-
-      <motion.div
-        className="pointer-events-none absolute left-5 top-14 h-px w-10 origin-left bg-gradient-to-r from-cyan-200 to-transparent md:hidden"
-        initial={reduceMotion ? false : { scaleX: 0, opacity: 0 }}
-        whileInView={reduceMotion ? undefined : { scaleX: 1, opacity: 0.55 }}
-        animate={{ opacity: isHovered ? 1 : 0.55 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: reduceMotion ? 0 : 0.5, delay: 0.16 + index * 0.08, ease: "easeOut" }}
-      />
-
-      <motion.div
-        className={
-          "pointer-events-none absolute top-14 hidden h-px bg-gradient-to-r from-transparent via-cyan-200 to-transparent md:block " +
-          (isLeft ? "left-[calc(50%_-_19rem)] right-1/2" : "left-1/2 right-[calc(50%_-_19rem)]")
-        }
-        initial={reduceMotion ? false : { scaleX: 0, opacity: 0 }}
-        whileInView={reduceMotion ? undefined : { scaleX: 1, opacity: 0.5 }}
-        animate={{ opacity: isHovered ? 1 : 0.5 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: reduceMotion ? 0 : 0.7, delay: 0.18 + index * 0.08, ease: "easeOut" }}
-        style={{ originX: isLeft ? 1 : 0 }}
-      />
-    </motion.div>
   );
 }

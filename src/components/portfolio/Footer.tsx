@@ -299,13 +299,13 @@ function Orbit({
 
         @media (max-width: 520px) {
           .orbit-mobile-scale {
-            transform: translate(-50%, -50%) scale(0.75);
+            transform: translate(-50%, -50%) scale(0.6);
           }
         }
 
         @media (max-width: 380px) {
           .orbit-mobile-scale {
-            transform: translate(-50%, -50%) scale(0.65);
+            transform: translate(-50%, -50%) scale(0.5);
           }
         }
       `}</style>
