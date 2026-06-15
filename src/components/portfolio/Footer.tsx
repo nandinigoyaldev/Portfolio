@@ -238,7 +238,7 @@ function Orbit({
   };
 
   return (
-    <div className="orbit-mobile-scale absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 scale-[0.55] min-[400px]:scale-75 sm:scale-100">
       <div
         className="footer-orbit absolute inset-0"
         style={{ animationPlayState: paused ? "paused" : "running" }}
@@ -283,7 +283,6 @@ function Orbit({
         })}
       </div>
 
-      {/* Mobile responsive: shrink orbit radius */}
       <style jsx>{`
         .footer-orbit {
           animation: footer-orbit-spin 34s linear infinite;
@@ -294,18 +293,6 @@ function Orbit({
         @keyframes footer-orbit-spin {
           to {
             transform: rotate(360deg);
-          }
-        }
-
-        @media (max-width: 520px) {
-          .orbit-mobile-scale {
-            transform: translate(-50%, -50%) scale(0.6);
-          }
-        }
-
-        @media (max-width: 380px) {
-          .orbit-mobile-scale {
-            transform: translate(-50%, -50%) scale(0.5);
           }
         }
       `}</style>

@@ -31,7 +31,7 @@ function parseMessageContent(text: string) {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 underline underline-offset-2 font-medium transition-colors"
+        className="inline-flex items-center gap-1 text-white hover:text-white/70 underline underline-offset-2 font-medium transition-colors"
       >
         {label} ↗
       </a>
@@ -114,15 +114,15 @@ export default function ChatMessageView({
       <div
         className={
           isUser
-            ? "max-w-[85%] rounded-2xl rounded-tr-none bg-cyan-400/20 text-white px-4 py-3 text-sm border border-cyan-400/35 shadow-[0_4px_15px_rgba(34,211,238,0.15)] leading-relaxed select-text"
-            : "max-w-[85%] rounded-2xl rounded-tl-none bg-white/[0.06] px-4 py-3 text-sm text-white/90 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.15)] leading-relaxed select-text"
+            ? "max-w-[85%] rounded-2xl rounded-tr-none bg-white text-black px-4 py-3 text-sm border border-transparent shadow-[0_4px_15px_rgba(255,255,255,0.15)] leading-relaxed select-text"
+            : "max-w-[85%] rounded-2xl rounded-tl-none bg-[#121212] px-4 py-3 text-sm text-white/90 border border-white/10 shadow-[0_4px_15px_rgba(0,0,0,0.5)] leading-relaxed select-text"
         }
         aria-label={isUser ? "User message" : "Assistant message"}
       >
         <div className="whitespace-pre-wrap">
           {parseMessageContent(displayedContent)}
           {!isUser && displayedContent.length < content.length && (
-            <span className="ml-[2px] inline-block w-1.5 h-3.5 bg-cyan-400 animate-pulse align-middle" />
+            <span className="ml-[2px] inline-block w-1.5 h-3.5 bg-white animate-pulse align-middle" />
           )}
         </div>
       </div>

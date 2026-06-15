@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
-// Static pre-calculated animation details to guarantee React component purity
 const WAVE_FACTORS = [
   { duration: 0.72, speakHeight: 48, listenHeight: 22 },
   { duration: 0.58, speakHeight: 54, listenHeight: 28 },
@@ -21,80 +20,197 @@ const WAVE_FACTORS = [
   { duration: 0.60, speakHeight: 44, listenHeight: 20 },
 ];
 
-export default function VoiceMode({ onClose }: { onClose: () => void }) {
-  const [state, setState] = useState<"connecting" | "listening" | "speaking" | "muted">("connecting");
+export default function VoiceMode({ 
+  onClose, 
+  onVoiceInput 
+}: { 
+  onClose: () => void;
+  onVoiceInput?: (text: string) => Promise<string>;
+}) {
+  const [state, setState] = useState<"connecting" | "listening" | "thinking" | "speaking" | "muted">("connecting");
   const [isMuted, setIsMuted] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  
+  const recognitionRef = useRef<any>(null);
 
-  // Simulate connection flow
   useEffect(() => {
-    const connTimer = setTimeout(() => {
-      setState("listening");
-    }, 1500);
+    // Initialize Web Speech API
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      setErrorText("Voice mode is not supported in this browser.");
+      setState("muted");
+      setIsMuted(true);
+      return;
+    }
 
-    return () => clearTimeout(connTimer);
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setState("listening");
+      setErrorText("");
+    };
+
+    recognition.onresult = async (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setState("thinking");
+      
+      if (onVoiceInput) {
+        try {
+          const reply = await onVoiceInput(transcript);
+          speakResponse(reply);
+        } catch (e) {
+          setErrorText("Failed to get response.");
+          setState("listening");
+        }
+      } else {
+        setState("listening");
+      }
+    };
+
+    recognition.onerror = (event: any) => {
+      if (event.error === "not-allowed") {
+        setErrorText("Microphone permission denied.");
+        setState("muted");
+        setIsMuted(true);
+      } else if (event.error !== "no-speech") {
+        setErrorText("Audio capture failed. Please try again.");
+        setState("muted");
+        setIsMuted(true);
+      }
+    };
+
+    recognition.onend = () => {
+      // If we are still in listening state (no result), and not muted, restart
+      if (state === "listening" && !isMuted) {
+        try { recognition.start(); } catch {}
+      }
+    };
+
+    recognitionRef.current = recognition;
+
+    // Start connecting flow
+    const connTimer = setTimeout(() => {
+      if (!isMuted) {
+        try {
+          recognitionRef.current.start();
+        } catch (e) {
+          console.error("Mic start error", e);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(connTimer);
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      window.speechSynthesis.cancel();
+    };
   }, []);
 
-  // Simulate speaking and listening loop
-  useEffect(() => {
-    if (state === "connecting" || state === "muted") return;
+  const speakResponse = (text: string) => {
+    if (!("speechSynthesis" in window)) {
+      setState("listening");
+      if (!isMuted) recognitionRef.current?.start();
+      return;
+    }
 
-    const interval = setInterval(() => {
-      setState((prev) => (prev === "listening" ? "speaking" : "listening"));
-    }, 4000);
+    setState("speaking");
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Try to find a good English voice
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => v.lang.includes("en") && v.name.includes("Female")) 
+      || voices.find(v => v.lang.includes("en"));
+      
+    if (preferredVoice) utterance.voice = preferredVoice;
+    
+    utterance.rate = 1.05;
+    utterance.pitch = 1.1;
 
-    return () => clearInterval(interval);
-  }, [state]);
+    utterance.onend = () => {
+      if (isMuted) {
+        setState("muted");
+      } else {
+        setState("listening");
+        try { recognitionRef.current?.start(); } catch {}
+      }
+    };
+    
+    utterance.onerror = () => {
+      if (!isMuted) {
+        setState("listening");
+        try { recognitionRef.current?.start(); } catch {}
+      }
+    };
 
-  const handleMuteToggle = () => {
-    setIsMuted(!isMuted);
-    setState(isMuted ? "listening" : "muted");
+    window.speechSynthesis.speak(utterance);
   };
 
-  // Waveform bars count
+  const handleMuteToggle = () => {
+    const nextMuted = !isMuted;
+    setIsMuted(nextMuted);
+    
+    if (nextMuted) {
+      setState("muted");
+      recognitionRef.current?.stop();
+      window.speechSynthesis.cancel();
+    } else {
+      setErrorText("");
+      setState("listening");
+      try { recognitionRef.current?.start(); } catch {}
+    }
+  };
+
   const bars = Array.from({ length: 14 });
 
   return (
-    <div className="absolute inset-0 bg-[#070b14]/94 backdrop-blur-2xl flex flex-col items-center justify-between p-6 z-50 rounded-3xl border border-white/10 select-none">
-      {/* Header */}
+    <div className="absolute inset-0 bg-[#0a0a0a]/95 backdrop-blur-2xl flex flex-col items-center justify-between p-6 z-50 rounded-3xl border border-white/10 select-none">
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
-          <span className="text-xs font-semibold tracking-wider uppercase text-white/50">Nandini AI Voice</span>
+          <span className="text-xs font-medium tracking-wider uppercase text-white/50">Voice Mode</span>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="text-white/40 hover:text-white/80 p-1.5 rounded-full hover:bg-white/5 transition-colors"
+          className="text-white/40 hover:text-white/80 p-1.5 rounded-full hover:bg-white/5 transition-colors cursor-pointer"
           aria-label="Exit voice mode"
         >
           ✕
         </button>
       </div>
 
-      {/* Waveform / Visualizer */}
-      <div className="flex flex-col items-center justify-center flex-1 my-6 gap-6">
-        {/* Pulsing Outer Ring */}
+      <div className="flex flex-col items-center justify-center flex-1 my-6 gap-6 w-full">
         <div className="relative flex items-center justify-center h-36 w-36">
           <motion.div
-            className="absolute inset-0 rounded-full border border-cyan-300/20 bg-cyan-300/[0.02]"
+            className="absolute inset-0 rounded-full border border-white/10 bg-white/[0.02]"
             animate={
               state === "speaking"
                 ? { scale: [1, 1.35, 1], opacity: [0.3, 0.6, 0.3] }
                 : state === "listening"
                 ? { scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }
+                : state === "thinking"
+                ? { scale: [1, 1.05, 1], opacity: [0.1, 0.2, 0.1] }
                 : { scale: 1, opacity: 0.1 }
             }
             transition={{
-              duration: state === "speaking" ? 2 : 3,
+              duration: state === "speaking" ? 2 : state === "thinking" ? 1 : 3,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
           <motion.div
-            className="absolute h-28 w-28 rounded-full border border-fuchsia-400/20 bg-fuchsia-400/[0.02]"
+            className="absolute h-28 w-28 rounded-full border border-white/10 bg-white/[0.02]"
             animate={
               state === "speaking"
                 ? { scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }
@@ -106,13 +222,11 @@ export default function VoiceMode({ onClose }: { onClose: () => void }) {
               ease: "easeInOut"
             }}
           />
-          {/* Central Orb */}
-          <div className="relative z-10 h-20 w-20 rounded-full bg-gradient-to-tr from-cyan-500 to-fuchsia-500 flex items-center justify-center shadow-[0_0_30px_rgba(34,211,238,0.25)]">
-            <span className="text-3xl text-white">🎙</span>
+          <div className="relative z-10 h-20 w-20 rounded-full bg-white flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+            <span className="text-3xl text-black">🎙</span>
           </div>
         </div>
 
-        {/* Dynamic Equalizer Wave */}
         <div className="flex items-center gap-1.5 h-16 w-60 justify-center">
           {bars.map((_, i) => {
             const factor = WAVE_FACTORS[i] || { duration: 0.7, speakHeight: 50, listenHeight: 25 };
@@ -123,7 +237,7 @@ export default function VoiceMode({ onClose }: { onClose: () => void }) {
               heightRange = [12, factor.speakHeight, 12];
             } else if (state === "listening") {
               heightRange = [8, factor.listenHeight, 8];
-            } else if (state === "connecting") {
+            } else if (state === "connecting" || state === "thinking") {
               heightRange = [8, 12, 8];
               duration = 1;
             }
@@ -131,7 +245,7 @@ export default function VoiceMode({ onClose }: { onClose: () => void }) {
             return (
               <motion.div
                 key={i}
-                className="w-1.5 rounded-full bg-gradient-to-t from-cyan-400 to-fuchsia-400"
+                className="w-1.5 rounded-full bg-white"
                 animate={{ height: heightRange }}
                 transition={{
                   duration,
@@ -145,62 +259,48 @@ export default function VoiceMode({ onClose }: { onClose: () => void }) {
           })}
         </div>
 
-        {/* Status Text */}
         <div className="text-center">
           <h4 className="text-lg font-medium tracking-wide text-white capitalize">
-            {state === "connecting"
-              ? "Establishing neural channel..."
-              : state === "listening"
-              ? "Listening to you..."
-              : state === "speaking"
-              ? "Nandini AI speaking"
-              : "Microphone muted"}
+            {errorText ? errorText : 
+              state === "connecting" ? "Requesting microphone..." :
+              state === "listening" ? "Listening..." :
+              state === "thinking" ? "Thinking..." :
+              state === "speaking" ? "Speaking..." :
+              "Microphone muted"}
           </h4>
           <p className="text-xs text-white/40 mt-1 max-w-[200px] mx-auto leading-relaxed">
-            {state === "connecting"
-              ? "Connecting mock channels..."
-              : state === "listening"
-              ? "Speak clearly. Click Mic to mute."
-              : state === "speaking"
-              ? "Translating repository facts..."
-              : "Click Mic to unmute."}
+            {errorText ? "Click mic to try again." :
+              state === "connecting" ? "Please allow microphone access." :
+              state === "listening" ? "Speak clearly." :
+              state === "thinking" ? "Processing your question..." :
+              state === "speaking" ? "Reading response..." :
+              "Click mic to unmute."}
           </p>
         </div>
       </div>
 
-      {/* Footer Controls */}
       <div className="w-full border-t border-white/10 pt-4 flex items-center justify-center gap-6">
-        {/* Mute Mic Button */}
         <button
           type="button"
           onClick={handleMuteToggle}
-          className={`flex h-11 w-11 items-center justify-center rounded-full border transition-all ${
+          className={`flex h-11 w-11 items-center justify-center rounded-full border transition-all cursor-pointer ${
             isMuted
-              ? "bg-brand/20 border-brand text-brand hover:bg-brand/30 shadow-[0_0_15px_rgba(213,83,77,0.25)]"
-              : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+              ? "bg-red-500/20 border-red-500 text-red-500 hover:bg-red-500/30"
+              : "bg-white border-white text-black hover:bg-white/90"
           }`}
           aria-label={isMuted ? "Unmute microphone" : "Mute microphone"}
         >
           {isMuted ? "🔇" : "🎙"}
         </button>
 
-        {/* End Call Button */}
         <button
           type="button"
           onClick={onClose}
-          className="flex h-11 px-5 items-center justify-center rounded-full bg-brand hover:bg-brand-dark text-white font-medium shadow-[0_0_20px_rgba(213,83,77,0.3)] hover:shadow-[0_0_25px_rgba(213,83,77,0.4)] transition-all"
+          className="flex h-11 px-5 items-center justify-center rounded-full bg-white/10 border border-white/10 hover:bg-white/20 text-white font-medium transition-all cursor-pointer"
         >
           Disconnect
         </button>
       </div>
-
-      {/* Integration Architectural Notes */}
-      {/* 
-        Future implementation details:
-        1. OpenAI Realtime: Hook up a WebSocket client to `wss://api.openai.com/v1/realtime`.
-        2. ElevenLabs / Deepgram: Stream user audio to Deepgram (STT), send text prompt to AI, 
-           and route AI text response to ElevenLabs API (TTS) to stream back audio buffers.
-      */}
     </div>
   );
 }

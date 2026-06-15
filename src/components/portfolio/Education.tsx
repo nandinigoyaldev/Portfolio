@@ -71,7 +71,7 @@ export default function Education() {
             Academic Trajectory
           </span>
           <h2 className="font-mono text-[clamp(1.5rem,5vw,2.25rem)] font-light tracking-widest text-white uppercase">
-            NAV.<span className="text-white/40">ROUTE</span>
+            Edu<span className="text-white/40">cation</span>
           </h2>
         </div>
 

@@ -178,11 +178,11 @@ function TechStackSection() {
           <div className="flex items-center gap-3 mb-3">
             <span className="flex h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
             <span className="font-mono text-xs uppercase tracking-[0.4em] text-cyan-400/80">
-              Terminal / Systems
+              Architecture
             </span>
           </div>
           <h2 className="font-mono text-3xl font-light tracking-tight text-white md:text-5xl uppercase">
-            <span className="text-white/40">SYS.</span>MODULES
+            Tech <span className="text-white/40">Stack</span>
           </h2>
         </div>
         <div className="max-w-sm font-mono text-[10px] uppercase leading-5 tracking-widest text-white/40 md:text-right">
@@ -192,7 +192,7 @@ function TechStackSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto h-[800px] md:h-[600px] w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)]">
+      <div className="relative mx-auto h-auto min-h-[500px] md:h-[600px] py-16 md:py-0 w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)] flex flex-wrap content-center justify-center gap-6 md:block">
         
         {/* Radar Background */}
         <div className="pointer-events-none absolute inset-0 opacity-40">
@@ -204,7 +204,7 @@ function TechStackSection() {
         </div>
 
         {/* Constellation Lines */}
-        <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-60">
+        <svg className="hidden md:block pointer-events-none absolute inset-0 h-full w-full opacity-60">
           {/* Frontend Cluster */}
           <motion.path className="hidden md:block" stroke="rgba(34, 211, 238, 0.2)" d="M 25% 15% L 12% 35% L 32% 48% L 45% 22% L 65% 28% Z" fill="none" strokeWidth="1.5" strokeDasharray="4 4" initial={reduceMotion ? false : { pathLength: 0 }} whileInView={reduceMotion ? undefined : { pathLength: 1 }} transition={{ duration: 2 }} />
           <motion.path className="md:hidden" stroke="rgba(34, 211, 238, 0.2)" d="M 20% 5% L 65% 12% L 30% 18% L 75% 25% L 15% 32%" fill="none" strokeWidth="1.5" strokeDasharray="4 4" initial={reduceMotion ? false : { pathLength: 0 }} whileInView={reduceMotion ? undefined : { pathLength: 1 }} transition={{ duration: 2 }} />
@@ -224,20 +224,17 @@ function TechStackSection() {
           return (
             <div
               key={node.id}
-              className="absolute group cursor-default"
+              className={`relative md:absolute group cursor-default tech-node-${node.id}`}
               style={{
-                transform: "translate(-50%, -50%)",
+                ...(typeof window !== 'undefined' && window.innerWidth >= 768 ? { transform: "translate(-50%, -50%)" } : {}),
                 "--desk-x": `${node.coords.deskX}%`,
                 "--desk-y": `${node.coords.deskY}%`,
-                "--mob-x": `${node.coords.mobX}%`,
-                "--mob-y": `${node.coords.mobY}%`,
               } as React.CSSProperties}
               onMouseEnter={() => setActiveNode(node.id)}
               onMouseLeave={() => setActiveNode(null)}
             >
               <style jsx>{`
-                div { left: var(--mob-x); top: var(--mob-y); }
-                @media (min-width: 768px) { div { left: var(--desk-x); top: var(--desk-y); } }
+                @media (min-width: 768px) { .tech-node-${node.id} { left: var(--desk-x); top: var(--desk-y); transform: translate(-50%, -50%); } }
               `}</style>
 
               <motion.div
@@ -263,7 +260,7 @@ function TechStackSection() {
                       src={`https://cdn.simpleicons.org/${node.icon}/ffffff`}
                     />
                     {/* System tag (hidden until hover) */}
-                    <div className={`absolute -top-6 whitespace-nowrap rounded bg-[#070b14] px-1.5 py-0.5 font-mono text-[9px] font-bold border transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0'} ${accentClassesMap[node.accent].text} ${accentClassesMap[node.accent].ring}`}>
+                    <div className={`absolute -top-8 md:-top-10 whitespace-nowrap rounded bg-[#070b14]/95 px-1.5 py-0.5 font-mono text-[9px] font-bold border transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-0'} ${accentClassesMap[node.accent].text} ${accentClassesMap[node.accent].ring}`}>
                       [{node.sys}]
                     </div>
                     {/* Coordinate tag */}
@@ -314,11 +311,11 @@ function ExperienceSection() {
           <div className="flex items-center gap-3 mb-3">
             <span className="flex h-2 w-2 rounded-sm bg-indigo-400" />
             <span className="font-mono text-xs uppercase tracking-[0.4em] text-indigo-400/80">
-              Data Modules
+              Professional
             </span>
           </div>
           <h2 className="font-mono text-3xl font-light tracking-tight text-white md:text-5xl uppercase">
-            <span className="text-white/40">OP.</span>ARCHIVE
+            <span className="text-white/40">Exp</span>erience
           </h2>
         </div>
         <div className="max-w-sm font-mono text-[10px] uppercase leading-5 tracking-widest text-white/40 md:text-right">
@@ -408,11 +405,11 @@ function AchievementsSection() {
         <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
           <span className="flex h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-yellow-500/90">
-            Classified Vault
+            Milestones
           </span>
         </div>
         <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
-          RECOVERED<span className="text-white/30">_RECORDS</span>
+          Achieve<span className="text-white/30">ments</span>
         </h2>
         <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
           [ Select file to decrypt contents ]
