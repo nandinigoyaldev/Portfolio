@@ -72,12 +72,13 @@ export default function VoiceMode({
     };
 
     recognition.onerror = (event: any) => {
+      console.error("Speech Recognition Error:", event.error);
       if (event.error === "not-allowed") {
         setErrorText("Microphone permission denied.");
         setState("muted");
         setIsMuted(true);
       } else if (event.error !== "no-speech") {
-        setErrorText("Audio capture failed. Please try again.");
+        setErrorText(`Error: ${event.error}`);
         setState("muted");
         setIsMuted(true);
       }
