@@ -51,24 +51,24 @@ export default function Education() {
   const [activeId, setActiveId] = React.useState<string | null>("bca");
 
   return (
-    <section className="relative overflow-hidden bg-[#050505] px-6 py-24 text-white min-h-[90vh] flex flex-col justify-center items-center" id="education">
+    <section className="relative overflow-hidden bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col justify-center items-center" id="education">
       
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] [background-size:40px_40px]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-5xl z-10">
+      <div className="relative mx-auto w-full max-w-4xl z-10">
         
         {/* Header */}
-        <div className="mb-16 flex flex-col items-center text-center">
+        <div className="mb-8 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
             <span className="flex h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-yellow-500/90">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-yellow-500/90">
               System Neural Spine
             </span>
           </div>
-          <h2 className="font-mono text-4xl font-light tracking-widest text-white md:text-6xl uppercase">
+          <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
             Edu<span className="text-white/30">cation</span>
           </h2>
           <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
@@ -77,7 +77,7 @@ export default function Education() {
         </div>
         
         {/* The Server Rack / Neural Spine */}
-        <div className="relative w-full flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto pl-4 md:pl-0">
+        <div className="relative w-full flex flex-col gap-4 md:gap-5 max-w-4xl mx-auto pl-4 md:pl-0">
           
           {/* Neural Spine glowing line */}
           <div className="absolute left-[7px] md:left-[29px] top-4 bottom-4 w-[2px] bg-white/10">
@@ -89,7 +89,7 @@ export default function Education() {
             const styles = colorMap[m.color];
 
             return (
-              <div key={m.id} className="relative flex gap-6 md:gap-10 group items-stretch">
+              <div key={m.id} className="relative flex gap-4 md:gap-8 group items-stretch">
                 
                 {/* Spine Connector Node */}
                 <div className="flex flex-col items-center pt-8 z-10">
@@ -107,10 +107,10 @@ export default function Education() {
                 >
                   
                   {/* Blade Header / External Casing */}
-                  <div className="p-5 md:p-8 flex justify-between items-center bg-black/40 border-b border-transparent transition-colors">
+                  <div className="p-4 md:p-6 flex justify-between items-center bg-black/40 border-b border-transparent transition-colors">
                     <div className="pr-4">
                        <span className="font-mono text-[9px] md:text-[10px] uppercase text-white/50 tracking-widest">{m.eyebrow}</span>
-                       <h3 className="text-lg md:text-2xl font-bold mt-2 uppercase tracking-tight text-white">{m.title}</h3>
+                       <h3 className="text-base md:text-xl font-bold mt-1 uppercase tracking-tight text-white">{m.title}</h3>
                     </div>
                     {/* Server LEDs */}
                     <div className="hidden sm:flex gap-2">
@@ -129,7 +129,7 @@ export default function Education() {
                         exit={{ height: 0, opacity: 0 }}
                         className="border-t border-white/10 bg-[#050505] overflow-hidden"
                       >
-                        <div className="p-6 md:p-8 flex gap-6 md:gap-8">
+                        <div className="p-4 md:p-6 flex gap-4 md:gap-6">
                            
                            {/* Internal Skill Tree visual trace */}
                            <div className="hidden sm:flex flex-col items-center">
@@ -141,7 +141,7 @@ export default function Education() {
                            
                            {/* Data Core */}
                            <div className="flex-1">
-                             <div className={`inline-block px-3 py-1 md:px-4 md:py-1.5 border bg-white/[0.03] font-mono text-[9px] md:text-[10px] uppercase tracking-widest mb-6 ${styles.border} ${styles.text}`}>
+                             <div className={`inline-block px-3 py-1 md:px-4 md:py-1.5 border bg-white/[0.03] font-mono text-[8px] md:text-[9px] uppercase tracking-widest mb-4 ${styles.border} ${styles.text}`}>
                                SYS.STATUS: {m.status}
                              </div>
                              
@@ -150,7 +150,7 @@ export default function Education() {
                              </p>
                              
                              {m.details && (
-                               <div className="mt-8 flex flex-wrap gap-3">
+                               <div className="mt-4 flex flex-wrap gap-2 md:gap-3">
                                  {m.details.map(d => (
                                    <span key={d} className="px-3 py-1.5 md:px-4 md:py-2 rounded bg-[#0a0f1a] border border-white/10 font-mono text-[10px] md:text-xs text-white/50 tracking-wider">
                                      {d}

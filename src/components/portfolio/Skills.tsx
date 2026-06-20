@@ -129,13 +129,13 @@ function TechStackSection() {
   const [activeNode, setActiveNode] = React.useState<string | null>(null);
 
   return (
-    <section id="tech-stack" className="relative overflow-hidden bg-[#070b14] px-6 py-16 md:py-20 text-white min-h-[70vh] flex flex-col justify-center">
+    <section id="tech-stack" className="relative overflow-hidden bg-[#070b14] px-6 pt-32 pb-16 text-white flex flex-col justify-center">
       {/* Vibe-coded heading */}
-      <div className="relative mx-auto max-w-5xl mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
+      <div className="relative mx-auto max-w-4xl mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
         <div>
           <div className="flex items-center gap-3 mb-3">
             <span className="flex h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
-            <span className="font-mono text-xs uppercase tracking-[0.4em] text-cyan-400/80">
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-cyan-400/80">
               Architecture
             </span>
           </div>
@@ -150,7 +150,7 @@ function TechStackSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto h-auto min-h-[500px] md:h-[600px] py-16 md:py-0 w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)] flex flex-wrap content-center justify-center gap-6 md:block">
+      <div className="relative mx-auto h-[350px] md:h-[400px] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)] flex flex-wrap content-center justify-center gap-6 md:block">
         
         {/* Radar Background */}
         <div className="pointer-events-none absolute inset-0 opacity-40">
@@ -262,21 +262,21 @@ function ExperienceSection() {
   const activeShard = dataShards.find(s => s.id === activeId);
 
   return (
-    <section id="experience" className="relative overflow-hidden bg-[#020408] px-6 py-24 text-white min-h-[90vh] flex flex-col justify-center">
+    <section id="experience" className="relative overflow-hidden bg-[#020408] px-6 pt-32 pb-16 text-white flex flex-col justify-center">
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_1px,_transparent_1px)] [background-size:24px_24px]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl z-10">
-        <div className="mb-12 flex flex-col items-center text-center">
+      <div className="relative mx-auto w-full max-w-4xl z-10">
+        <div className="mb-6 md:mb-8 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
             <span className="flex h-2 w-2 rounded-full bg-fuchsia-500 animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-fuchsia-400/90">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fuchsia-400/90">
               Orbital Command
             </span>
           </div>
-          <h2 className="font-mono text-4xl font-light tracking-widest text-white md:text-6xl uppercase">
+          <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
             Exper<span className="text-white/30">ience</span>
           </h2>
           <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
@@ -285,7 +285,7 @@ function ExperienceSection() {
         </div>
 
         {/* Full-width Galaxy Map */}
-        <div className="relative h-[600px] lg:h-[750px] w-full bg-black rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/5 flex items-center justify-center">
+        <div className="relative h-[350px] lg:h-[400px] w-full max-w-4xl mx-auto bg-black rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/5 flex items-center justify-center">
           
           {/* Deep Space Background / Nebula */}
           <div className="absolute inset-0 z-0">
@@ -315,13 +315,12 @@ function ExperienceSection() {
              const isActive = activeId === shard.id;
              const styles = accentClassesMap[shard.color];
              const angle = (index / dataShards.length) * 360;
-             // Push them out a bit further since we have more space
-             const radius = typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 260; 
-             const x = Math.cos(angle * (Math.PI / 180)) * radius;
-             const y = Math.sin(angle * (Math.PI / 180)) * radius;
+             const radiusPercent = 35; // Responsive percentage radius
+             const left = 50 + Math.cos(angle * (Math.PI / 180)) * radiusPercent;
+             const top = 50 + Math.sin(angle * (Math.PI / 180)) * radiusPercent;
              
              return (
-               <div key={shard.id} className="absolute top-1/2 left-1/2 z-20 group cursor-pointer" style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` }} onClick={() => setActiveId(shard.id)}>
+               <div key={shard.id} className="absolute z-20 group cursor-pointer" style={{ top: `${top}%`, left: `${left}%`, transform: `translate(-50%, -50%)` }} onClick={() => setActiveId(shard.id)}>
                   
                   {/* Planet body */}
                   <div className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-500 flex items-center justify-center shadow-lg ${isActive ? styles.bg + ' shadow-[0_0_30px_currentColor] scale-110' : 'bg-[#0a0f1a] border border-white/20 group-hover:border-white/50 group-hover:scale-105'}`}>
@@ -348,11 +347,11 @@ function ExperienceSection() {
                   {/* Laser Beam to Center when active */}
                   {isActive && (
                     <svg className="absolute top-1/2 left-1/2 w-[800px] h-[800px] pointer-events-none overflow-visible -translate-x-1/2 -translate-y-1/2 -z-10">
-                      <line x1="50%" y1="50%" x2={`calc(50% - ${x}px)`} y2={`calc(50% - ${y}px)`} stroke="currentColor" strokeWidth="2" className={styles.text} strokeDasharray="4 8" />
+                      <line x1="50%" y1="50%" x2={`${left}%`} y2={`${top}%`} stroke="currentColor" strokeWidth="2" className={styles.text} strokeDasharray="4 8" />
                       {/* Pulse effect traveling along the line */}
-                      <circle cx={`calc(50% - ${x}px)`} cy={`calc(50% - ${y}px)`} r="3" fill="currentColor" className={styles.text}>
-                        <animate attributeName="cx" values={`calc(50% - ${x}px); 50%`} dur="1.5s" repeatCount="indefinite" />
-                        <animate attributeName="cy" values={`calc(50% - ${y}px); 50%`} dur="1.5s" repeatCount="indefinite" />
+                      <circle cx={`${left}%`} cy={`${top}%`} r="3" fill="currentColor" className={styles.text}>
+                        <animate attributeName="cx" values={`${left}%; 50%`} dur="1.5s" repeatCount="indefinite" />
+                        <animate attributeName="cy" values={`${top}%; 50%`} dur="1.5s" repeatCount="indefinite" />
                       </circle>
                     </svg>
                   )}
@@ -439,12 +438,12 @@ function AchievementsSection() {
   const [activeRecord, setActiveRecord] = React.useState<string | null>(null);
 
   return (
-    <section id="achievements" className="relative overflow-hidden bg-[#050505] px-6 py-16 md:py-20 text-white min-h-[60vh] flex flex-col justify-center">
+    <section id="achievements" className="relative overflow-hidden bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col justify-center">
       {/* Vault Header */}
-      <div className="relative mx-auto max-w-6xl mb-12 flex flex-col items-center text-center z-10">
+      <div className="relative mx-auto max-w-6xl mb-6 md:mb-8 flex flex-col items-center text-center z-10">
         <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
           <span className="flex h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
-          <span className="font-mono text-xs uppercase tracking-[0.3em] text-yellow-500/90">
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-yellow-500/90">
             Milestones
           </span>
         </div>
@@ -457,7 +456,7 @@ function AchievementsSection() {
       </div>
 
       {/* The Vault Desk Viewport */}
-      <div className="relative mx-auto h-[65vh] min-h-[500px] max-h-[700px] w-full max-w-5xl rounded-lg border border-white/5 bg-[#0a0a0a] shadow-[inset_0_0_80px_rgba(0,0,0,0.9)] overflow-hidden">
+      <div className="relative mx-auto h-[400px] w-full max-w-4xl rounded-lg border border-white/5 bg-[#0a0a0a] shadow-[inset_0_0_80px_rgba(0,0,0,0.9)] overflow-hidden">
         
         {/* Subtle grid on the desk */}
         <div className="pointer-events-none absolute inset-0 opacity-10">

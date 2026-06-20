@@ -57,7 +57,7 @@ export default function Projects() {
   const activeProject = projects.find(p => p.id === activeId);
 
   return (
-    <section className="relative bg-[#050505] px-6 py-24 text-white min-h-[90vh] flex flex-col items-center justify-center overflow-hidden" id="projects">
+    <section className="relative bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col items-center justify-center overflow-hidden" id="projects">
       
       {/* Deep Circuit Grid Background */}
       <div className="pointer-events-none absolute inset-0 opacity-20">
@@ -65,16 +65,16 @@ export default function Projects() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_#050505_100%)]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-6xl z-10">
+      <div className="relative mx-auto w-full max-w-4xl z-10">
         {/* Header */}
-        <div className="mb-12 flex flex-col items-center text-center">
+        <div className="mb-6 md:mb-8 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
             <span className="flex h-2 w-2 rounded-sm bg-cyan-500 animate-pulse" />
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-cyan-400/90">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan-400/90">
               Motherboard
             </span>
           </div>
-          <h2 className="font-mono text-4xl font-light tracking-widest text-white md:text-6xl uppercase">
+          <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
             Data<span className="text-white/30">Cores</span>
           </h2>
           <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
@@ -83,7 +83,7 @@ export default function Projects() {
         </div>
 
         {/* The Circuit Board Area */}
-        <div className="relative w-full h-[500px] md:h-[600px] border border-white/10 bg-[#070b14]/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
+        <div className="relative w-full h-[350px] md:h-[400px] border border-white/10 bg-[#070b14]/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
           
           {/* Main Bus Line */}
           <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/5 -translate-y-1/2" />
@@ -271,7 +271,7 @@ function Microchip({
       </div>
 
       {/* The Chip Body */}
-      <div className={`relative w-32 h-24 md:w-40 md:h-28 bg-[#0a0f1a] border-2 transition-colors duration-300 ${isActive ? styles.border : 'border-white/20 group-hover:border-white/40'} flex flex-col items-center justify-center shadow-2xl z-10`}>
+      <div className={`relative w-28 h-20 md:w-36 md:h-24 bg-[#0a0f1a] border-2 transition-colors duration-300 ${isActive ? styles.border : 'border-white/20 group-hover:border-white/40'} flex flex-col items-center justify-center shadow-2xl z-10`}>
         {/* Core indentation */}
         <div className={`absolute inset-2 bg-[#050505] border transition-colors duration-300 flex items-center justify-center ${isActive ? styles.border : 'border-white/5 group-hover:border-white/10'}`}>
           <div className="text-center">
