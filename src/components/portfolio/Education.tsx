@@ -41,130 +41,137 @@ const milestones: Milestone[] = [
   },
 ];
 
-const colorStyles = {
-  cyan: { bg: "bg-cyan-400", text: "text-cyan-300", border: "border-cyan-400/50", shadow: "shadow-[0_0_15px_rgba(34,211,238,0.5)]" },
-  emerald: { bg: "bg-emerald-400", text: "text-emerald-300", border: "border-emerald-400/50", shadow: "shadow-[0_0_15px_rgba(52,211,153,0.5)]" },
-  fuchsia: { bg: "bg-fuchsia-400", text: "text-fuchsia-300", border: "border-fuchsia-400/50", shadow: "shadow-[0_0_15px_rgba(232,121,249,0.5)]" },
+const colorMap = {
+  cyan: { bg: "bg-cyan-500", text: "text-cyan-400", border: "border-cyan-500", glow: "shadow-[0_0_30px_rgba(6,182,212,0.15)]" },
+  emerald: { bg: "bg-emerald-500", text: "text-emerald-400", border: "border-emerald-500", glow: "shadow-[0_0_30px_rgba(16,185,129,0.15)]" },
+  fuchsia: { bg: "bg-fuchsia-500", text: "text-fuchsia-400", border: "border-fuchsia-500", glow: "shadow-[0_0_30px_rgba(217,70,239,0.15)]" },
 };
 
 export default function Education() {
-  const [activeId, setActiveId] = React.useState<string>("bca");
-
-  const activeMilestone = milestones.find((m) => m.id === activeId) || milestones[1];
-  const activeStyles = colorStyles[activeMilestone.color];
+  const [activeId, setActiveId] = React.useState<string | null>("bca");
 
   return (
-    <section
-      className="relative overflow-hidden bg-[#070b14] px-6 py-16 md:py-20 text-white min-h-[50vh] flex flex-col justify-center"
-      id="education"
-    >
+    <section className="relative overflow-hidden bg-[#050505] px-6 py-24 text-white min-h-[90vh] flex flex-col justify-center items-center" id="education">
+      
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_1px,_transparent_1px)] [background-size:24px_24px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] [background-size:40px_40px]" />
       </div>
 
       <div className="relative mx-auto w-full max-w-5xl z-10">
+        
         {/* Header */}
-        <div className="mb-12 md:mb-16 flex flex-col items-center text-center">
-          <span className="font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase mb-2">
-            Academic Trajectory
-          </span>
-          <h2 className="font-mono text-[clamp(1.5rem,5vw,2.25rem)] font-light tracking-widest text-white uppercase">
-            Edu<span className="text-white/40">cation</span>
-          </h2>
-        </div>
-
-        {/* The Route (Horizontal on desktop, vertical-ish on mobile) */}
-        <div className="relative mb-12">
-          {/* Base Line */}
-          <div className="absolute top-1/2 left-[10%] right-[10%] h-px -translate-y-1/2 bg-white/10 hidden md:block" />
-          <div className="absolute left-[28px] top-[10%] bottom-[10%] w-px -translate-x-1/2 bg-white/10 md:hidden" />
-
-          {/* Waypoints */}
-          <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-0 px-4 md:px-[10%]">
-            {milestones.map((milestone) => {
-              const isActive = activeId === milestone.id;
-              const styles = colorStyles[milestone.color];
-
-              return (
-                <div 
-                  key={milestone.id}
-                  className="group relative flex md:flex-col items-center gap-4 cursor-pointer"
-                  onClick={() => setActiveId(milestone.id)}
-                >
-                  {/* Node */}
-                  <div className="relative flex items-center justify-center">
-                    <div className={`h-8 w-8 rounded-full border transition-all duration-300 ${isActive ? styles.border + ' bg-[#070b14] ' + styles.shadow : 'border-white/20 bg-[#0a0f1a] group-hover:border-white/40'} flex items-center justify-center`}>
-                      <div className={`h-2 w-2 rounded-full transition-colors duration-300 ${isActive ? styles.bg : 'bg-white/30'}`} />
-                    </div>
-                    {/* Ping effect for active */}
-                    {isActive && (
-                      <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${styles.bg}`} />
-                    )}
-                  </div>
-                  
-                  {/* Label */}
-                  <div className="flex flex-col md:items-center md:absolute md:top-12 md:left-1/2 md:-translate-x-1/2 md:w-40 md:text-center">
-                    <span className={`font-mono text-[10px] tracking-widest uppercase transition-colors duration-300 ${isActive ? styles.text : 'text-white/40 group-hover:text-white/60'}`}>
-                      {milestone.status}
-                    </span>
-                    <span className={`text-xs font-semibold mt-1 transition-colors duration-300 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white/90'}`}>
-                      {milestone.title.split(' (')[0]}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+        <div className="mb-16 flex flex-col items-center text-center">
+          <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
+            <span className="flex h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
+            <span className="font-mono text-xs uppercase tracking-[0.3em] text-yellow-500/90">
+              System Neural Spine
+            </span>
           </div>
+          <h2 className="font-mono text-4xl font-light tracking-widest text-white md:text-6xl uppercase">
+            Edu<span className="text-white/30">cation</span>
+          </h2>
+          <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
+            [ Accessing core memory banks ]
+          </p>
         </div>
+        
+        {/* The Server Rack / Neural Spine */}
+        <div className="relative w-full flex flex-col gap-6 md:gap-8 max-w-4xl mx-auto pl-4 md:pl-0">
+          
+          {/* Neural Spine glowing line */}
+          <div className="absolute left-[7px] md:left-[29px] top-4 bottom-4 w-[2px] bg-white/10">
+            <div className="w-full h-1/3 bg-white/40 animate-[pulse_4s_infinite]" />
+          </div>
 
-        {/* Single Info HUD */}
-        <div className="mx-auto max-w-2xl mt-8 md:mt-24">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeMilestone.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="relative rounded-xl border border-white/10 bg-[#0a0f1a] p-6 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.5)] backdrop-blur-md"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-              <div className={`absolute top-0 left-1/2 w-1/3 h-[2px] -translate-x-1/2 ${activeStyles.bg} shadow-[0_0_10px_currentColor] opacity-50`} />
-              
-              <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <span className={`font-mono text-[10px] tracking-widest uppercase ${activeStyles.text}`}>
-                    {activeMilestone.eyebrow}
-                  </span>
-                  <h3 className="text-xl md:text-2xl font-bold text-white mt-1">
-                    {activeMilestone.title}
-                  </h3>
+          {milestones.map((m) => {
+            const isActive = activeId === m.id;
+            const styles = colorMap[m.color];
+
+            return (
+              <div key={m.id} className="relative flex gap-6 md:gap-10 group items-stretch">
+                
+                {/* Spine Connector Node */}
+                <div className="flex flex-col items-center pt-8 z-10">
+                  <div className={`h-4 w-4 md:h-5 md:w-5 rounded-full border-2 transition-colors duration-500 flex items-center justify-center bg-[#050505] ${isActive ? styles.border : 'border-white/20 group-hover:border-white/50'}`}>
+                    {isActive && <div className={`absolute h-2 w-2 md:h-2.5 md:w-2.5 rounded-full animate-ping ${styles.bg}`} />}
+                    {isActive && <div className={`h-2 w-2 md:h-2.5 md:w-2.5 rounded-full ${styles.bg}`} />}
+                  </div>
                 </div>
-                <div className={`hidden md:flex px-3 py-1 rounded-full border border-white/10 font-mono text-[9px] uppercase tracking-widest bg-white/5`}>
-                  STATUS: {activeMilestone.status}
+
+                {/* Server Blade */}
+                <div 
+                  className={`flex-1 rounded-r-2xl border-l-[6px] md:border-l-[8px] bg-[#0a0f1a] border border-white/10 transition-all duration-500 overflow-hidden cursor-pointer flex flex-col ${isActive ? 'border-l-' + m.color + '-500 bg-white/[0.04] ' + styles.glow : 'border-l-white/20 hover:border-l-white/40 hover:bg-white/[0.02]'}`}
+                  onClick={() => setActiveId(isActive ? null : m.id)}
+                  style={{ borderLeftColor: isActive ? `var(--tw-colors-${m.color}-500)` : '' }}
+                >
+                  
+                  {/* Blade Header / External Casing */}
+                  <div className="p-5 md:p-8 flex justify-between items-center bg-black/40 border-b border-transparent transition-colors">
+                    <div className="pr-4">
+                       <span className="font-mono text-[9px] md:text-[10px] uppercase text-white/50 tracking-widest">{m.eyebrow}</span>
+                       <h3 className="text-lg md:text-2xl font-bold mt-2 uppercase tracking-tight text-white">{m.title}</h3>
+                    </div>
+                    {/* Server LEDs */}
+                    <div className="hidden sm:flex gap-2">
+                      <div className="w-2 h-2 rounded-full bg-red-500/20" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
+                      <div className={`w-2 h-2 rounded-full ${isActive ? styles.bg + ' animate-pulse' : 'bg-white/20'}`} />
+                    </div>
+                  </div>
+
+                  {/* Blade Internal Components (The Skill Tree / Data) */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="border-t border-white/10 bg-[#050505] overflow-hidden"
+                      >
+                        <div className="p-6 md:p-8 flex gap-6 md:gap-8">
+                           
+                           {/* Internal Skill Tree visual trace */}
+                           <div className="hidden sm:flex flex-col items-center">
+                             <div className="w-px h-full bg-white/10 relative mt-2">
+                               <div className={`absolute top-2 left-[-3px] w-1.5 h-1.5 rounded-full ${styles.bg}`} />
+                               <div className={`absolute top-1/2 left-[-3px] w-1.5 h-1.5 rounded-full ${styles.bg}`} />
+                             </div>
+                           </div>
+                           
+                           {/* Data Core */}
+                           <div className="flex-1">
+                             <div className={`inline-block px-3 py-1 md:px-4 md:py-1.5 border bg-white/[0.03] font-mono text-[9px] md:text-[10px] uppercase tracking-widest mb-6 ${styles.border} ${styles.text}`}>
+                               SYS.STATUS: {m.status}
+                             </div>
+                             
+                             <p className="font-mono text-xs md:text-sm leading-relaxed text-white/70 max-w-2xl border-l-2 border-white/10 pl-4 py-1">
+                               &gt; {m.description}
+                             </p>
+                             
+                             {m.details && (
+                               <div className="mt-8 flex flex-wrap gap-3">
+                                 {m.details.map(d => (
+                                   <span key={d} className="px-3 py-1.5 md:px-4 md:py-2 rounded bg-[#0a0f1a] border border-white/10 font-mono text-[10px] md:text-xs text-white/50 tracking-wider">
+                                     {d}
+                                   </span>
+                                 ))}
+                               </div>
+                             )}
+                           </div>
+                           
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  
                 </div>
               </div>
-              
-              <p className="font-mono text-sm leading-relaxed text-white/70">
-                &gt; {activeMilestone.description}
-              </p>
-
-              {activeMilestone.details && (
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {activeMilestone.details.map((detail) => (
-                    <span key={detail} className="px-3 py-1.5 rounded border border-white/10 bg-[#070b14] font-mono text-xs text-white/50">
-                      {detail}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+            )
+          })}
         </div>
 
       </div>
     </section>
-  );
+  )
 }
