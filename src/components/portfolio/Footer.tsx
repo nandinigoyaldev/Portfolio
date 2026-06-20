@@ -173,7 +173,7 @@ export default function Footer() {
           </div>
 
           {/* Connection line */}
-          <svg className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
             {line ? (
               <>
                 <defs>

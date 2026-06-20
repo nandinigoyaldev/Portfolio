@@ -114,13 +114,6 @@ const recoveredRecords: RecoveredRecord[] = [
   },
 ];
 
-const accentClasses: Record<string, string> = {
-  cyan: "border-cyan-200/25 text-cyan-100 shadow-[0_0_28px_rgba(34,211,238,0.16)]",
-  emerald: "border-emerald-200/25 text-emerald-100 shadow-[0_0_28px_rgba(110,231,183,0.16)]",
-  indigo: "border-indigo-200/25 text-indigo-100 shadow-[0_0_28px_rgba(129,140,248,0.16)]",
-  fuchsia: "border-fuchsia-200/25 text-fuchsia-100 shadow-[0_0_28px_rgba(217,70,239,0.16)]",
-};
-
 export default function Skills() {
   return (
     <>
@@ -128,41 +121,6 @@ export default function Skills() {
       <ExperienceSection />
       <AchievementsSection />
     </>
-  );
-}
-
-function SectionShell({
-  id,
-  eyebrow,
-  title,
-  intro,
-  children,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  intro: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="relative overflow-hidden bg-[#070b14] px-6 py-24 text-white" id={id}>
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.052)_1px,_transparent_1px)] [background-size:30px_30px] opacity-25" />
-      </div>
-
-      <div className="relative mx-auto max-w-6xl">
-        <div className="mb-14 max-w-3xl">
-          <span className="font-mono text-sm font-medium tracking-[0.35em] text-cyan-200/80">
-            {eyebrow}
-          </span>
-          <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">{title}</h2>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/60 md:text-base">{intro}</p>
-        </div>
-        {children}
-      </div>
-    </section>
   );
 }
 
@@ -288,7 +246,7 @@ function TechStackSection() {
         {/* Decorative Radar Overlays */}
         <div className="absolute bottom-4 right-4 flex gap-2 font-mono text-[10px] text-white/20">
           <span>SYS.ON</span>
-          <span>//</span>
+          <span>{"//"}</span>
           <span>RADAR.TRK</span>
         </div>
         <div className="absolute top-4 left-4 font-mono text-[10px] text-white/20">
@@ -324,7 +282,7 @@ function ExperienceSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto h-[70vh] min-h-[500px] max-h-[800px] w-full max-w-6xl overflow-hidden flex flex-col justify-center gap-3 md:gap-4 z-10">
+      <div className="relative mx-auto h-[70vh] min-h-[560px] max-h-[820px] w-full max-w-6xl overflow-visible flex flex-col justify-center gap-3 md:gap-4 z-10">
         
         {dataShards.map((shard, i) => {
           const isActive = activeShard?.id === shard.id;
@@ -332,7 +290,7 @@ function ExperienceSection() {
           return (
             <motion.div
               key={shard.id}
-              className={`relative cursor-pointer h-12 md:h-16 rounded border transition-all duration-300 ${isActive ? 'bg-white/[0.08] border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'bg-[#0a0f1a] border-white/10 hover:border-white/20 hover:bg-[#111827]'} ${shard.width}`}
+              className={`relative cursor-pointer h-12 md:h-16 rounded border transition-all duration-300 ${isActive ? 'z-30 bg-white/[0.08] border-white/40 shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'z-10 bg-[#0a0f1a] border-white/10 hover:border-white/20 hover:bg-[#111827]'} ${shard.width}`}
               style={{ alignSelf: shard.align }}
               onMouseEnter={() => setActiveShard(shard)}
               onMouseLeave={() => setActiveShard(null)}
@@ -353,38 +311,38 @@ function ExperienceSection() {
                   {shard.tag}
                 </div>
               </div>
+
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    key={`${shard.id}-details`}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    className={
+                      "absolute top-[calc(100%+2px)] w-[min(350px,calc(100vw-3rem))] rounded-xl border border-white/10 bg-[#070b14]/96 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl " +
+                      (shard.align === "flex-end" ? "right-0" : shard.align === "center" ? "left-1/2 -translate-x-1/2" : "left-0")
+                    }
+                  >
+                    <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                      <span className={`font-mono text-[10px] font-bold uppercase tracking-widest ${accentClassesMap[shard.color].text}`}>
+                        {shard.org}
+                      </span>
+                      <span className={`flex h-1.5 w-1.5 rounded-full ${accentClassesMap[shard.color].bg}`} />
+                    </div>
+                    <h4 className="text-base font-semibold text-white">{shard.title}</h4>
+                    <p className="mt-3 font-mono text-xs leading-relaxed text-white/60">
+                      {shard.signal}
+                    </p>
+                    <div className={`mt-5 rounded border px-4 py-3 text-xs leading-5 bg-white/[0.03] ${accentClassesMap[shard.color].text} ${accentClassesMap[shard.color].ring}`}>
+                      {shard.impact}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           );
         })}
-
-        {/* Hover Modal Overlay */}
-        <AnimatePresence>
-          {activeShard && (
-            <motion.div
-              key="mission-log"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 5 }}
-              className="pointer-events-none absolute bottom-6 left-6 right-6 md:left-auto md:right-8 md:top-8 md:bottom-auto md:w-[350px] rounded-xl border border-white/10 bg-[#070b14]/95 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl z-20"
-            >
-              <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
-                <span className={`font-mono text-[10px] font-bold uppercase tracking-widest ${accentClassesMap[activeShard.color].text}`}>
-                  {activeShard.org}
-                </span>
-                <span className={`flex h-1.5 w-1.5 rounded-full ${accentClassesMap[activeShard.color].bg}`} />
-              </div>
-              <h4 className="text-base font-semibold text-white">
-                {activeShard.title}
-              </h4>
-              <p className="mt-4 font-mono text-xs leading-relaxed text-white/60">
-                {activeShard.signal}
-              </p>
-              <div className={`mt-6 rounded border px-4 py-3 text-xs leading-5 bg-white/[0.03] ${accentClassesMap[activeShard.color].text} ${accentClassesMap[activeShard.color].ring}`}>
-                {activeShard.impact}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Subtle Background Grid (Minimalist) */}
