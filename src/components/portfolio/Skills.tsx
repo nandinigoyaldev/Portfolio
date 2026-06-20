@@ -150,7 +150,7 @@ function TechStackSection() {
         </div>
       </div>
 
-      <div className="relative mx-auto h-[350px] md:h-[400px] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)] flex flex-wrap content-center justify-center gap-6 md:block">
+      <div className="relative mx-auto h-auto min-h-[400px] py-12 md:py-0 w-full max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#050810] shadow-[0_24px_80px_rgba(0,0,0,0.4)] flex flex-wrap content-center justify-center gap-6 md:block">
         
         {/* Radar Background */}
         <div className="pointer-events-none absolute inset-0 opacity-40">
@@ -368,29 +368,36 @@ function ExperienceSection() {
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                onClick={() => setActiveId(null)}
               >
                 {/* Blur backdrop for the HUD specifically */}
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-none" />
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm pointer-events-none" />
               
-              <div className="relative w-full max-w-lg pointer-events-auto">
+              <div 
+                className="relative w-full max-w-lg max-h-[90vh] flex flex-col pointer-events-auto shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+                onClick={(e) => e.stopPropagation()}
+              >
                 
                 {/* Holographic Frame Base */}
-                <div className={`absolute inset-0 rounded-[2rem] bg-black/60 backdrop-blur-xl border border-white/10 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)]`}>
+                <div className={`absolute inset-0 rounded-[1.5rem] md:rounded-[2rem] bg-black/60 backdrop-blur-xl border border-white/10 overflow-hidden`}>
                   {/* Subtle color wash matching the planet */}
                   <div className={`absolute inset-0 opacity-10 bg-gradient-to-b from-transparent to-current ${accentClassesMap[activeShard.color].text}`} />
                 </div>
                 
                 {/* Sci-Fi Corners */}
-                <div className={`absolute top-0 left-0 w-12 h-12 border-t-[3px] border-l-[3px] rounded-tl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute top-0 right-0 w-12 h-12 border-t-[3px] border-r-[3px] rounded-tr-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute bottom-0 left-0 w-12 h-12 border-b-[3px] border-l-[3px] rounded-bl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute bottom-0 right-0 w-12 h-12 border-b-[3px] border-r-[3px] rounded-br-[2rem] ${accentClassesMap[activeShard.color].border}`} />
+                <div className={`absolute top-0 left-0 w-8 h-8 md:w-12 md:h-12 border-t-[3px] border-l-[3px] rounded-tl-[1.5rem] md:rounded-tl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
+                <div className={`absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 border-t-[3px] border-r-[3px] rounded-tr-[1.5rem] md:rounded-tr-[2rem] ${accentClassesMap[activeShard.color].border}`} />
+                <div className={`absolute bottom-0 left-0 w-8 h-8 md:w-12 md:h-12 border-b-[3px] border-l-[3px] rounded-bl-[1.5rem] md:rounded-bl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
+                <div className={`absolute bottom-0 right-0 w-8 h-8 md:w-12 md:h-12 border-b-[3px] border-r-[3px] rounded-br-[1.5rem] md:rounded-br-[2rem] ${accentClassesMap[activeShard.color].border}`} />
 
-                <div className="relative p-10 md:p-12 z-10">
-                  <button onClick={(e) => { e.stopPropagation(); setActiveId(null); }} className="absolute top-6 right-8 font-mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors">
-                    [ Close ]
-                  </button>
+                {/* Fixed Close Button */}
+                <button onClick={() => setActiveId(null)} className="absolute top-4 right-4 md:top-6 md:right-8 z-20 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-colors bg-black/80 backdrop-blur rounded px-2 py-1 md:p-0 md:bg-transparent border border-white/10 md:border-transparent">
+                  [ Close ]
+                </button>
+
+                {/* Scrollable Content Area */}
+                <div className="relative p-6 md:p-12 z-10 overflow-y-auto flex-1 custom-scrollbar">
                   
                   <div className={`mb-4 flex items-center gap-3`}>
                     <div className={`h-2 w-2 rounded-full animate-pulse ${accentClassesMap[activeShard.color].bg}`} />

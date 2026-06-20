@@ -144,22 +144,28 @@ export default function Projects() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md"
-                onClick={() => setActiveId(null)} // Click outside to close
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+                onClick={() => setActiveId(null)}
               >
+                {/* Blur backdrop */}
+                <div className="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-none" />
+                
                 <div 
-                  className={`relative w-full max-w-4xl bg-[#0a0f1a]/95 border border-white/20 p-8 md:p-12 shadow-2xl rounded-sm ${colorMap[activeProject.color as keyof typeof colorMap].shadow}`}
-                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+                  className={`relative w-full max-w-4xl max-h-[90vh] bg-[#0a0f1a] border border-white/20 p-6 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col pointer-events-auto`}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div className={`absolute top-0 left-0 w-full h-1 ${colorMap[activeProject.color as keyof typeof colorMap].bg}`} />
                   
-                  {/* Close button */}
+                  {/* Fixed Close Button */}
                   <button 
                     onClick={() => setActiveId(null)}
-                    className="absolute top-4 right-4 font-mono text-[10px] text-white/50 hover:text-white uppercase tracking-widest"
+                    className="absolute top-4 right-4 md:top-6 md:right-6 z-20 font-mono text-[10px] text-white/50 hover:text-white uppercase tracking-widest bg-black/80 backdrop-blur px-2 py-1 rounded border border-white/10 md:bg-transparent md:border-transparent"
                   >
                     [ Close ]
                   </button>
+
+                  {/* Scrollable Content */}
+                  <div className="overflow-y-auto custom-scrollbar flex-1 -mx-2 px-2">
 
                   <div className="flex flex-col md:flex-row gap-8 md:gap-12">
                     
@@ -221,6 +227,7 @@ export default function Projects() {
                       </div>
                     </div>
 
+                  </div>
                   </div>
                 </div>
               </motion.div>
