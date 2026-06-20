@@ -39,7 +39,7 @@ export default function Contact() {
 
           {/* Right Column: Minimal Form */}
           <div className="flex flex-col bg-white/[0.02] p-8 md:p-12 rounded-[2rem] border border-white/[0.05]">
-            <form className="flex flex-col gap-10 font-light" method="post" action="/api/contact">
+            <form className="flex flex-col gap-10 font-light" method="post" action="https://formspree.io/f/xlgwbqry">
 
               <div className="group relative pt-2">
                 <input
