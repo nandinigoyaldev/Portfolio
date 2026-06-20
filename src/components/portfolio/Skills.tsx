@@ -368,14 +368,14 @@ function ExperienceSection() {
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4"
                 onClick={() => setActiveId(null)}
               >
                 {/* Blur backdrop for the HUD specifically */}
               <div className="absolute inset-0 bg-black/80 backdrop-blur-sm pointer-events-none" />
               
               <div 
-                className="relative w-full max-w-lg max-h-[90vh] flex flex-col pointer-events-auto shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+                className="relative w-full max-w-lg max-h-[85dvh] flex flex-col pointer-events-auto shadow-[0_0_80px_rgba(0,0,0,0.8)]"
                 onClick={(e) => e.stopPropagation()}
               >
                 
@@ -397,7 +397,7 @@ function ExperienceSection() {
                 </button>
 
                 {/* Scrollable Content Area */}
-                <div className="relative p-6 md:p-12 z-10 overflow-y-auto flex-1 custom-scrollbar">
+                <div className="relative p-5 pt-14 md:p-12 z-10 overflow-y-auto flex-1 custom-scrollbar min-h-0">
                   
                   <div className={`mb-4 flex items-center gap-3`}>
                     <div className={`h-2 w-2 rounded-full animate-pulse ${accentClassesMap[activeShard.color].bg}`} />

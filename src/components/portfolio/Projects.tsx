@@ -144,14 +144,14 @@ export default function Projects() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6"
                 onClick={() => setActiveId(null)}
               >
                 {/* Blur backdrop */}
                 <div className="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-none" />
                 
                 <div 
-                  className={`relative w-full max-w-4xl max-h-[90vh] bg-[#0a0f1a] border border-white/20 p-6 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col pointer-events-auto`}
+                  className={`relative w-full max-w-4xl max-h-[60vh] md:max-h-[85vh] bg-[#0a0f1a] border border-white/20 p-4 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col overflow-hidden pointer-events-auto`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className={`absolute top-0 left-0 w-full h-1 ${colorMap[activeProject.color as keyof typeof colorMap].bg}`} />
@@ -165,26 +165,26 @@ export default function Projects() {
                   </button>
 
                   {/* Scrollable Content */}
-                  <div className="overflow-y-auto custom-scrollbar flex-1 -mx-2 px-2">
+                  <div className="overflow-y-auto custom-scrollbar flex-1 min-h-0 -mx-2 px-2 mt-8 md:mt-0">
 
-                  <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+                  <div className="flex flex-col md:flex-row gap-6 md:gap-12">
                     
                     {/* Data Pane */}
                     <div className="flex-1">
-                      <div className={`mb-2 font-mono text-[10px] tracking-[0.3em] uppercase ${colorMap[activeProject.color as keyof typeof colorMap].text}`}>
+                      <div className={`mb-2 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${colorMap[activeProject.color as keyof typeof colorMap].text}`}>
                         {activeProject.label}
                       </div>
-                      <h3 className="text-3xl md:text-5xl font-bold uppercase tracking-tight text-white mb-6">
+                      <h3 className="text-xl md:text-5xl font-bold uppercase tracking-tight text-white mb-3 md:mb-6">
                         {activeProject.name}
                       </h3>
                       
-                      <p className="text-sm md:text-base text-white/70 leading-relaxed mb-8">
+                      <p className="text-xs md:text-base text-white/70 leading-relaxed mb-4 md:mb-8">
                         {activeProject.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-2 mb-8">
+                      <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
                         {activeProject.stack.map(s => (
-                          <span key={s} className="border border-white/10 bg-white/[0.05] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
+                          <span key={s} className="border border-white/10 bg-white/[0.05] px-2 md:px-3 py-1 font-mono text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-white/60">
                             {s}
                           </span>
                         ))}
@@ -200,8 +200,8 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    {/* Hardware Schema Diagram */}
-                    <div className="w-full md:w-1/3 border border-white/10 bg-[#050505] p-6 flex flex-col justify-between font-mono">
+                    {/* Hardware Schema Diagram (Desktop Only) */}
+                    <div className="hidden md:flex w-full md:w-1/3 border border-white/10 bg-[#050505] p-6 flex-col justify-between font-mono">
                       <div>
                         <div className="text-[9px] text-white/40 tracking-[0.3em] uppercase border-b border-white/10 pb-2 mb-4">
                           Hardware Specs

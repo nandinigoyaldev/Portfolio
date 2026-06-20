@@ -11,6 +11,7 @@ import Contact from "./Contact";
 import Footer from "./Footer";
 import ChatWidget from "../chat/ChatWidget";
 import AmbientSnake from "./AmbientSnake";
+import CometShower from "./CometShower";
 
 export default function PortfolioPage() {
   // Keeps parity with the original HTML behavior:
@@ -58,6 +59,9 @@ export default function PortfolioPage() {
 
       <Footer />
       <AmbientSnake />
+      <div className="block md:hidden">
+        <CometShower />
+      </div>
       <ChatWidget />
     </div>
   );

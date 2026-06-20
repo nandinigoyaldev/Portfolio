@@ -210,8 +210,8 @@ export default function AmbientSnake() {
 
   if (snake.length === 0) return null;
 
-  const renderSize = isMobile ? 18 : 24; 
-  const fontRenderSize = isMobile ? 14 : 18;
+  const renderSize = isMobile ? 12 : 24; 
+  const fontRenderSize = isMobile ? 10 : 18;
 
   let headRotation = 0;
   if (dir.x === 1) headRotation = 0;
@@ -221,8 +221,7 @@ export default function AmbientSnake() {
 
   return (
     <div
-      aria-hidden="true"
-      className="pointer-events-none absolute left-0 top-0 w-full h-full z-[9999]"
+      className="hidden md:block pointer-events-none absolute left-0 top-0 w-full h-full z-[-1] opacity-60"
       style={{ overflow: "hidden" }}
     >
       {/* Snake Segments */}
