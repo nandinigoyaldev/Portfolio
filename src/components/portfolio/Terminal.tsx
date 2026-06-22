@@ -62,6 +62,42 @@ export default function Terminal() {
     return node;
   };
 
+  const [historyIndex, setHistoryIndex] = useState(-1);
+
+  const matchKey = (obj: any, target: string) => {
+    if (!target) return null;
+    const s = target.toLowerCase();
+    for (const key of Object.keys(obj)) {
+      if (key.toLowerCase() === s) return key;
+      if (s === "project" && key.toLowerCase() === "projects") return key; // handle plural alias
+      // handle missing extension
+      if (key.toLowerCase().startsWith(s + ".")) return key;
+    }
+    return null;
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const commandHistory = history.filter(h => h.command !== "").map(h => h.command);
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (historyIndex < commandHistory.length - 1) {
+        const nextIndex = historyIndex + 1;
+        setHistoryIndex(nextIndex);
+        setInput(commandHistory[commandHistory.length - 1 - nextIndex]);
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const nextIndex = historyIndex - 1;
+        setHistoryIndex(nextIndex);
+        setInput(commandHistory[commandHistory.length - 1 - nextIndex]);
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setInput("");
+      }
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cmdLine = input.trim();
@@ -70,6 +106,8 @@ export default function Terminal() {
       setInput("");
       return;
     }
+
+    setHistoryIndex(-1); // Reset history index on new command
 
     const args = cmdLine.split(" ").filter(Boolean);
     const cmd = args[0].toLowerCase();
@@ -97,6 +135,13 @@ export default function Terminal() {
         output = Object.keys(currentNode)
           .map(k => typeof currentNode[k] === "object" ? `${k}/` : k)
           .join("  ");
+        
+        // Smart Hints
+        if (cwd.length === 0) {
+          output += "\n\n💡 Hint: Type 'cd projects' to open a folder, or 'cat contact.txt' to read a file.";
+        } else {
+          output += "\n\n💡 Hint: Type 'cat <filename>' to read a file, or 'cd ..' to go back.";
+        }
       } else {
         output = "Not a directory.";
       }
@@ -109,9 +154,10 @@ export default function Terminal() {
       } else if (target === "/") {
         setCwd([]);
       } else {
-        if (typeof currentNode === "object" && currentNode[target] && typeof currentNode[target] === "object") {
-          setCwd(prev => [...prev, target]);
-        } else if (typeof currentNode === "object" && currentNode[target]) {
+        const actualKey = matchKey(currentNode, target);
+        if (actualKey && typeof currentNode[actualKey] === "object") {
+          setCwd(prev => [...prev, actualKey]);
+        } else if (actualKey && typeof currentNode[actualKey] === "string") {
           output = `cd: not a directory: ${target}`;
         } else {
           output = `cd: no such file or directory: ${target}`;
@@ -122,12 +168,11 @@ export default function Terminal() {
       if (!target) {
         output = "cat: missing file operand";
       } else {
-        if (typeof currentNode === "object" && currentNode[target]) {
-          if (typeof currentNode[target] === "string") {
-            output = currentNode[target];
-          } else {
-            output = `cat: ${target}: Is a directory`;
-          }
+        const actualKey = matchKey(currentNode, target);
+        if (actualKey && typeof currentNode[actualKey] === "string") {
+          output = currentNode[actualKey];
+        } else if (actualKey && typeof currentNode[actualKey] === "object") {
+          output = `cat: ${target}: Is a directory`;
         } else {
           output = `cat: ${target}: No such file or directory`;
         }
@@ -181,6 +226,7 @@ export default function Terminal() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="flex-1 bg-transparent outline-none text-green-500"
               spellCheck={false}
               autoComplete="off"
