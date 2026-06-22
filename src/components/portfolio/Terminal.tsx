@@ -36,6 +36,12 @@ export default function Terminal() {
   }, [isOpen]);
 
   useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-terminal", handleOpen);
+    return () => window.removeEventListener("open-terminal", handleOpen);
+  }, []);
+
+  useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }

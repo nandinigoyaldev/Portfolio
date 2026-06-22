@@ -61,6 +61,7 @@ export default function AmbientSnake() {
 
   const [, setTickNum] = React.useState(0);
   const [sparkle, setSparkle] = React.useState<Point | null>(null);
+  const controlTimeoutRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
@@ -75,6 +76,7 @@ export default function AmbientSnake() {
 
         if (e.key === "Escape") {
           st.isPlayerControlled = false;
+          if (controlTimeoutRef.current) window.clearTimeout(controlTimeoutRef.current);
           return;
         }
 
@@ -82,6 +84,13 @@ export default function AmbientSnake() {
         e.preventDefault();
 
         st.isPlayerControlled = true;
+
+        if (controlTimeoutRef.current) {
+          window.clearTimeout(controlTimeoutRef.current);
+        }
+        controlTimeoutRef.current = window.setTimeout(() => {
+          gameState.current.isPlayerControlled = false;
+        }, 2000);
 
         const nextDir = { ...st.dir };
         if (e.key === "ArrowUp" && st.dir.y !== 1) { nextDir.x = 0; nextDir.y = -1; }
@@ -97,6 +106,7 @@ export default function AmbientSnake() {
       return () => {
         window.removeEventListener("resize", onResize);
         window.removeEventListener("keydown", onKeyDown);
+        if (controlTimeoutRef.current) window.clearTimeout(controlTimeoutRef.current);
       };
     }
   }, []);
@@ -256,13 +266,6 @@ export default function AmbientSnake() {
       className="hidden md:block pointer-events-none absolute left-0 top-0 w-full h-full z-0 opacity-60"
       style={{ overflow: "hidden" }}
     >
-      {/* Player Control Overlay Hint */}
-      {isPlayerControlled && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-black/80 text-[#00FFCC] border border-[#00FFCC]/50 px-4 py-2 font-mono text-xs z-[100] tracking-widest rounded animate-pulse">
-          SNAKE MANUAL OVERRIDE ENGAGED. [ESC] TO ABORT.
-        </div>
-      )}
-
       {/* Snake Segments */}
       {snake.map((segment, index) => {
         const isHead = index === 0;
