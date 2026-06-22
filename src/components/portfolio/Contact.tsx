@@ -4,6 +4,34 @@ import { motion } from "framer-motion";
 import * as React from "react";
 
 export default function Contact() {
+  const [status, setStatus] = React.useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("submitting");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (response.ok) {
+        setStatus("success");
+        form.reset();
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
   return (
     <section className="relative bg-[#050505] px-6 py-32 md:py-48 text-white min-h-[100dvh] flex flex-col justify-center snap-center" id="connect">
 
@@ -22,10 +50,10 @@ export default function Contact() {
             </p>
 
             <div className="flex flex-wrap gap-8 text-sm font-medium mt-auto">
-              <a href="https://github.com/goyaljiiiiii" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+              <a href="https://github.com/nandinigoyaldev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
                 GitHub <span className="text-white/30 font-serif">↗</span>
               </a>
-              <a href="https://linkedin.com/in/goyaljiiiiii" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
+              <a href="https://linkedin.com/in/nandinigoyaldev" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
                 LinkedIn <span className="text-white/30 font-serif">↗</span>
               </a>
               <a href="https://youtube.com/@self_taught_bob" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/60 hover:text-white transition-colors pb-1 border-b border-white/10 hover:border-white">
@@ -39,7 +67,7 @@ export default function Contact() {
 
           {/* Right Column: Minimal Form */}
           <div className="flex flex-col bg-white/[0.02] p-8 md:p-12 rounded-[2rem] border border-white/[0.05]">
-            <form className="flex flex-col gap-10 font-light" method="post" action="https://formspree.io/f/xlgwbqry">
+            <form className="flex flex-col gap-10 font-light" method="post" action="https://formspree.io/f/xlgwbqry" onSubmit={handleSubmit}>
 
               <div className="group relative pt-2">
                 <input
@@ -82,14 +110,18 @@ export default function Contact() {
                 </label>
               </div>
 
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="mt-6 bg-white text-black hover:bg-white/90 py-4 px-10 rounded-full transition-all text-sm font-medium w-fit"
-              >
-                Send Message
-              </motion.button>
+              <div className="flex items-center gap-4 mt-6">
+                <motion.button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-white text-black hover:bg-white/90 disabled:opacity-50 py-4 px-10 rounded-full transition-all text-sm font-medium w-fit"
+                >
+                  {status === "submitting" ? "Sending..." : status === "success" ? "Sent Successfully!" : "Send Message"}
+                </motion.button>
+                {status === "error" && <span className="text-red-400 text-sm">Failed to send. Please try again.</span>}
+              </div>
             </form>
           </div>
 

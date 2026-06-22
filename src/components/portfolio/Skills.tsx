@@ -262,17 +262,14 @@ function ExperienceSection() {
   const activeShard = dataShards.find(s => s.id === activeId);
 
   return (
-    <section id="experience" className="relative overflow-hidden bg-[#020408] px-6 pt-32 pb-16 text-white flex flex-col justify-center">
-      {/* Background Ambience */}
-      <div className="pointer-events-none absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.03)_1px,_transparent_1px)] [background-size:24px_24px]" />
-      </div>
+    <section id="experience" className="relative overflow-hidden px-6 pt-32 pb-16 text-white flex flex-col justify-center">
+      {/* Background Ambience: None */}
 
-      <div className="relative mx-auto w-full max-w-4xl z-10">
-        <div className="mb-6 md:mb-8 flex flex-col items-center text-center">
-          <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
-            <span className="flex h-2 w-2 rounded-full bg-fuchsia-500 animate-pulse" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fuchsia-400/90">
+      <div className="relative mx-auto w-full max-w-5xl z-10">
+        <div className="mb-12 md:mb-16 flex flex-col items-center text-center">
+          <div className="flex items-center gap-3 mb-4 border border-white/10 px-4 py-1.5 rounded-full bg-white/[0.02] backdrop-blur-sm">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-fuchsia-500 animate-pulse" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fuchsia-400/80">
               Orbital Command
             </span>
           </div>
@@ -280,66 +277,61 @@ function ExperienceSection() {
             Exper<span className="text-white/30">ience</span>
           </h2>
           <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
-            [ Select a planetary node to extract data ]
+            [ Select a stellar node to extract data ]
           </p>
         </div>
 
-        {/* Full-width Galaxy Map */}
-        <div className="relative h-[350px] lg:h-[400px] w-full max-w-4xl mx-auto bg-black rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/5 flex items-center justify-center">
+        {/* Galaxy Map Box (Matching Projects Section) */}
+        <div className="relative h-[400px] lg:h-[500px] w-full max-w-4xl mx-auto border border-white/10 bg-[#070b14]/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] flex items-center justify-center">
           
-          {/* Deep Space Background / Nebula */}
-          <div className="absolute inset-0 z-0">
-             <div className="absolute inset-0 bg-[radial-gradient(white_1px,transparent_1px)] [background-size:40px_40px] opacity-10" style={{ backgroundPosition: '0 0' }} />
-             <div className="absolute inset-0 bg-[radial-gradient(white_2px,transparent_2px)] [background-size:100px_100px] opacity-20" style={{ backgroundPosition: '50px 50px' }} />
-             
-             {/* Glowing Nebulas */}
-             <div className="absolute top-1/3 left-1/3 w-[600px] h-[600px] bg-fuchsia-900/20 blur-[150px] rounded-full -translate-x-1/2 -translate-y-1/2" />
-             <div className="absolute bottom-1/3 right-1/3 w-[500px] h-[500px] bg-cyan-900/10 blur-[120px] rounded-full translate-x-1/2 translate-y-1/2" />
-          </div>
-
-          <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
-             {/* Faint orbital tracks */}
-             <circle cx="50" cy="50" r="15" stroke="white" strokeWidth="0.05" fill="none" />
-             <circle cx="50" cy="50" r="30" stroke="white" strokeWidth="0.05" fill="none" />
-             <circle cx="50" cy="50" r="45" stroke="white" strokeWidth="0.05" fill="none" />
+          <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+             {/* Elegant orbital tracks */}
+             <circle cx="50" cy="50" r="20" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
+             <circle cx="50" cy="50" r="32" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
+             <circle cx="50" cy="50" r="44" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
           </svg>
 
-          {/* The Central Star / Sun */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full flex items-center justify-center z-10 pointer-events-none">
-            <div className="absolute w-20 h-20 rounded-full bg-yellow-100/10 blur-[20px]" />
-            <div className="absolute w-8 h-8 rounded-full bg-yellow-200 shadow-[0_0_60px_rgba(253,224,71,0.8)] animate-pulse" />
+          {/* The Central Star */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full flex items-center justify-center z-10 pointer-events-none">
+            <div className="absolute w-24 h-24 rounded-full bg-white/5 blur-[30px]" />
+            <div className="absolute w-4 h-4 rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,1)] animate-pulse" />
           </div>
 
-          {/* Orbital Planets */}
+          {/* Orbital Nodes */}
           {dataShards.map((shard, index) => {
              const isActive = activeId === shard.id;
              const styles = accentClassesMap[shard.color];
              const angle = (index / dataShards.length) * 360;
-             const radiusPercent = 35; // Responsive percentage radius
+             // Distribute across the 3 orbital rings (20, 32, 44)
+             const radiusLevels = [20, 32, 44];
+             const radiusPercent = radiusLevels[index % radiusLevels.length]; 
              const left = 50 + Math.cos(angle * (Math.PI / 180)) * radiusPercent;
              const top = 50 + Math.sin(angle * (Math.PI / 180)) * radiusPercent;
              
              return (
                <div key={shard.id} className="absolute z-20 group cursor-pointer" style={{ top: `${top}%`, left: `${left}%`, transform: `translate(-50%, -50%)` }} onClick={() => setActiveId(shard.id)}>
                   
-                  {/* Planet body */}
-                  <div className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-500 flex items-center justify-center shadow-lg ${isActive ? styles.bg + ' shadow-[0_0_30px_currentColor] scale-110' : 'bg-[#0a0f1a] border border-white/20 group-hover:border-white/50 group-hover:scale-105'}`}>
+                  {/* Node body */}
+                  <div className={`relative w-8 h-8 md:w-10 md:h-10 rounded-full transition-all duration-500 flex items-center justify-center ${isActive ? 'scale-125' : 'group-hover:scale-110'}`}>
                     
-                    {/* Inner texture / glow */}
-                    <div className="absolute inset-1 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
+                    {/* Glowing Core */}
+                    <div className={`absolute w-1.5 h-1.5 md:w-2 md:h-2 rounded-full z-10 transition-colors duration-300 ${isActive ? styles.bg + ' shadow-[0_0_15px_currentColor]' : 'bg-white/40 group-hover:bg-white'}`} />
+                    
+                    {/* Outer Aura */}
+                    <div className={`absolute inset-0 rounded-full blur-md opacity-0 transition-opacity duration-300 ${styles.bg} ${isActive ? 'opacity-60' : 'group-hover:opacity-30'}`} />
                     
                     {isActive && (
                       <>
-                        <div className="absolute inset-0 rounded-full animate-ping opacity-40 bg-current" />
-                        {/* Orbital ring around the active planet */}
-                        <div className={`absolute -inset-3 rounded-full border border-current opacity-50 animate-[spin_4s_linear_infinite]`} style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }} />
+                        <div className={`absolute inset-0 rounded-full animate-ping opacity-40 ${styles.bg}`} />
+                        {/* Orbital ring around the active node */}
+                        <div className={`absolute -inset-4 rounded-full border border-current opacity-30 animate-[spin_4s_linear_infinite] ${styles.text}`} style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }} />
                       </>
                     )}
                   </div>
                   
                   {/* Label */}
-                  <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 flex flex-col items-center transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
-                     <span className={`font-mono text-[9px] md:text-[10px] tracking-widest uppercase whitespace-nowrap bg-[#020305]/80 px-2 py-0.5 rounded border ${isActive ? 'border-current ' + styles.text : 'border-transparent text-white/50'}`}>
+                  <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 flex flex-col items-center transition-all duration-300 ${isActive ? 'opacity-100 translate-y-1' : 'opacity-50 group-hover:opacity-100 group-hover:translate-y-1'}`}>
+                     <span className={`font-mono text-[9px] md:text-[10px] tracking-widest uppercase whitespace-nowrap transition-colors ${isActive ? styles.text : 'text-white/60 group-hover:text-white'}`}>
                        {shard.org}
                      </span>
                   </div>
@@ -347,11 +339,10 @@ function ExperienceSection() {
                   {/* Laser Beam to Center when active */}
                   {isActive && (
                     <svg className="absolute top-1/2 left-1/2 w-[800px] h-[800px] pointer-events-none overflow-visible -translate-x-1/2 -translate-y-1/2 -z-10">
-                      <line x1="50%" y1="50%" x2={`${left}%`} y2={`${top}%`} stroke="currentColor" strokeWidth="2" className={styles.text} strokeDasharray="4 8" />
-                      {/* Pulse effect traveling along the line */}
-                      <circle cx={`${left}%`} cy={`${top}%`} r="3" fill="currentColor" className={styles.text}>
-                        <animate attributeName="cx" values={`${left}%; 50%`} dur="1.5s" repeatCount="indefinite" />
-                        <animate attributeName="cy" values={`${top}%; 50%`} dur="1.5s" repeatCount="indefinite" />
+                      <line x1="50%" y1="50%" x2={`${left}%`} y2={`${top}%`} stroke="currentColor" strokeWidth="1" className={`${styles.text} opacity-40`} strokeDasharray="2 6" />
+                      <circle cx={`${left}%`} cy={`${top}%`} r="2" fill="currentColor" className={styles.text}>
+                        <animate attributeName="cx" values={`${left}%; 50%`} dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="cy" values={`${top}%; 50%`} dur="2s" repeatCount="indefinite" />
                       </circle>
                     </svg>
                   )}
@@ -368,64 +359,60 @@ function ExperienceSection() {
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
                 transition={{ duration: 0.4 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4"
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
                 onClick={() => setActiveId(null)}
               >
                 {/* Blur backdrop for the HUD specifically */}
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm pointer-events-none" />
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-none" />
               
               <div 
-                className="relative w-full max-w-lg max-h-[85dvh] flex flex-col pointer-events-auto shadow-[0_0_80px_rgba(0,0,0,0.8)]"
+                className="relative w-full max-w-lg max-h-[85dvh] flex flex-col pointer-events-auto shadow-[0_0_100px_rgba(0,0,0,0.5)]"
                 onClick={(e) => e.stopPropagation()}
               >
                 
                 {/* Holographic Frame Base */}
-                <div className={`absolute inset-0 rounded-[1.5rem] md:rounded-[2rem] bg-black/60 backdrop-blur-xl border border-white/10 overflow-hidden`}>
-                  {/* Subtle color wash matching the planet */}
-                  <div className={`absolute inset-0 opacity-10 bg-gradient-to-b from-transparent to-current ${accentClassesMap[activeShard.color].text}`} />
+                <div className={`absolute inset-0 rounded-[1.5rem] bg-[#050810]/80 backdrop-blur-2xl border border-white/10 overflow-hidden`}>
+                  <div className={`absolute inset-0 opacity-[0.03] bg-gradient-to-b from-transparent to-current ${accentClassesMap[activeShard.color].text}`} />
                 </div>
                 
-                {/* Sci-Fi Corners */}
-                <div className={`absolute top-0 left-0 w-8 h-8 md:w-12 md:h-12 border-t-[3px] border-l-[3px] rounded-tl-[1.5rem] md:rounded-tl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 border-t-[3px] border-r-[3px] rounded-tr-[1.5rem] md:rounded-tr-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute bottom-0 left-0 w-8 h-8 md:w-12 md:h-12 border-b-[3px] border-l-[3px] rounded-bl-[1.5rem] md:rounded-bl-[2rem] ${accentClassesMap[activeShard.color].border}`} />
-                <div className={`absolute bottom-0 right-0 w-8 h-8 md:w-12 md:h-12 border-b-[3px] border-r-[3px] rounded-br-[1.5rem] md:rounded-br-[2rem] ${accentClassesMap[activeShard.color].border}`} />
+                {/* Minimalist Accents */}
+                <div className={`absolute top-0 left-8 w-16 h-[2px] ${accentClassesMap[activeShard.color].bg}`} />
+                <div className={`absolute bottom-0 right-8 w-16 h-[2px] ${accentClassesMap[activeShard.color].bg}`} />
 
                 {/* Fixed Close Button */}
-                <button onClick={() => setActiveId(null)} className="absolute top-4 right-4 md:top-6 md:right-8 z-20 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-colors bg-black/80 backdrop-blur rounded px-2 py-1 md:p-0 md:bg-transparent border border-white/10 md:border-transparent">
-                  [ Close ]
+                <button onClick={() => setActiveId(null)} className="absolute top-5 right-5 z-20 font-mono text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">
+                  [ CLOSE ]
                 </button>
 
                 {/* Scrollable Content Area */}
-                <div className="relative p-5 pt-14 md:p-12 z-10 overflow-y-auto flex-1 custom-scrollbar min-h-0">
+                <div className="relative p-8 pt-12 md:p-10 z-10 overflow-y-auto flex-1 custom-scrollbar min-h-0">
                   
-                  <div className={`mb-4 flex items-center gap-3`}>
-                    <div className={`h-2 w-2 rounded-full animate-pulse ${accentClassesMap[activeShard.color].bg}`} />
+                  <div className={`mb-6 flex items-center gap-3`}>
+                    <div className={`h-1.5 w-1.5 rounded-full animate-pulse ${accentClassesMap[activeShard.color].bg}`} />
                     <span className={`font-mono text-[10px] tracking-[0.3em] uppercase ${accentClassesMap[activeShard.color].text}`}>
                       Holographic Record
                     </span>
                   </div>
                   
-                  <h3 className="text-3xl md:text-5xl font-light uppercase tracking-tighter text-white mb-2">
+                  <h3 className="text-3xl md:text-4xl font-light uppercase tracking-tighter text-white mb-2">
                     {activeShard.org}
                   </h3>
                   
-                  <div className="font-mono text-xs text-white/50 mb-8 pb-6 border-b border-white/10 relative">
+                  <div className="font-mono text-xs text-white/40 mb-8 pb-6 border-b border-white/10 relative">
                     {activeShard.title}
-                    <div className={`absolute bottom-[-1px] left-0 w-1/4 h-[1px] ${accentClassesMap[activeShard.color].bg}`} />
                   </div>
                   
                   <div className="space-y-8">
                     <div>
                       <div className="font-mono text-[9px] text-white/30 uppercase tracking-[0.2em] mb-3">Transmission Log</div>
-                      <p className="text-sm md:text-base text-white/80 leading-relaxed pl-4 border-l-2 border-white/10">
+                      <p className="text-sm md:text-base text-white/70 font-light leading-relaxed">
                         {activeShard.signal}
                       </p>
                     </div>
                     <div>
                       <div className="font-mono text-[9px] text-white/30 uppercase tracking-[0.2em] mb-3">Planetary Impact</div>
-                      <div className={`text-xs md:text-sm font-mono p-5 rounded-xl bg-white/[0.02] border border-white/5 leading-relaxed ${accentClassesMap[activeShard.color].text} ${accentClassesMap[activeShard.color].glowBorder}`}>
-                        &gt; {activeShard.impact}
+                      <div className={`text-sm md:text-base font-light leading-relaxed pl-4 border-l-2 ${accentClassesMap[activeShard.color].border} ${accentClassesMap[activeShard.color].text}`}>
+                        {activeShard.impact}
                       </div>
                     </div>
                   </div>

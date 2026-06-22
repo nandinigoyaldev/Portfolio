@@ -18,15 +18,15 @@ const projects = [
     color: "emerald"
   },
   {
-    id: "autoalign",
-    name: "AutoAlign",
+    id: "osca",
+    name: "Open Source Atelier",
     type: "DEV-UTILITY",
-    label: "Recognized utility tool",
+    label: "Contribution Platform",
     description:
-      "A developer utility for automated alignment and visual component mapping, recognized on Commudle for its practical approach. Dramatically reduces CSS alignment boilerplate.",
-    stack: ["TypeScript", "React", "CSS"],
-    live: "https://github.com/goyaljiiiiii/AutoAlign",
-    code: "https://github.com/goyaljiiiiii/AutoAlign",
+      "A platform to explore and contribute to open source projects. It provides a curated atelier experience for open source enthusiasts.",
+    stack: ["TypeScript", "Next.js", "Tailwind"],
+    live: "https://github.com/nandinigoyaldev/Open-Source-Contribution-Atelier",
+    code: "https://github.com/nandinigoyaldev/Open-Source-Contribution-Atelier",
     cpu: "0x0B5",
     color: "cyan"
   },
