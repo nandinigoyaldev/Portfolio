@@ -131,7 +131,7 @@ export default function Terminal() {
     } else if (cmd === "pwd") {
       output = "/home/visitor" + (cwd.length > 0 ? "/" + cwd.join("/") : "");
     } else if (cmd === "ls") {
-      if (typeof currentNode === "object") {
+      if (typeof currentNode === "object" && currentNode !== null) {
         output = Object.keys(currentNode)
           .map(k => typeof currentNode[k] === "object" ? `${k}/` : k)
           .join("  ");
