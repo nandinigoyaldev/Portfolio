@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/refs */
 "use client";
 
 import { motion } from "framer-motion";

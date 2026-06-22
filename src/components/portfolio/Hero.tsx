@@ -16,11 +16,11 @@ export default function Hero() {
         const res = await fetch("https://api.github.com/users/nandinigoyaldev/events/public?per_page=5");
         const events = await res.json();
         if (events && events.length > 0) {
-          const pushEvent = events.find((e: any) => e.type === "PushEvent" || e.type === "CreateEvent" || e.type === "PullRequestEvent");
+          const pushEvent = events.find((e: Record<string, unknown>) => e.type === "PushEvent" || e.type === "CreateEvent" || e.type === "PullRequestEvent");
           if (pushEvent) {
-            const date = new Date(pushEvent.created_at);
+            const date = new Date(String(pushEvent.created_at));
             const timeAgo = Math.floor((Date.now() - date.getTime()) / 60000); // minutes
-            let timeStr = timeAgo < 60 ? `${timeAgo}m ago` : `${Math.floor(timeAgo/60)}h ago`;
+            const timeStr = timeAgo < 60 ? `${timeAgo}m ago` : `${Math.floor(timeAgo/60)}h ago`;
             setLatestEvent({
               type: pushEvent.type === "PushEvent" ? "Pushed to" : (pushEvent.type === "PullRequestEvent" ? "PR on" : "Created"),
               repo: pushEvent.repo.name.split("/")[1] || pushEvent.repo.name,
@@ -28,7 +28,9 @@ export default function Hero() {
             });
           }
         }
-      } catch (err) {}
+      } catch {
+        // ignore fetch errors
+      }
     }
     fetchGitHub();
   }, []);
@@ -127,7 +129,7 @@ export default function Hero() {
               </motion.button>
             </div>
             <motion.div drag dragConstraints={containerRef} whileDrag={{ scale: 1.1, zIndex: 50 }} className="text-[9px] md:text-[10px] font-mono text-green-500/50 uppercase tracking-[0.2em] animate-pulse cursor-grab active:cursor-grabbing">
-              // Or type &apos;hack&apos; / &apos;matrix&apos;
+              {"// Or type 'hack' / 'matrix'"}
             </motion.div>
           </motion.div>
 

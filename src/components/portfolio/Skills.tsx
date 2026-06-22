@@ -212,6 +212,7 @@ function TechStackSection() {
                       <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-25 ${accentClassesMap[node.accent].bg}`} />
                     )}
                     <div className={`absolute inset-0 rounded-full border ${accentClassesMap[node.accent].ring} ${isActive ? 'opacity-100' : 'opacity-0'} transition-opacity`} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       alt={node.name}
                       className={`h-5 w-5 md:h-6 md:w-6 transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-60'}`}

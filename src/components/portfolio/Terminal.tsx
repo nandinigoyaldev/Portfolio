@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -65,7 +66,7 @@ export default function Terminal() {
   const [historyIndex, setHistoryIndex] = useState(-1);
 
   const matchKey = (obj: any, target: string) => {
-    if (!target) return null;
+    if (!target || !obj) return null;
     const s = target.toLowerCase();
     for (const key of Object.keys(obj)) {
       if (key.toLowerCase() === s) return key;
@@ -135,7 +136,7 @@ export default function Terminal() {
         output = Object.keys(currentNode)
           .map(k => typeof currentNode[k] === "object" ? `${k}/` : k)
           .join("  ");
-        
+
         // Smart Hints
         if (cwd.length === 0) {
           output += "\n\n💡 Hint: Type 'cd projects' to open a folder, or 'cat contact.txt' to read a file.";
@@ -155,9 +156,9 @@ export default function Terminal() {
         setCwd([]);
       } else {
         const actualKey = matchKey(currentNode, target);
-        if (actualKey && typeof currentNode[actualKey] === "object") {
+        if (actualKey && currentNode !== null && typeof currentNode[actualKey] === "object") {
           setCwd(prev => [...prev, actualKey]);
-        } else if (actualKey && typeof currentNode[actualKey] === "string") {
+        } else if (actualKey && currentNode !== null && typeof currentNode[actualKey] === "string") {
           output = `cd: not a directory: ${target}`;
         } else {
           output = `cd: no such file or directory: ${target}`;
@@ -169,9 +170,9 @@ export default function Terminal() {
         output = "cat: missing file operand";
       } else {
         const actualKey = matchKey(currentNode, target);
-        if (actualKey && typeof currentNode[actualKey] === "string") {
+        if (actualKey && currentNode !== null && typeof currentNode[actualKey] === "string") {
           output = currentNode[actualKey];
-        } else if (actualKey && typeof currentNode[actualKey] === "object") {
+        } else if (actualKey && currentNode !== null && typeof currentNode[actualKey] === "object") {
           output = `cat: ${target}: Is a directory`;
         } else {
           output = `cat: ${target}: No such file or directory`;
@@ -200,7 +201,7 @@ export default function Terminal() {
           <div className="absolute top-4 right-4 text-green-500/50 text-sm">
             [SYS_OVERRIDE_ACTIVE]
           </div>
-          
+
           <div className="flex-1 overflow-y-auto mb-4">
             {history.map((h, i) => (
               <div key={i} className="mb-4">

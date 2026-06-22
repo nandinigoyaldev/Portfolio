@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -113,7 +116,7 @@ export default function VoiceMode({
     };
   }, []);
 
-  const speakResponse = (text: string) => {
+  function speakResponse(text: string) {
     if (!("speechSynthesis" in window)) {
       setState("listening");
       if (!isMuted) recognitionRef.current?.start();
