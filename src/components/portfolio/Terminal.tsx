@@ -3,15 +3,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const COMMANDS: Record<string, string> = {
-  help: "Available commands: help, whoami, projects, contact, clear, exit",
-  whoami: "Nandini Goyal - Software Developer, Mentor, & Content Creator.",
-  projects: "1. Open Source Contribution Atelier\n2. Developer RPG Profile\n3. And more...",
-  contact: "Email: connect with me via the contact section!\nGitHub: @nandinigoyaldev",
+const FILE_SYSTEM: Record<string, any> = {
+  about: {
+    "me.txt": "Nandini Goyal - Software Developer, Mentor, & Content Creator.",
+    "skills.txt": "React, Next.js, Node.js, Python, TypeScript",
+  },
+  projects: {
+    "open-source.txt": "Open Source Contribution Atelier: A platform for contributors...",
+    "rpg-profile.txt": "Developer RPG Profile: Generate a cool developer card!",
+  },
+  "contact.txt": "Email: connect with me via the contact section!\nGitHub: @nandinigoyaldev",
 };
 
 export default function Terminal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [cwd, setCwd] = useState<string[]>([]);
   const [history, setHistory] = useState<{ command: string; output: string }[]>([
     { command: "", output: "Welcome to the hidden terminal. Type 'help' for commands." }
   ]);
@@ -47,10 +53,28 @@ export default function Terminal() {
     }
   }, [isOpen]);
 
+  const getCurrentNode = (path: string[]) => {
+    let node = FILE_SYSTEM;
+    for (const dir of path) {
+      if (node[dir]) node = node[dir];
+      else return null;
+    }
+    return node;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cmd = input.trim().toLowerCase();
-    
+    const cmdLine = input.trim();
+    if (!cmdLine) {
+      setHistory((prev) => [...prev, { command: "", output: "" }]);
+      setInput("");
+      return;
+    }
+
+    const args = cmdLine.split(" ").filter(Boolean);
+    const cmd = args[0].toLowerCase();
+    let output = "";
+
     if (cmd === "clear") {
       setHistory([]);
       setInput("");
@@ -61,17 +85,62 @@ export default function Terminal() {
       setInput("");
       return;
     }
-    
-    let output = "Command not found. Type 'help'.";
-    if (COMMANDS[cmd]) {
-      output = COMMANDS[cmd];
-    } else if (cmd === "") {
-      output = "";
+
+    const currentNode = getCurrentNode(cwd);
+
+    if (cmd === "help") {
+      output = "Available commands: ls, cd, cat, pwd, clear, exit";
+    } else if (cmd === "pwd") {
+      output = "/home/visitor" + (cwd.length > 0 ? "/" + cwd.join("/") : "");
+    } else if (cmd === "ls") {
+      if (typeof currentNode === "object") {
+        output = Object.keys(currentNode)
+          .map(k => typeof currentNode[k] === "object" ? `${k}/` : k)
+          .join("  ");
+      } else {
+        output = "Not a directory.";
+      }
+    } else if (cmd === "cd") {
+      const target = args[1];
+      if (!target || target === "~") {
+        setCwd([]);
+      } else if (target === "..") {
+        setCwd(prev => prev.slice(0, -1));
+      } else if (target === "/") {
+        setCwd([]);
+      } else {
+        if (typeof currentNode === "object" && currentNode[target] && typeof currentNode[target] === "object") {
+          setCwd(prev => [...prev, target]);
+        } else if (typeof currentNode === "object" && currentNode[target]) {
+          output = `cd: not a directory: ${target}`;
+        } else {
+          output = `cd: no such file or directory: ${target}`;
+        }
+      }
+    } else if (cmd === "cat") {
+      const target = args[1];
+      if (!target) {
+        output = "cat: missing file operand";
+      } else {
+        if (typeof currentNode === "object" && currentNode[target]) {
+          if (typeof currentNode[target] === "string") {
+            output = currentNode[target];
+          } else {
+            output = `cat: ${target}: Is a directory`;
+          }
+        } else {
+          output = `cat: ${target}: No such file or directory`;
+        }
+      }
+    } else {
+      output = `Command not found: ${cmd}. Type 'help'.`;
     }
 
-    setHistory((prev) => [...prev, { command: input, output }]);
+    setHistory((prev) => [...prev, { command: cmdLine, output }]);
     setInput("");
   };
+
+  const promptString = `visitor@nandini:~${cwd.length > 0 ? "/" + cwd.join("/") : ""}$`;
 
   return (
     <AnimatePresence>
@@ -92,7 +161,7 @@ export default function Terminal() {
               <div key={i} className="mb-4">
                 {h.command && (
                   <div className="flex gap-2">
-                    <span className="text-green-700">visitor@nandini:~$</span>
+                    <span className="text-green-700">{h.command.startsWith('cd') || h.command.startsWith('clear') ? "" : (i === history.length - 1 ? promptString : "visitor@nandini:~$ ")}</span>
                     <span>{h.command}</span>
                   </div>
                 )}
@@ -106,7 +175,7 @@ export default function Terminal() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex gap-2">
-            <span className="text-green-700">visitor@nandini:~$</span>
+            <span className="text-green-700 whitespace-nowrap">{promptString}</span>
             <input
               ref={inputRef}
               type="text"

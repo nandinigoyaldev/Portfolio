@@ -233,6 +233,22 @@ export default function Navbar() {
           >
             <span className="text-white/52">⌘</span>K
           </button>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('toggle-theme'))}
+            className={
+              "ml-1 flex h-9 shrink-0 items-center justify-center w-9 rounded-full border shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] outline-none transition " +
+              (isInHero
+                ? "border-white/12 bg-white/[0.06] text-white/72 hover:border-green-400/35 hover:text-green-400 focus-visible:ring-2 focus-visible:ring-green-400/70"
+                : "border-white/12 bg-white/[0.06] text-white/72 hover:border-green-400/35 hover:text-green-400 hover:shadow-[0_0_18px_rgba(74,222,128,0.16)] focus-visible:ring-2 focus-visible:ring-green-400/70")
+            }
+            aria-label="Toggle Hacker Theme"
+            title="Toggle Hacker Theme"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
         </motion.div>
       </motion.nav>
 

@@ -61,52 +61,14 @@ export default function AmbientSnake() {
 
   const [, setTickNum] = React.useState(0);
   const [sparkle, setSparkle] = React.useState<Point | null>(null);
-  const controlTimeoutRef = React.useRef<number | null>(null);
-
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       setIsMobile(window.innerWidth < 768);
       const onResize = () => setIsMobile(window.innerWidth < 768);
       window.addEventListener("resize", onResize);
 
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Escape"].includes(e.key)) return;
-        
-        const st = gameState.current;
-
-        if (e.key === "Escape") {
-          st.isPlayerControlled = false;
-          if (controlTimeoutRef.current) window.clearTimeout(controlTimeoutRef.current);
-          return;
-        }
-
-        // Prevent default scrolling for all arrow keys when we are intercepting them
-        e.preventDefault();
-
-        st.isPlayerControlled = true;
-
-        if (controlTimeoutRef.current) {
-          window.clearTimeout(controlTimeoutRef.current);
-        }
-        controlTimeoutRef.current = window.setTimeout(() => {
-          gameState.current.isPlayerControlled = false;
-        }, 2000);
-
-        const nextDir = { ...st.dir };
-        if (e.key === "ArrowUp" && st.dir.y !== 1) { nextDir.x = 0; nextDir.y = -1; }
-        else if (e.key === "ArrowDown" && st.dir.y !== -1) { nextDir.x = 0; nextDir.y = 1; }
-        else if (e.key === "ArrowLeft" && st.dir.x !== 1) { nextDir.x = -1; nextDir.y = 0; }
-        else if (e.key === "ArrowRight" && st.dir.x !== -1) { nextDir.x = 1; nextDir.y = 0; }
-        
-        st.dir = nextDir;
-      };
-
-      window.addEventListener("keydown", onKeyDown);
-
       return () => {
         window.removeEventListener("resize", onResize);
-        window.removeEventListener("keydown", onKeyDown);
-        if (controlTimeoutRef.current) window.clearTimeout(controlTimeoutRef.current);
       };
     }
   }, []);
@@ -153,7 +115,7 @@ export default function AmbientSnake() {
       const head = st.snake[0];
       let nextDir = { ...st.dir };
       
-      if (!st.isPlayerControlled && st.fragment) {
+      if (st.fragment) {
         const dx = st.fragment.x - head.x;
         const dy = st.fragment.y - head.y;
 
@@ -248,7 +210,7 @@ export default function AmbientSnake() {
     return () => window.clearTimeout(timeoutId);
   }, [prefersReducedMotion]); // Empty dependency array guarantees the loop NEVER resets!
 
-  const { snake, fragment, dir, currentTickRate, isPlayerControlled } = gameState.current;
+  const { snake, fragment, dir, currentTickRate } = gameState.current;
 
   if (snake.length === 0) return null;
 

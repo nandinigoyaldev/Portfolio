@@ -8,6 +8,7 @@ import CursorAndEffects from "./CursorAndEffects";
 
 export default function Hero() {
   const [latestEvent, setLatestEvent] = useState<{ type: string; repo: string; time: string } | null>(null);
+  const containerRef = React.useRef(null);
 
   useEffect(() => {
     async function fetchGitHub() {
@@ -38,6 +39,7 @@ export default function Hero() {
 
       <section
         id="hero"
+        ref={containerRef}
         className="relative min-h-[85vh] overflow-hidden bg-[#050505] px-6 py-16 md:py-20 text-white flex flex-col items-center justify-center"
         aria-label="Hero"
       >
@@ -112,14 +114,16 @@ export default function Hero() {
             transition={{ delay: 1.5, duration: 1 }}
             className="absolute top-[85%] md:top-[88%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30 w-full text-center"
           >
-            <button 
-              className="px-6 py-2.5 bg-black/80 border border-green-500/50 text-green-500 font-mono text-[10px] md:text-xs rounded-full shadow-[0_0_15px_rgba(0,255,0,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_25px_rgba(0,255,0,0.4)] uppercase tracking-widest active:scale-95 transition-all"
-              onClick={() => window.dispatchEvent(new Event('open-terminal'))}
-            >
-              [ Open Terminal ]
-            </button>
+            <div className="flex gap-4">
+              <button 
+                className="px-6 py-2.5 bg-black/80 border border-green-500/50 text-green-500 font-mono text-[10px] md:text-xs rounded-full shadow-[0_0_15px_rgba(0,255,0,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_25px_rgba(0,255,0,0.4)] uppercase tracking-widest active:scale-95 transition-all"
+                onClick={() => window.dispatchEvent(new Event('open-terminal'))}
+              >
+                [ Open Terminal ]
+              </button>
+            </div>
             <div className="text-[9px] md:text-[10px] font-mono text-green-500/50 uppercase tracking-[0.2em] animate-pulse">
-              // Or just type &apos;hack&apos; anywhere
+              // Or type &apos;hack&apos; / &apos;matrix&apos;
             </div>
           </motion.div>
 
@@ -127,10 +131,15 @@ export default function Hero() {
           
           {/* 1. Software Development */}
           <motion.div
+            drag
+            dragConstraints={containerRef}
+            dragElastic={0.2}
+            whileDrag={{ scale: 1.05, zIndex: 50, cursor: "grabbing" }}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="absolute top-[8%] md:top-[18%] left-0 md:left-[5%] z-20 md:max-w-[220px]"
+            className="absolute top-[8%] md:top-[18%] left-0 md:left-[5%] z-20 md:max-w-[220px] cursor-grab active:cursor-grabbing touch-none"
           >
             <div className="font-mono text-[9px] text-white/40 mb-1 md:mb-2 tracking-widest uppercase flex items-center gap-2">
               <span className="w-4 h-px bg-white/40"></span> Action 01
@@ -142,10 +151,15 @@ export default function Hero() {
 
           {/* 2. Community Building */}
           <motion.div
+            drag
+            dragConstraints={containerRef}
+            dragElastic={0.2}
+            whileDrag={{ scale: 1.05, zIndex: 50, cursor: "grabbing" }}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="absolute top-[28%] md:top-[15%] right-0 md:right-[5%] text-right z-20 md:max-w-[220px]"
+            className="absolute top-[28%] md:top-[15%] right-0 md:right-[5%] text-right z-20 md:max-w-[220px] cursor-grab active:cursor-grabbing touch-none"
           >
             <div className="font-mono text-[9px] text-white/40 mb-1 md:mb-2 tracking-widest uppercase flex items-center justify-end gap-2">
               Action 02 <span className="w-4 h-px bg-white/40"></span>
@@ -158,10 +172,15 @@ export default function Hero() {
 
           {/* 3. Open Source */}
           <motion.div
+            drag
+            dragConstraints={containerRef}
+            dragElastic={0.2}
+            whileDrag={{ scale: 1.05, zIndex: 50, cursor: "grabbing" }}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="absolute bottom-[22%] md:bottom-[25%] left-0 md:left-[2%] z-20 md:max-w-[250px]"
+            className="absolute bottom-[22%] md:bottom-[25%] left-0 md:left-[2%] z-20 md:max-w-[250px] cursor-grab active:cursor-grabbing touch-none"
           >
             <div className="font-mono text-[9px] text-white/40 mb-1 md:mb-2 tracking-widest uppercase flex items-center gap-2">
               <span className="w-4 h-px bg-white/40"></span> Action 03
@@ -174,10 +193,15 @@ export default function Hero() {
 
           {/* 4. Mentoring & Content */}
           <motion.div
+            drag
+            dragConstraints={containerRef}
+            dragElastic={0.2}
+            whileDrag={{ scale: 1.05, zIndex: 50, cursor: "grabbing" }}
+            dragTransition={{ bounceStiffness: 600, bounceDamping: 10 }}
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="absolute bottom-[8%] md:bottom-[15%] right-0 md:right-[8%] text-right z-20 md:max-w-[220px]"
+            className="absolute bottom-[8%] md:bottom-[15%] right-0 md:right-[8%] text-right z-20 md:max-w-[220px] cursor-grab active:cursor-grabbing touch-none"
           >
             <div className="font-mono text-[9px] text-white/40 mb-1 md:mb-2 tracking-widest uppercase flex items-center justify-end gap-2">
               Action 04 <span className="w-4 h-px bg-white/40"></span>
