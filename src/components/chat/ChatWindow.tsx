@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ChatInput from "./ChatInput";
 import ChatMessageView, { type ChatMessage } from "./ChatMessage";
-import VoiceMode from "./VoiceMode";
 
 type QuickAction = {
   label: string;
@@ -26,7 +24,6 @@ const generateMsgId = (role: string) => `${role}-${Date.now()}-${Math.floor(Math
 export default function ChatWindow({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom of messages
@@ -43,7 +40,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
       role: "user",
       content: text
     };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages([userMsg]);
     setLoading(true);
 
     // 2. Fetch response from API
@@ -60,7 +57,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
         role: "assistant",
         content: data.reply || "I couldn't generate a response. Please try again!"
       };
-      setMessages((prev) => [...prev, assistantMsg]);
+      setMessages([userMsg, assistantMsg]);
       return assistantMsg.content;
     } catch {
       const errorMsg: ChatMessage = {
@@ -68,7 +65,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
         role: "assistant",
         content: "Sorry, I hit a slight connection glitch. Could you ask me that again?"
       };
-      setMessages((prev) => [...prev, errorMsg]);
+      setMessages([userMsg, errorMsg]);
       return errorMsg.content;
     } finally {
       setLoading(false);
@@ -99,16 +96,6 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Voice Mode Toggle */}
-          <button
-            type="button"
-            onClick={() => setIsVoiceOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
-            aria-label="Open voice mode"
-          >
-            🎙 Voice
-          </button>
-          
           <button
             type="button"
             onClick={onClose}
@@ -121,7 +108,7 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Messages / Welcome Panel */}
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
+      <div ref={scrollRef} data-lenis-prevent="true" className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
         {messages.length === 0 ? (
           <div className="flex flex-col justify-center h-full space-y-6">
             <div className="space-y-2.5">
@@ -153,45 +140,48 @@ export default function ChatWindow({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         ) : (
-          messages.map((m) => (
-            <ChatMessageView key={m.id} role={m.role} content={m.content} />
-          ))
-        )}
+          <div className="flex flex-col space-y-6">
+            <div className="space-y-4">
+              {messages.map((m) => (
+                <ChatMessageView key={m.id} role={m.role} content={m.content} />
+              ))}
+              
+              {/* Loading Indicator */}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[85%] rounded-2xl bg-[#121212] border border-white/10 px-4 py-3 flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </div>
+                </div>
+              )}
+            </div>
 
-        {/* Loading Indicator */}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl bg-[#121212] border border-white/10 px-4 py-3 flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50 animate-bounce" style={{ animationDelay: "300ms" }} />
+            <div className="pt-4 border-t border-white/10">
+              <p className="text-xs text-white/40 mb-3 tracking-wide uppercase">Ask another question:</p>
+              <div className="grid grid-cols-2 gap-3.5">
+                {QUICK_ACTIONS.map((action) => (
+                  <button
+                    key={action.label}
+                    type="button"
+                    onClick={() => handleSendMessage(action.query)}
+                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-3 text-left transition hover:bg-white/[0.08] hover:border-cyan-200/30 group cursor-pointer"
+                  >
+                    <span className="text-xl group-hover:scale-110 transition-transform duration-300">
+                      {action.icon}
+                    </span>
+                    <span className="text-xs font-medium text-white/60 group-hover:text-white">
+                      {action.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Input Box */}
-      <div className="p-4 border-t border-white/10 bg-white/[0.01]">
-        <ChatInput onSend={handleSendMessage} />
-      </div>
-
-      {/* Voice Mode Overlay */}
-      <AnimatePresence>
-        {isVoiceOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute inset-0"
-          >
-            <VoiceMode 
-              onClose={() => setIsVoiceOpen(false)} 
-              onVoiceInput={handleSendMessage}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
