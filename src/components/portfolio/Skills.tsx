@@ -302,8 +302,8 @@ function ExperienceSection() {
              const isActive = activeId === shard.id;
              const styles = accentClassesMap[shard.color];
              const angle = (index / dataShards.length) * 360;
-             // Distribute across the 3 orbital rings (20, 32, 44)
-             const radiusLevels = [20, 32, 44];
+             // Distribute across the 3 orbital rings (18, 28, 38)
+             const radiusLevels = [18, 28, 38];
              const radiusPercent = radiusLevels[index % radiusLevels.length]; 
              const left = 50 + Math.cos(angle * (Math.PI / 180)) * radiusPercent;
              const top = 50 + Math.sin(angle * (Math.PI / 180)) * radiusPercent;

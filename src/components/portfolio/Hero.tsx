@@ -83,27 +83,28 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-            className="relative w-[280px] h-[380px] md:w-[450px] md:h-[580px] rounded-sm overflow-hidden z-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border border-white/5 group"
+            className="relative w-[280px] h-[380px] md:w-[450px] md:h-[580px] rounded-sm z-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] border border-white/5 group"
           >
-            <Image
-              src="/assets/picture.jpeg"
-              alt="Nandini Profile"
-              fill
-              className="object-cover object-center grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700"
-              priority
-            />
-            
-            {/* Inner frame subtle gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505]/90 pointer-events-none" />
+            <div className="absolute inset-0 rounded-sm overflow-hidden">
+              <Image
+                src="/assets/picture.jpeg"
+                alt="Nandini Profile"
+                fill
+                className="object-cover object-center grayscale group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700"
+                priority
+              />
+              {/* Inner frame subtle gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505]/90 pointer-events-none" />
+            </div>
             
             {/* Lower minimal links embedded in the photo frame */}
             <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end border-t border-white/20 pt-4 z-20">
-              <a href="#connect" className="text-white hover:text-white/70 transition-colors font-serif italic text-base md:text-xl relative z-30">
+              <motion.a drag dragConstraints={containerRef} whileDrag={{ scale: 1.1, zIndex: 50 }} href="#connect" className="text-white hover:text-white/70 transition-colors font-serif italic text-base md:text-xl relative z-30 cursor-grab active:cursor-grabbing">
                 Say Hello ↘
-              </a>
-              <a href="/assets/Nandini.pdf" target="_blank" rel="noopener noreferrer" className="font-mono text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors relative z-30">
+              </motion.a>
+              <motion.a drag dragConstraints={containerRef} whileDrag={{ scale: 1.1, zIndex: 50 }} href="/assets/Nandini.pdf" target="_blank" rel="noopener noreferrer" className="font-mono text-[9px] uppercase tracking-widest text-white/50 hover:text-white transition-colors relative z-30 cursor-grab active:cursor-grabbing">
                 Decrypt Dossier ↗
-              </a>
+              </motion.a>
             </div>
           </motion.div>
 
@@ -115,16 +116,19 @@ export default function Hero() {
             className="absolute top-[85%] md:top-[88%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-30 w-full text-center"
           >
             <div className="flex gap-4">
-              <button 
-                className="px-6 py-2.5 bg-black/80 border border-green-500/50 text-green-500 font-mono text-[10px] md:text-xs rounded-full shadow-[0_0_15px_rgba(0,255,0,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_25px_rgba(0,255,0,0.4)] uppercase tracking-widest active:scale-95 transition-all"
+              <motion.button 
+                drag
+                dragConstraints={containerRef}
+                whileDrag={{ scale: 1.1, zIndex: 50 }}
+                className="px-6 py-2.5 bg-black/80 border border-green-500/50 text-green-500 font-mono text-[10px] md:text-xs rounded-full shadow-[0_0_15px_rgba(0,255,0,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_25px_rgba(0,255,0,0.4)] uppercase tracking-widest active:scale-95 transition-all cursor-grab active:cursor-grabbing"
                 onClick={() => window.dispatchEvent(new Event('open-terminal'))}
               >
                 [ Open Terminal ]
-              </button>
+              </motion.button>
             </div>
-            <div className="text-[9px] md:text-[10px] font-mono text-green-500/50 uppercase tracking-[0.2em] animate-pulse">
+            <motion.div drag dragConstraints={containerRef} whileDrag={{ scale: 1.1, zIndex: 50 }} className="text-[9px] md:text-[10px] font-mono text-green-500/50 uppercase tracking-[0.2em] animate-pulse cursor-grab active:cursor-grabbing">
               // Or type &apos;hack&apos; / &apos;matrix&apos;
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Floating Impact Blocks */}
