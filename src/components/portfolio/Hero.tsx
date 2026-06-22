@@ -3,9 +3,35 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import CursorAndEffects from "./CursorAndEffects";
 
 export default function Hero() {
+  const [latestEvent, setLatestEvent] = useState<{ type: string; repo: string; time: string } | null>(null);
+
+  useEffect(() => {
+    async function fetchGitHub() {
+      try {
+        const res = await fetch("https://api.github.com/users/nandinigoyaldev/events/public?per_page=5");
+        const events = await res.json();
+        if (events && events.length > 0) {
+          const pushEvent = events.find((e: any) => e.type === "PushEvent" || e.type === "CreateEvent" || e.type === "PullRequestEvent");
+          if (pushEvent) {
+            const date = new Date(pushEvent.created_at);
+            const timeAgo = Math.floor((Date.now() - date.getTime()) / 60000); // minutes
+            let timeStr = timeAgo < 60 ? `${timeAgo}m ago` : `${Math.floor(timeAgo/60)}h ago`;
+            setLatestEvent({
+              type: pushEvent.type === "PushEvent" ? "Pushed to" : (pushEvent.type === "PullRequestEvent" ? "PR on" : "Created"),
+              repo: pushEvent.repo.name.split("/")[1] || pushEvent.repo.name,
+              time: timeStr
+            });
+          }
+        }
+      } catch (err) {}
+    }
+    fetchGitHub();
+  }, []);
+
   return (
     <>
       <CursorAndEffects />
@@ -31,6 +57,24 @@ export default function Hero() {
               [ 01 ] Portfolio <br/> Architecture
             </div>
           </motion.div>
+
+          {/* Developer Heartbeat Widget */}
+          {latestEvent && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              className="absolute top-4 right-4 md:top-8 md:right-8 z-30 flex items-center gap-3 bg-[#0a0f1a]/80 backdrop-blur-md border border-emerald-500/30 px-4 py-2 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+            >
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </div>
+              <div className="font-mono text-[10px] text-white/70">
+                <span className="text-emerald-400">SYS_LOG:</span> {latestEvent.type} <span className="text-white">{latestEvent.repo}</span> ({latestEvent.time})
+              </div>
+            </motion.div>
+          )}
 
           {/* Central Portrait */}
           <motion.div

@@ -12,6 +12,7 @@ import Footer from "./Footer";
 import ChatWidget from "../chat/ChatWidget";
 import AmbientSnake from "./AmbientSnake";
 import CometShower from "./CometShower";
+import Terminal from "./Terminal";
 
 export default function PortfolioPage() {
   // Keeps parity with the original HTML behavior:
@@ -63,6 +64,7 @@ export default function PortfolioPage() {
         <CometShower />
       </div>
       <ChatWidget />
+      <Terminal />
     </div>
   );
 }
