@@ -31,15 +31,15 @@ const projects = [
     color: "cyan"
   },
   {
-    id: "portfolio",
-    name: "AI Portfolio",
+    id: "rpg-generator",
+    name: "Developer RPG Profile",
     type: "WEB-APP",
-    label: "AI-powered portfolio",
+    label: "Profile Generator",
     description:
-      "This portfolio pairs a responsive Next.js experience with a dynamic assistant that can answer questions about projects, education, communities, and resume details in real-time.",
-    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    live: "https://nandini-goyal.netlify.app/",
-    code: "https://github.com/goyaljiiiiii/portfolio",
+      "A fun project to generate an RPG-style developer profile based on your GitHub statistics and languages.",
+    stack: ["React", "TypeScript", "Tailwind CSS"],
+    live: "https://github.com/nandinigoyaldev/Developer-rpg-profile-generator",
+    code: "https://github.com/nandinigoyaldev/Developer-rpg-profile-generator",
     cpu: "0x0C8",
     color: "fuchsia"
   },

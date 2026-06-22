@@ -1,6 +1,5 @@
 # Nandini Goyal — Portfolio & AI Portfolio Assistant
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1cdd8a3f-3447-4071-8935-02febb091b07/deploy-status)](https://app.netlify.com/projects/nandini-goyal/deploys)
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=for-the-badge\&logo=next.js\&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb?style=for-the-badge\&logo=react\&logoColor=black)](https://react.dev/)
@@ -11,7 +10,7 @@ Personal portfolio built with Next.js, React, TypeScript, and Tailwind CSS. The 
 
 ### Live Site
 
-🌐 https://nandini-goyal.netlify.app/
+https://nandinigoyaldev.vercel.app/
 
 ---
 

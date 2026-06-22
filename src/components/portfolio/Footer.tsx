@@ -64,12 +64,12 @@ const socials = [
   {
     key: "github" as const,
     label: "GitHub",
-    href: "https://github.com/goyaljiiiiii",
+    href: "https://github.com/nandinigoyaldev",
   },
   {
     key: "linkedin" as const,
     label: "LinkedIn",
-    href: "https://linkedin.com/in/goyaljiiiiii",
+    href: "https://linkedin.com/in/nandinigoyaldev",
   },
   {
     key: "youtube" as const,
@@ -84,7 +84,7 @@ const socials = [
   {
     key: "x" as const,
     label: "X",
-    href: "https://x.com/goyaljiiiiii",
+    href: "https://x.com/nandinigoyaldev",
   },
 ];
 

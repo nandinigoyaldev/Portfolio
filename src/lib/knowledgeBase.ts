@@ -139,7 +139,7 @@ export const portfolioKnowledge: Document[] = [
   },
   {
     id: "contact-socials",
-    content: "You can reach out to Nandini via these channels:\n- YouTube Channel: https://youtube.com/@self_taught_bob\n- GitHub: https://github.com/goyaljiiiiii\n- LinkedIn: https://linkedin.com/in/goyaljiiiiii\n- Resume: /assets/Nandini.pdf",
+    content: "You can reach out to Nandini via these channels:\n- YouTube Channel: https://youtube.com/@self_taught_bob\n- GitHub: https://github.com/nandinigoyaldev\n- LinkedIn: https://linkedin.com/in/nandinigoyaldev\n- Resume: /assets/Nandini.pdf",
     metadata: { source: "portfolio", category: "contact" }
   }
 ];
