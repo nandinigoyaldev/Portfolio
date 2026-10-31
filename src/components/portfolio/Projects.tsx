@@ -11,7 +11,7 @@ const projects = [
     type: "WEB-APP",
     label: "Personal Portfolio",
     description:
-      "Personal portfolio built with Next.js, React, TypeScript, and Tailwind CSS. Showcases projects, open-source work, community initiatives, and an AI-powered portfolio assistant that answers questions about work and experience.",
+      "Personal portfolio built with Next.js, React, TypeScript, and Tailwind CSS. Showcases projects, open-source work, community initiatives, achievements, and includes an AI-powered portfolio assistant.",
     stack: ["TypeScript", "Next.js", "React", "Tailwind CSS"],
     live: "https://nandinigoyaldev.vercel.app/",
     code: "https://github.com/nandinigoyaldev/Portfolio",
@@ -54,14 +54,14 @@ const projects = [
     id: "osca",
     name: "Open Source Atelier",
     type: "DEV-PLATFORM",
-    label: "133 Forks · 21 Stars",
+    label: "Open Source Learning Platform",
     description:
-      "A complete Open Source Learning Platform designed to help beginners confidently transition from zero to real open-source contributions. Template used widely across the community.",
+      "A complete Open Source Learning Platform designed to help beginners confidently transition from zero to real open-source contributions.",
     stack: ["Python", "React", "Git", "GitHub", "Next.js"],
     live: "https://open-source-contribution-atelier.vercel.app/",
     code: "https://github.com/nandinigoyaldev/Open-Source-Contribution-Atelier",
     stars: 21,
-    forks: 133,
+    forks: 0,
     cpu: "0x0B5",
     color: "cyan",
   },
@@ -86,8 +86,8 @@ const projects = [
     type: "CREATIVE-UI",
     label: "Vinyl Record Showcase",
     description:
-      "A tactile, relaxing vinyl record player showcase designed to display web projects as illustrated record albums inside an interactive crate shelf. Pure CSS artistry meets UI creativity.",
-    stack: ["HTML", "SASS", "CSS", "JavaScript"],
+      "A tactile, relaxing vinyl record player showcase designed to display web projects as illustrated record albums inside an interactive crate shelf.",
+    stack: ["HTML", "CSS", "SCSS", "JavaScript"],
     live: "https://groove-lyart.vercel.app",
     code: "https://github.com/nandinigoyaldev/Groove",
     stars: 1,
@@ -101,7 +101,7 @@ const projects = [
     type: "AI-TOOL",
     label: "GitHub Profile Roaster",
     description:
-      "Turn your GitHub profile into a hilariously honest roasting session, generate an impressive README.md, master conventional Git commits, and audit open-source repositories for hackathons and recruiter impressions.",
+      "Turn your GitHub profile into a hilariously honest roasting session, generate an impressive README.md, master conventional Git commits, and audit open-source repositories.",
     stack: ["TypeScript", "Next.js", "AI", "GitHub API"],
     live: "https://git-roast-iota.vercel.app/",
     code: "https://github.com/nandinigoyaldev/Git-Roast",
@@ -110,13 +110,98 @@ const projects = [
     cpu: "0x0D2",
     color: "fuchsia",
   },
+  {
+    id: "mason-de-beaute",
+    name: "mason-de-beaute",
+    type: "FULL-STACK",
+    label: "Salon Management Platform",
+    description:
+      "Elegant, full-stack salon management and reservation platform with a step-by-step reservation wizard, coupon discount engine, visual transformation comparisons, and a secure staff portal.",
+    stack: ["JavaScript", "CSS", "HTML"],
+    live: "",
+    code: "https://github.com/nandinigoyaldev/mason-de-beaute",
+    stars: 1,
+    forks: 0,
+    cpu: "0x0E1",
+    color: "violet",
+  },
+  {
+    id: "100-python-projects",
+    name: "100-python-projects",
+    type: "COLLECTION",
+    label: "100 Python Projects",
+    description:
+      "A growing collection of Python projects built to move from simple CLI exercises toward a more advanced, automated, and security-conscious repository.",
+    stack: ["Python"],
+    live: "",
+    code: "https://github.com/nandinigoyaldev/100-python-projects",
+    stars: 1,
+    forks: 0,
+    cpu: "0x0E2",
+    color: "emerald",
+  },
+  {
+    id: "release-swarm-armorIQ",
+    name: "Release-Swarm-armorIQ",
+    type: "AUTOMATION",
+    label: "Release Swarm armorIQ",
+    description:
+      "Python-based automation tooling for release management and swarm orchestration.",
+    stack: ["Python", "JavaScript", "HTML", "CSS"],
+    live: "",
+    code: "https://github.com/nandinigoyaldev/Release-Swarm-armorIQ",
+    stars: 0,
+    forks: 0,
+    cpu: "0x0E3",
+    color: "amber",
+  },
+  {
+    id: "vivek-ai",
+    name: "Vivek-AI",
+    type: "STATIC",
+    label: "Vivek-AI",
+    description:
+      "HTML-based AI project showcase.",
+    stack: ["HTML", "TypeScript", "CSS", "JavaScript"],
+    live: "",
+    code: "https://github.com/nandinigoyaldev/Vivek-AI",
+    stars: 0,
+    forks: 0,
+    cpu: "0x0E4",
+    color: "cyan",
+  },
+  {
+    id: "facebook-login",
+    name: "facebook-login",
+    type: "STATIC",
+    label: "Facebook Login Page",
+    description:
+      "HTML/CSS implementation of a Facebook login page.",
+    stack: ["CSS", "HTML"],
+    live: "",
+    code: "https://github.com/nandinigoyaldev/facebook-login",
+    stars: 0,
+    forks: 0,
+    cpu: "0x0E5",
+    color: "rose",
+  },
 ];
 
-const colorMap = {
+const colorMap: Record<string, { text: string; border: string; bg: string; shadow: string }> = {
+  violet: { text: "text-violet-400", border: "border-violet-500", bg: "bg-violet-500", shadow: "shadow-[0_0_20px_rgba(139,92,246,0.5)]" },
   emerald: { text: "text-emerald-400", border: "border-emerald-500", bg: "bg-emerald-500", shadow: "shadow-[0_0_20px_rgba(16,185,129,0.5)]" },
+  amber: { text: "text-amber-400", border: "border-amber-500", bg: "bg-amber-500", shadow: "shadow-[0_0_20px_rgba(245,158,11,0.5)]" },
   cyan: { text: "text-cyan-400", border: "border-cyan-500", bg: "bg-cyan-500", shadow: "shadow-[0_0_20px_rgba(6,182,212,0.5)]" },
+  sky: { text: "text-sky-400", border: "border-sky-500", bg: "bg-sky-500", shadow: "shadow-[0_0_20px_rgba(14,165,233,0.5)]" },
+  rose: { text: "text-rose-400", border: "border-rose-500", bg: "bg-rose-500", shadow: "shadow-[0_0_20px_rgba(244,63,94,0.5)]" },
   fuchsia: { text: "text-fuchsia-400", border: "border-fuchsia-500", bg: "bg-fuchsia-500", shadow: "shadow-[0_0_20px_rgba(217,70,239,0.5)]" },
 };
+
+const DEFAULT_COLOR = { text: "text-white/40", border: "border-white/20", bg: "bg-white/10", shadow: "shadow-[0_0_20px_rgba(255,255,255,0.1)]" };
+
+function getColor(key: string) {
+  return colorMap[key] ?? DEFAULT_COLOR;
+}
 
 export default function Projects() {
   const [activeId, setActiveId] = React.useState<string | null>(null);
@@ -179,29 +264,24 @@ export default function Projects() {
             />
           </svg>
 
-          {/* Chip 1 */}
-          <Microchip 
-            project={projects[0]} 
-            position={{ left: "20%", top: "30%" }} 
-            isActive={activeId === projects[0].id}
-            onClick={() => setActiveId(projects[0].id)}
-          />
-
-          {/* Chip 2 */}
-          <Microchip 
-            project={projects[1]} 
-            position={{ left: "50%", top: "70%" }} 
-            isActive={activeId === projects[1].id}
-            onClick={() => setActiveId(projects[1].id)}
-          />
-
-          {/* Chip 3 */}
-          <Microchip 
-            project={projects[2]} 
-            position={{ left: "80%", top: "30%" }} 
-            isActive={activeId === projects[2].id}
-            onClick={() => setActiveId(projects[2].id)}
-          />
+          {/* Render data core chips dynamically for every project */}
+          {projects.map((project, idx) => {
+            const cols = 4;
+            const col = idx % cols;
+            const row = Math.floor(idx / cols);
+            return (
+              <Microchip
+                key={project.id}
+                project={project}
+                position={{
+                  left: `${12 + col * 24}%`,
+                  top: `${18 + row * 30}%`,
+                }}
+                isActive={activeId === project.id}
+                onClick={() => setActiveId(project.id)}
+              />
+            );
+          })}
 
         </div>
 
@@ -223,7 +303,7 @@ export default function Projects() {
                 className={`relative w-full max-w-4xl max-h-[60vh] md:max-h-[85vh] bg-[#0a0f1a] border border-white/20 p-4 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col overflow-hidden pointer-events-auto`}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className={`absolute top-0 left-0 w-full h-1 ${colorMap[activeProject.color as keyof typeof colorMap].bg}`} />
+                <div className={`absolute top-0 left-0 w-full h-1 ${getColor(activeProject.color).bg}`} />
                 
                 {/* Fixed Close Button */}
                 <button 
@@ -240,7 +320,7 @@ export default function Projects() {
                   
                   {/* Data Pane */}
                   <div className="flex-1">
-                    <div className={`mb-2 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${colorMap[activeProject.color as keyof typeof colorMap].text}`}>
+                    <div className={`mb-2 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${getColor(activeProject.color).text}`}>
                       {activeProject.label}
                     </div>
                     <h3 className="text-xl md:text-5xl font-bold uppercase tracking-tight text-white mb-3 md:mb-6">
@@ -260,7 +340,7 @@ export default function Projects() {
                     </div>
 
                     <div className="flex gap-6 font-mono text-[11px] uppercase tracking-widest mt-auto">
-                      <a href={activeProject.live} target="_blank" rel="noopener noreferrer" className={`transition-colors hover:text-white ${colorMap[activeProject.color as keyof typeof colorMap].text}`}>
+                      <a href={activeProject.live} target="_blank" rel="noopener noreferrer" className={`transition-colors hover:text-white ${getColor(activeProject.color).text}`}>
                         Execute Live ↗
                       </a>
                       <a href={activeProject.code} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
@@ -286,12 +366,12 @@ export default function Projects() {
                     {/* Cool animated diagram */}
                     <div className="mt-8 relative h-24 border border-white/10 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] [background-size:10px_10px]">
                       <motion.div 
-                        className={`absolute top-1/2 left-1/4 h-8 w-8 -translate-y-1/2 ${colorMap[activeProject.color as keyof typeof colorMap].bg} opacity-20 blur-md`}
+                        className={`absolute top-1/2 left-1/4 h-8 w-8 -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-20 blur-md`}
                         animate={{ opacity: [0.2, 0.6, 0.2] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
-                      <div className={`absolute top-1/2 left-1/4 h-2 w-2 -translate-y-1/2 ${colorMap[activeProject.color as keyof typeof colorMap].bg}`} />
-                      <div className={`absolute top-1/2 left-1/4 w-1/2 h-px -translate-y-1/2 ${colorMap[activeProject.color as keyof typeof colorMap].bg} opacity-50`} />
+                      <div className={`absolute top-1/2 left-1/4 h-2 w-2 -translate-y-1/2 ${getColor(activeProject.color).bg}`} />
+                      <div className={`absolute top-1/2 left-1/4 w-1/2 h-px -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-50`} />
                       <div className={`absolute top-1/2 right-1/4 h-4 w-4 -translate-y-1/2 border border-white/40`} />
                     </div>
                   </div>
@@ -319,7 +399,7 @@ function Microchip({
   isActive: boolean,
   onClick: () => void
 }) {
-  const styles = colorMap[project.color as keyof typeof colorMap];
+  const styles = getColor(project.color);
 
   // Generate little pins for the microchip
   const pins = Array.from({ length: 5 }).map((_, i) => (
