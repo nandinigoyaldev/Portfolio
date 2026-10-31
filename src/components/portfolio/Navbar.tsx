@@ -4,8 +4,9 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import MagneticButton from "./MagneticButton";
 
-const navItems = [
+const navItems: { id: string; label: string; href?: string }[] = [
   { id: "hero", label: "Home" },
+  { id: "game", label: "Play", href: "/journey" },
   { id: "tech-stack", label: "Tech" },
   { id: "certifications", label: "Certs" },
   { id: "experience", label: "Experience" },
@@ -18,7 +19,10 @@ const SCROLL_OFFSET = 120;
 
 function scrollToSection(id: string, reduceMotion: boolean) {
   const section = document.getElementById(id);
-  if (!section) return;
+  if (!section) {
+    window.location.href = id === "hero" ? "/" : `/#${id}`;
+    return;
+  }
 
   const top = section.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
   const currentPath = `${window.location.pathname}${window.location.search}`;
@@ -177,6 +181,14 @@ export default function Navbar() {
             {navItems.slice(1).map((item) => {
               const isActive = activeSection === item.id;
 
+              if (item.href) {
+                return (
+                  <a key={item.id} href={item.href} className="relative h-9 rounded-full px-3.5 text-xs font-medium text-white/68 transition hover:text-white">
+                    <span className="relative z-10 block pt-2">{item.label}</span>
+                  </a>
+                );
+              }
+
               return (
                 <button
                   key={item.id}
@@ -285,6 +297,12 @@ export default function Navbar() {
               </div>
               <div className="space-y-1">
                 {navItems.map((item) => (
+                  item.href ? (
+                    <a key={item.id} href={item.href} className="flex w-full items-center justify-between rounded-2xl px-3 py-3 text-left text-sm transition hover:bg-white/10">
+                      <span>{item.label}</span>
+                      <span className="text-xs text-cyan-300">Play ↗</span>
+                    </a>
+                  ) : (
                   <button
                     key={item.id}
                     type="button"
@@ -299,6 +317,7 @@ export default function Navbar() {
                       <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(103,232,249,0.95)]" />
                     ) : null}
                   </button>
+                  )
                 ))}
               </div>
             </motion.div>

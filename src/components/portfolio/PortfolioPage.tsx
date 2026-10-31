@@ -32,9 +32,8 @@ export default function PortfolioPage() {
       });
     }, observerOptions);
 
-    const els = Array.from(
-      document.querySelectorAll("section h2, section h3, section p"),
-    );
+    const els = Array.from(document.querySelectorAll("section h2, section h3, section p"))
+      .filter((el) => !el.closest("#education"));
     els.forEach((el) => {
       (el as HTMLElement).classList.add(
         "opacity-0",

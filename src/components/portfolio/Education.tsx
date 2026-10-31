@@ -1,189 +1,81 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import * as React from "react";
-import TextScramble from "./TextScramble";
 
-type Milestone = {
-  id: string;
-  title: string;
-  status: "Completed" | "Active" | "Planned";
-  eyebrow: string;
-  description: string;
-  details?: string[];
-  color: "cyan" | "emerald" | "fuchsia";
-};
+const milestones = [
+  { year: "2024", code: "IGNOU.BCA", title: "Build the foundation", copy: "Programming, algorithms, applications, and systems design.", color: "emerald" },
+  { year: "2024—27", code: "IICS.MDCE", title: "Understand the machine", copy: "Computer software, hardware integration, and diagnostics.", color: "cyan" },
+  { year: "2024", code: "IICS.AUTO", title: "Make work move", copy: "Business process automation, productivity, and structured data.", color: "yellow" },
+  { year: "2027 →", code: "MCA.NEXT", title: "Next map loading", copy: "Advanced computer science and intelligent systems.", color: "fuchsia" },
+] as const;
 
-const milestones: Milestone[] = [
-  {
-    id: "bca",
-    title: "Bachelor of Computer Applications (BCA) - Computer Science",
-    status: "Active",
-    eyebrow: "Indira Gandhi National Open University (IGNOU)",
-    description: "Building a core academic foundation in Computer Science, software engineering algorithms, application development, and systems design.",
-    details: ["Duration: July 2024 - July 2027", "Field: Computer Science & Applications"],
-    color: "emerald",
-  },
-  {
-    id: "diploma",
-    title: "Master Diploma in Computer Engineering (MDCE)",
-    status: "Completed",
-    eyebrow: "Indian Institute Of Computer Science (IICS)",
-    description: "Comprehensive diploma specializing in Computer Software Engineering, hardware systems integration, systems diagnostics, and practical development.",
-    details: ["Duration: July 2024 - June 2027", "Field: Computer Software Engineering"],
-    color: "cyan",
-  },
-  {
-    id: "automation",
-    title: "Business & Office Automation Certificate",
-    status: "Completed",
-    eyebrow: "Indian Institute of Computer Science (IICS)",
-    description: "Specialized training in business process automation, technology tools, office productivity, and structured data handling.",
-    details: ["Field: Technology & Office Automation"],
-    color: "cyan",
-  },
-  {
-    id: "mca",
-    title: "Master of Computer Applications (MCA)",
-    status: "Planned",
-    eyebrow: "Postgraduate Milestone",
-    description: "Targeted postgraduate path designed to deepen advanced computer science, intelligent systems, and software engineering capabilities.",
-    details: ["Target Admission: 2027", "Through NIMCET / CUET PG Entrance"],
-    color: "fuchsia",
-  },
-];
-
-const colorMap = {
-  cyan: { bg: "bg-cyan-500", text: "text-cyan-400", border: "border-cyan-500", glow: "shadow-[0_0_30px_rgba(6,182,212,0.15)]" },
-  emerald: { bg: "bg-emerald-500", text: "text-emerald-400", border: "border-emerald-500", glow: "shadow-[0_0_30px_rgba(16,185,129,0.15)]" },
-  fuchsia: { bg: "bg-fuchsia-500", text: "text-fuchsia-400", border: "border-fuchsia-500", glow: "shadow-[0_0_30px_rgba(217,70,239,0.15)]" },
+const colors = {
+  cyan: { text: "text-cyan-300", line: "bg-cyan-300", border: "border-cyan-300/50", glow: "rgba(34,211,238,.3)" },
+  emerald: { text: "text-emerald-300", line: "bg-emerald-300", border: "border-emerald-300/50", glow: "rgba(52,211,153,.3)" },
+  yellow: { text: "text-yellow-300", line: "bg-yellow-300", border: "border-yellow-300/50", glow: "rgba(250,204,21,.25)" },
+  fuchsia: { text: "text-fuchsia-300", line: "bg-fuchsia-300", border: "border-fuchsia-300/50", glow: "rgba(232,121,249,.3)" },
 };
 
 export default function Education() {
-  const [activeId, setActiveId] = React.useState<string | null>("bca");
+  const reduceMotion = useReducedMotion();
+  const [active, setActive] = React.useState(0);
 
   return (
-    <section className="relative overflow-hidden bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col justify-center items-center" id="education">
-      
-      {/* Background Ambience */}
-      <div className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] [background-size:40px_40px]" />
-      </div>
-
-      <div className="relative mx-auto w-full max-w-4xl z-10">
-        
-        {/* Header */}
-        <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
-            <span className="flex h-2 w-2 rounded-full bg-yellow-500 animate-pulse" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-yellow-500/90">
-              System Neural Spine
-            </span>
-          </div>
-          <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
-            <TextScramble text="EDUCATION" />
-          </h2>
-          <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
-            [ Accessing core memory banks ]
-          </p>
+    <section id="education" className="relative bg-[#05070d] text-white">
+      <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] [background-size:32px_32px]" />
+      <div className="relative mx-auto max-w-6xl px-5 py-24 md:px-8">
+        <div className="mb-10">
+          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.3em] text-cyan-300/70">Education // scroll sequence</p>
+          <h2 className="text-5xl font-black uppercase tracking-[-0.06em] md:text-8xl">Build<span className="text-white/20"> mode</span></h2>
         </div>
-        
-        {/* The Server Rack / Neural Spine */}
-        <div className="relative w-full flex flex-col gap-4 md:gap-5 max-w-4xl mx-auto pl-4 md:pl-0">
-          
-          {/* Neural Spine glowing line */}
-          <div className="absolute left-[7px] md:left-[29px] top-4 bottom-4 w-[2px] bg-white/10">
-            <div className="w-full h-1/3 bg-white/40 animate-[pulse_4s_infinite]" />
+
+        <div className="relative">
+          <div className="pointer-events-none absolute left-2 top-0 h-full w-1 rounded-full bg-white/10 md:left-1/2 md:-translate-x-1/2">
+            <motion.div className="w-full origin-top bg-gradient-to-b from-emerald-300 via-cyan-300 to-fuchsia-300" animate={{ height: `${((active + 1) / milestones.length) * 100}%` }} transition={{ duration: reduceMotion ? 0 : 0.18 }} />
           </div>
 
-          {milestones.map((m) => {
-            const isActive = activeId === m.id;
-            const styles = colorMap[m.color];
-
+          {milestones.map((item, index) => {
+            const palette = colors[item.color];
+            const isActive = index === active;
             return (
-              <div key={m.id} className="relative flex gap-4 md:gap-8 group items-stretch">
-                
-                {/* Spine Connector Node */}
-                <div className="flex flex-col items-center pt-8 z-10">
-                  <div className={`h-4 w-4 md:h-5 md:w-5 rounded-full border-2 transition-colors duration-500 flex items-center justify-center bg-[#050505] ${isActive ? styles.border : 'border-white/20 group-hover:border-white/50'}`}>
-                    {isActive && <div className={`absolute h-2 w-2 md:h-2.5 md:w-2.5 rounded-full animate-ping ${styles.bg}`} />}
-                    {isActive && <div className={`h-2 w-2 md:h-2.5 md:w-2.5 rounded-full ${styles.bg}`} />}
-                  </div>
-                </div>
-
-                {/* Server Blade */}
-                <div 
-                  className={`flex-1 rounded-r-2xl border-l-[6px] md:border-l-[8px] bg-[#0a0f1a] border border-white/10 transition-all duration-500 overflow-hidden cursor-pointer flex flex-col ${isActive ? 'border-l-' + m.color + '-500 bg-white/[0.04] ' + styles.glow : 'border-l-white/20 hover:border-l-white/40 hover:bg-white/[0.02]'}`}
-                  onClick={() => setActiveId(isActive ? null : m.id)}
-                  style={{ borderLeftColor: isActive ? `var(--tw-colors-${m.color}-500)` : '' }}
-                >
-                  
-                  {/* Blade Header / External Casing */}
-                  <div className="p-4 md:p-6 flex justify-between items-center bg-black/40 border-b border-transparent transition-colors">
-                    <div className="pr-4">
-                       <span className="font-mono text-[9px] md:text-[10px] uppercase text-white/50 tracking-widest">{m.eyebrow}</span>
-                       <h3 className="text-base md:text-xl font-bold mt-1 uppercase tracking-tight text-white">{m.title}</h3>
-                    </div>
-                    {/* Server LEDs */}
-                    <div className="hidden sm:flex gap-2">
-                      <div className="w-2 h-2 rounded-full bg-red-500/20" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-500/20" />
-                      <div className={`w-2 h-2 rounded-full ${isActive ? styles.bg + ' animate-pulse' : 'bg-white/20'}`} />
-                    </div>
-                  </div>
-
-                  {/* Blade Internal Components (The Skill Tree / Data) */}
-                  <AnimatePresence>
+              <motion.article
+                key={item.code}
+                onMouseEnter={() => setActive(index)}
+                onViewportEnter={() => setActive(index)}
+                viewport={{ amount: 0.6, margin: "-20% 0px -20% 0px" }}
+                className="relative flex min-h-[86vh] snap-start items-center pl-9 md:min-h-[78vh] md:pl-0"
+              >
+                <button type="button" onClick={() => setActive(index)} className={`group w-full max-w-xl rounded-[2rem] border bg-[#0a101b]/95 p-7 text-left backdrop-blur-xl transition-all duration-300 md:p-11 ${index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"} ${isActive ? `${palette.border} opacity-100 shadow-[0_0_80px_${palette.glow}]` : "border-white/10 opacity-25 hover:opacity-70"}`}>
+                  <AnimatePresence mode="wait" initial={false}>
                     {isActive && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="border-t border-white/10 bg-[#050505] overflow-hidden"
+                        key={item.code}
+                        initial={reduceMotion ? false : { opacity: 0, y: 30, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
+                        transition={{ duration: reduceMotion ? 0 : 0.28 }}
                       >
-                        <div className="p-4 md:p-6 flex gap-4 md:gap-6">
-                           
-                           {/* Internal Skill Tree visual trace */}
-                           <div className="hidden sm:flex flex-col items-center">
-                             <div className="w-px h-full bg-white/10 relative mt-2">
-                               <div className={`absolute top-2 left-[-3px] w-1.5 h-1.5 rounded-full ${styles.bg}`} />
-                               <div className={`absolute top-1/2 left-[-3px] w-1.5 h-1.5 rounded-full ${styles.bg}`} />
-                             </div>
-                           </div>
-                           
-                           {/* Data Core */}
-                           <div className="flex-1">
-                             <div className={`inline-block px-3 py-1 md:px-4 md:py-1.5 border bg-white/[0.03] font-mono text-[8px] md:text-[9px] uppercase tracking-widest mb-4 ${styles.border} ${styles.text}`}>
-                               SYS.STATUS: {m.status}
-                             </div>
-                             
-                             <p className="font-mono text-xs md:text-sm leading-relaxed text-white/70 max-w-2xl border-l-2 border-white/10 pl-4 py-1">
-                               &gt; {m.description}
-                             </p>
-                             
-                             {m.details && (
-                               <div className="mt-4 flex flex-wrap gap-2 md:gap-3">
-                                 {m.details.map(d => (
-                                   <span key={d} className="px-3 py-1.5 md:px-4 md:py-2 rounded bg-[#0a0f1a] border border-white/10 font-mono text-[10px] md:text-xs text-white/50 tracking-wider">
-                                     {d}
-                                   </span>
-                                 ))}
-                               </div>
-                             )}
-                           </div>
-                           
+                        <div className="flex items-start justify-between gap-5">
+                          <span className={`font-mono text-7xl font-black leading-none ${palette.text}`}>{String(index + 1).padStart(2, "0")}</span>
+                          <span className={`rounded-full border px-3 py-1 font-mono text-[10px] tracking-[0.18em] ${palette.border} ${palette.text}`}>{item.year}</span>
+                        </div>
+                        <p className={`mt-12 font-mono text-[10px] uppercase tracking-[0.28em] ${palette.text}`}>{item.code}</p>
+                        <h3 className="mt-3 text-3xl font-bold md:text-5xl">{item.title}</h3>
+                        <p className="mt-5 max-w-md text-sm leading-7 text-white/55">{item.copy}</p>
+                        <div className="mt-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
+                          <span className={`h-2 w-2 animate-pulse rounded-full ${palette.line}`} /> Current checkpoint
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                  
-                </div>
-              </div>
-            )
+                </button>
+                <span className={`absolute left-[-3px] z-10 h-7 w-7 rounded-full border-4 border-[#05070d] ${palette.line} transition-all duration-200 md:left-1/2 md:-translate-x-1/2 ${isActive ? "scale-125 shadow-[0_0_24px_currentColor]" : "opacity-30"}`} />
+              </motion.article>
+            );
           })}
         </div>
-
       </div>
     </section>
-  )
+  );
 }
