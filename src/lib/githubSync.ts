@@ -6,12 +6,24 @@ export interface GitHubRepository {
   name: string;
   description: string;
   html_url: string;
+  homepage?: string;
   language: string;
   languages: string[];
   readme?: string;
   stars: number;
   forks: number;
+  fork?: boolean;
   updated_at: string;
+}
+
+const PROFILE_REPO = "nandinigoyaldev";
+const GITHUB_HEADERS = {
+  Accept: "application/vnd.github.v3+json",
+  "User-Agent": "Nandini-Portfolio-Assistant",
+} as const;
+
+function isShowcaseRepo(repo: { name: string; fork?: boolean }): boolean {
+  return !repo.fork && repo.name.toLowerCase() !== PROFILE_REPO;
 }
 
 const CACHE_DIR = path.join(process.cwd(), "data");
@@ -84,19 +96,68 @@ export function saveCachedRepositories(repos: GitHubRepository[]): void {
 }
 
 /**
+ * Lightweight live fetch for the portfolio Projects UI.
+ * Skips README pulls so the section stays fast and always matches GitHub.
+ */
+export async function fetchLiveRepositories(
+  username: string = "nandinigoyaldev"
+): Promise<GitHubRepository[]> {
+  const reposRes = await fetch(
+    `https://api.github.com/users/${username}/repos?sort=updated&per_page=100&type=owner`,
+    {
+      headers: GITHUB_HEADERS,
+      next: { revalidate: 300 },
+    }
+  );
+
+  if (!reposRes.ok) {
+    throw new Error(`GitHub API returned status ${reposRes.status}`);
+  }
+
+  const reposData = await reposRes.json();
+  if (!Array.isArray(reposData)) {
+    throw new Error("Invalid response from GitHub API");
+  }
+
+  return reposData
+    .filter(isShowcaseRepo)
+    .map((repo: {
+      name: string;
+      description: string | null;
+      html_url: string;
+      homepage: string | null;
+      language: string | null;
+      stargazers_count: number;
+      forks_count: number;
+      fork: boolean;
+      updated_at: string;
+    }) => ({
+      name: repo.name,
+      description: repo.description || "",
+      html_url: repo.html_url,
+      homepage: repo.homepage || undefined,
+      language: repo.language || "",
+      languages: repo.language ? [repo.language] : ["Other"],
+      stars: repo.stargazers_count || 0,
+      forks: repo.forks_count || 0,
+      fork: Boolean(repo.fork),
+      updated_at: repo.updated_at,
+    }));
+}
+
+/**
  * Fetches repositories and details dynamically from the GitHub API.
  * Designed for on-demand sync triggers or cron schedules.
  */
 export async function syncGitHubData(username: string = "nandinigoyaldev"): Promise<GitHubRepository[]> {
   try {
-    // 1. Fetch repos list
-    const reposRes = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=10`, {
-      headers: {
-        Accept: "application/vnd.github.v3+json",
-        "User-Agent": "Nandini-Portfolio-Assistant"
-      },
-      next: { revalidate: 3600 } // Cache for 1 hour in Next.js
-    });
+    const reposRes = await fetch(
+      `https://api.github.com/users/${username}/repos?sort=updated&per_page=100&type=owner`,
+      {
+        headers: GITHUB_HEADERS,
+        next: { revalidate: 3600 },
+      }
+    );
 
     if (!reposRes.ok) {
       throw new Error(`GitHub API returned status ${reposRes.status}`);
@@ -110,28 +171,27 @@ export async function syncGitHubData(username: string = "nandinigoyaldev"): Prom
     const updatedRepos: GitHubRepository[] = [];
 
     for (const repo of reposData) {
-      if (repo.fork) continue; // Skip forks to show original work
+      if (!isShowcaseRepo(repo)) continue;
 
-      // Fetch languages
       let languages: string[] = [repo.language].filter(Boolean);
       try {
         const langRes = await fetch(repo.languages_url, {
-          headers: { "User-Agent": "Nandini-Portfolio-Assistant" }
+          headers: GITHUB_HEADERS,
         });
         if (langRes.ok) {
-          const langData = await langRes.ok ? await langRes.json() : {};
+          const langData = await langRes.json();
           languages = Object.keys(langData);
         }
       } catch {
         // Fallback to primary language
       }
 
-      // Fetch README content from raw usercontent (or fallback API content)
       let readme = "";
-      const branches = ["main", "master"];
-      for (const branch of branches) {
+      for (const branch of ["main", "master"]) {
         try {
-          const readmeRes = await fetch(`https://raw.githubusercontent.com/${username}/${repo.name}/${branch}/README.md`);
+          const readmeRes = await fetch(
+            `https://raw.githubusercontent.com/${username}/${repo.name}/${branch}/README.md`
+          );
           if (readmeRes.ok) {
             readme = await readmeRes.text();
             break;
@@ -145,12 +205,14 @@ export async function syncGitHubData(username: string = "nandinigoyaldev"): Prom
         name: repo.name,
         description: repo.description || "",
         html_url: repo.html_url,
+        homepage: repo.homepage || undefined,
         language: repo.language || "",
         languages: languages.length > 0 ? languages : [repo.language || "Other"],
         readme: readme || undefined,
         stars: repo.stargazers_count || 0,
         forks: repo.forks_count || 0,
-        updated_at: repo.updated_at
+        fork: Boolean(repo.fork),
+        updated_at: repo.updated_at,
       });
     }
 
@@ -162,8 +224,7 @@ export async function syncGitHubData(username: string = "nandinigoyaldev"): Prom
     console.error("Failed to sync dynamically from GitHub, returning cached data. Error:", error);
   }
 
-  // Fallback to cached data if API call fails (rate limits or offline)
-  return getCachedRepositories();
+  return getCachedRepositories().filter(isShowcaseRepo);
 }
 
 /**

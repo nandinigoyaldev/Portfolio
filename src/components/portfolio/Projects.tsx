@@ -4,221 +4,144 @@ import { motion, AnimatePresence } from "framer-motion";
 import * as React from "react";
 import TextScramble from "./TextScramble";
 
-const projects = [
-  {
-    id: "portfolio",
-    name: "Portfolio",
-    type: "WEB-APP",
-    label: "Personal Portfolio",
-    description:
-      "Personal portfolio built with Next.js, React, TypeScript, and Tailwind CSS. Showcases projects, open-source work, community initiatives, achievements, and includes an AI-powered portfolio assistant.",
-    stack: ["TypeScript", "Next.js", "React", "Tailwind CSS"],
-    live: "https://nandinigoyaldev.vercel.app/",
-    code: "https://github.com/nandinigoyaldev/Portfolio",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0A1",
-    color: "violet",
-  },
-  {
-    id: "auto-botx",
-    name: "Auto_botX",
-    type: "AI / IOT",
-    label: "Gesture + Voice IoT Assistant",
-    description:
-      "Gesture and voice controlled IoT and Spotify assistant built with OpenCV and MediaPipe. Combines computer vision hand tracking with real-time IoT device control and music automation.",
-    stack: ["Python", "TypeScript", "OpenCV", "MediaPipe", "IoT"],
-    live: "https://auto-bot-x.vercel.app/",
-    code: "https://github.com/nandinigoyaldev/Auto_botX",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0A2",
-    color: "emerald",
-  },
-  {
-    id: "terminal-lab",
-    name: "Terminal Lab",
-    type: "EDU-GAME",
-    label: "CLI Learning Game",
-    description:
-      "Beginner-first command-line learning game. Start at the prompt, earn XP by completing missions, unlock the next lesson, and build confidence to use a real terminal.",
-    stack: ["JavaScript", "Node.js", "HTML", "CSS"],
-    live: "https://terminal-lab.vercel.app",
-    code: "https://github.com/nandinigoyaldev/Terminal-lab",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0B3",
-    color: "amber",
-  },
-  {
-    id: "osca",
-    name: "Open Source Atelier",
-    type: "DEV-PLATFORM",
-    label: "Open Source Learning Platform",
-    description:
-      "A complete Open Source Learning Platform designed to help beginners confidently transition from zero to real open-source contributions.",
-    stack: ["Python", "React", "Git", "GitHub", "Next.js"],
-    live: "https://open-source-contribution-atelier.vercel.app/",
-    code: "https://github.com/nandinigoyaldev/Open-Source-Contribution-Atelier",
-    stars: 21,
-    forks: 0,
-    cpu: "0x0B5",
-    color: "cyan",
-  },
-  {
-    id: "drawspace",
-    name: "DrawSpace",
-    type: "REALTIME-APP",
-    label: "Shared Collaborative Canvas",
-    description:
-      "A tiny, dependency-light shared whiteboard. Everyone who opens the same URL sees the same canvas and can draw on it simultaneously — real-time multiplayer sync with zero dependencies.",
-    stack: ["PHP", "HTML", "CSS", "JS", "MySQL"],
-    live: "https://drawspace-rho.vercel.app",
-    code: "https://github.com/nandinigoyaldev/DrawSpace",
-    stars: 0,
-    forks: 0,
-    cpu: "0x0C1",
-    color: "sky",
-  },
-  {
-    id: "groove",
-    name: "Groove",
-    type: "CREATIVE-UI",
-    label: "Vinyl Record Showcase",
-    description:
-      "A tactile, relaxing vinyl record player showcase designed to display web projects as illustrated record albums inside an interactive crate shelf.",
-    stack: ["HTML", "CSS", "SCSS", "JavaScript"],
-    live: "https://groove-lyart.vercel.app",
-    code: "https://github.com/nandinigoyaldev/Groove",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0C4",
-    color: "rose",
-  },
-  {
-    id: "git-roast",
-    name: "Git-Roast",
-    type: "AI-TOOL",
-    label: "GitHub Profile Roaster",
-    description:
-      "Turn your GitHub profile into a hilariously honest roasting session, generate an impressive README.md, master conventional Git commits, and audit open-source repositories.",
-    stack: ["TypeScript", "Next.js", "AI", "GitHub API"],
-    live: "https://git-roast-iota.vercel.app/",
-    code: "https://github.com/nandinigoyaldev/Git-Roast",
-    stars: 2,
-    forks: 0,
-    cpu: "0x0D2",
-    color: "fuchsia",
-  },
-  {
-    id: "mason-de-beaute",
-    name: "mason-de-beaute",
-    type: "FULL-STACK",
-    label: "Salon Management Platform",
-    description:
-      "Elegant, full-stack salon management and reservation platform with a step-by-step reservation wizard, coupon discount engine, visual transformation comparisons, and a secure staff portal.",
-    stack: ["JavaScript", "CSS", "HTML"],
-    live: "",
-    code: "https://github.com/nandinigoyaldev/mason-de-beaute",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0E1",
-    color: "violet",
-  },
-  {
-    id: "100-python-projects",
-    name: "100-python-projects",
-    type: "COLLECTION",
-    label: "100 Python Projects",
-    description:
-      "A growing collection of Python projects built to move from simple CLI exercises toward a more advanced, automated, and security-conscious repository.",
-    stack: ["Python"],
-    live: "",
-    code: "https://github.com/nandinigoyaldev/100-python-projects",
-    stars: 1,
-    forks: 0,
-    cpu: "0x0E2",
-    color: "emerald",
-  },
-  {
-    id: "release-swarm-armorIQ",
-    name: "Release-Swarm-armorIQ",
-    type: "AUTOMATION",
-    label: "Release Swarm armorIQ",
-    description:
-      "Python-based automation tooling for release management and swarm orchestration.",
-    stack: ["Python", "JavaScript", "HTML", "CSS"],
-    live: "",
-    code: "https://github.com/nandinigoyaldev/Release-Swarm-armorIQ",
-    stars: 0,
-    forks: 0,
-    cpu: "0x0E3",
-    color: "amber",
-  },
-  {
-    id: "vivek-ai",
-    name: "Vivek-AI",
-    type: "STATIC",
-    label: "Vivek-AI",
-    description:
-      "HTML-based AI project showcase.",
-    stack: ["HTML", "TypeScript", "CSS", "JavaScript"],
-    live: "",
-    code: "https://github.com/nandinigoyaldev/Vivek-AI",
-    stars: 0,
-    forks: 0,
-    cpu: "0x0E4",
-    color: "cyan",
-  },
-  {
-    id: "facebook-login",
-    name: "facebook-login",
-    type: "STATIC",
-    label: "Facebook Login Page",
-    description:
-      "HTML/CSS implementation of a Facebook login page.",
-    stack: ["CSS", "HTML"],
-    live: "",
-    code: "https://github.com/nandinigoyaldev/facebook-login",
-    stars: 0,
-    forks: 0,
-    cpu: "0x0E5",
-    color: "rose",
-  },
-];
+interface GitHubRepo {
+  name: string;
+  description: string;
+  html_url: string;
+  homepage?: string;
+  language: string;
+  languages: string[];
+  stars: number;
+  forks: number;
+  updated_at: string;
+  fork?: boolean;
+}
 
-const colorMap: Record<string, { text: string; border: string; bg: string; shadow: string }> = {
-  violet: { text: "text-violet-400", border: "border-violet-500", bg: "bg-violet-500", shadow: "shadow-[0_0_20px_rgba(139,92,246,0.5)]" },
-  emerald: { text: "text-emerald-400", border: "border-emerald-500", bg: "bg-emerald-500", shadow: "shadow-[0_0_20px_rgba(16,185,129,0.5)]" },
-  amber: { text: "text-amber-400", border: "border-amber-500", bg: "bg-amber-500", shadow: "shadow-[0_0_20px_rgba(245,158,11,0.5)]" },
-  cyan: { text: "text-cyan-400", border: "border-cyan-500", bg: "bg-cyan-500", shadow: "shadow-[0_0_20px_rgba(6,182,212,0.5)]" },
-  sky: { text: "text-sky-400", border: "border-sky-500", bg: "bg-sky-500", shadow: "shadow-[0_0_20px_rgba(14,165,233,0.5)]" },
-  rose: { text: "text-rose-400", border: "border-rose-500", bg: "bg-rose-500", shadow: "shadow-[0_0_20px_rgba(244,63,94,0.5)]" },
-  fuchsia: { text: "text-fuchsia-400", border: "border-fuchsia-500", bg: "bg-fuchsia-500", shadow: "shadow-[0_0_20px_rgba(217,70,239,0.5)]" },
+interface GitHubProject {
+  id: string;
+  name: string;
+  type: string;
+  label: string;
+  description: string;
+  stack: string[];
+  live: string;
+  code: string;
+  stars: number;
+  forks: number;
+  cpu: string;
+  color: string;
+}
+
+const colorMap: Record<string, { text: string; border: string; bg: string; shadow: string; hex: string }> = {
+  violet: { text: "text-violet-400", border: "border-violet-500", bg: "bg-violet-500", shadow: "shadow-[0_0_20px_rgba(139,92,246,0.5)]", hex: "#8b5cf6" },
+  emerald: { text: "text-emerald-400", border: "border-emerald-500", bg: "bg-emerald-500", shadow: "shadow-[0_0_20px_rgba(16,185,129,0.5)]", hex: "#10b981" },
+  amber: { text: "text-amber-400", border: "border-amber-500", bg: "bg-amber-500", shadow: "shadow-[0_0_20px_rgba(245,158,11,0.5)]", hex: "#f59e0b" },
+  cyan: { text: "text-cyan-400", border: "border-cyan-500", bg: "bg-cyan-500", shadow: "shadow-[0_0_20px_rgba(6,182,212,0.5)]", hex: "#06b6d4" },
+  sky: { text: "text-sky-400", border: "border-sky-500", bg: "bg-sky-500", shadow: "shadow-[0_0_20px_rgba(14,165,233,0.5)]", hex: "#0ea5e9" },
+  rose: { text: "text-rose-400", border: "border-rose-500", bg: "bg-rose-500", shadow: "shadow-[0_0_20px_rgba(244,63,94,0.5)]", hex: "#f43f5e" },
+  fuchsia: { text: "text-fuchsia-400", border: "border-fuchsia-500", bg: "bg-fuchsia-500", shadow: "shadow-[0_0_20px_rgba(217,70,239,0.5)]", hex: "#d946ef" },
 };
 
-const DEFAULT_COLOR = { text: "text-white/40", border: "border-white/20", bg: "bg-white/10", shadow: "shadow-[0_0_20px_rgba(255,255,255,0.1)]" };
+const DEFAULT_COLOR = { text: "text-white/40", border: "border-white/20", bg: "bg-white/10", shadow: "shadow-[0_0_20px_rgba(255,255,255,0.1)]", hex: "#ffffff" };
 
 function getColor(key: string) {
   return colorMap[key] ?? DEFAULT_COLOR;
 }
 
-export default function Projects() {
-  const [activeId, setActiveId] = React.useState<string | null>(null);
+function normalizeHomepage(homepage?: string): string {
+  if (!homepage) return "";
+  const trimmed = homepage.trim();
+  if (!trimmed) return "";
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
 
-  const activeProject = projects.find(p => p.id === activeId);
+function mapRepoToProject(repo: GitHubRepo): GitHubProject {
+  const colorKeys = Object.keys(colorMap);
+  const color = colorKeys[repo.name.length % colorKeys.length];
+  const live = normalizeHomepage(repo.homepage);
+  return {
+    id: repo.name.toLowerCase().replace(/[^a-z0-9]/g, "-"),
+    name: repo.name,
+    type: repo.language ? `${repo.language.toUpperCase()}-PROJECT` : "PROJECT",
+    label: repo.description ? repo.description.slice(0, 40) : "GitHub Project",
+    description: repo.description || "No description available.",
+    stack: repo.languages.length > 0 ? repo.languages : [repo.language || "Other"],
+    live,
+    code: repo.html_url,
+    stars: repo.stars,
+    forks: repo.forks,
+    cpu: `0x${(repo.name.charCodeAt(0) % 256).toString(16).toUpperCase().padStart(2, "0")}${((repo.name.length * 17) % 256).toString(16).toUpperCase().padStart(2, "0")}`,
+    color,
+  };
+}
+
+const CARD_WIDTH = 220;
+const AUTO_ROTATE_MS = 2800;
+
+export default function Projects() {
+  const [projects, setProjects] = React.useState<GitHubProject[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const [frontIndex, setFrontIndex] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.repositories)) {
+          const filtered = data.repositories.filter(
+            (r: GitHubRepo) => !r.fork && r.name.toLowerCase() !== "nandinigoyaldev"
+          );
+          setProjects(filtered.map(mapRepoToProject));
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch projects:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Step the cylinder so each project rotates to the front
+  React.useEffect(() => {
+    if (projects.length < 2 || paused || activeId) return;
+    const id = window.setInterval(() => {
+      setFrontIndex((prev) => (prev + 1) % projects.length);
+    }, AUTO_ROTATE_MS);
+    return () => window.clearInterval(id);
+  }, [projects.length, paused, activeId]);
+
+  const activeProject = projects.find((p) => p.id === activeId);
+  const count = projects.length || 1;
+  const angleStep = 360 / count;
+  const radius = Math.max(
+    180,
+    Math.round((CARD_WIDTH / 2) / Math.tan(Math.PI / Math.max(count, 3)))
+  );
+  const frontProject = projects[frontIndex] ?? null;
+
+  if (loading) {
+    return (
+      <section className="relative bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col items-center justify-center overflow-hidden" id="projects">
+        <div className="flex flex-col items-center justify-center h-96">
+          <div className="animate-spin h-12 w-12 border-4 border-white/20 border-t-white rounded-full mb-4" />
+          <p className="font-mono text-xs text-white/40 tracking-widest uppercase">
+            Loading data cores from GitHub...
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative bg-[#050505] px-6 pt-32 pb-16 text-white flex flex-col items-center justify-center overflow-hidden" id="projects">
-      
-      {/* Deep Circuit Grid Background */}
       <div className="pointer-events-none absolute inset-0 opacity-20">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] [background-size:30px_30px]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_#050505_100%)]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-4xl z-10">
-        {/* Header */}
+      <div className="relative mx-auto w-full max-w-5xl z-10">
         <div className="mb-6 md:mb-8 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-4 border border-white/20 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm">
             <span className="flex h-2 w-2 rounded-sm bg-cyan-500 animate-pulse" />
@@ -230,62 +153,154 @@ export default function Projects() {
             <TextScramble text="DATA CORES" />
           </h2>
           <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
-            [ Select Microchip to extract data ]
+            [ Cylinder rotate — select front core ]
           </p>
         </div>
 
-        {/* The Circuit Board Area */}
-        <div className="relative w-full h-[350px] md:h-[400px] border border-white/10 bg-[#070b14]/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
-          
-          {/* Main Bus Line */}
-          <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-white/5 -translate-y-1/2" />
-          <div className="absolute top-1/2 left-0 right-0 h-[6px] bg-white/5 -translate-y-1/2 opacity-30" />
-          
-          {/* Central Processor Node (Optional visual) */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-white/10 rounded-full animate-[spin_20s_linear_infinite]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white/5 rounded-full animate-[spin_30s_linear_infinite_reverse]" />
+        {/* 3D Project Cylinder */}
+        <div
+          className="relative w-full h-[380px] md:h-[460px] border border-white/10 bg-[#070b14]/50 rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.9)]"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10 -translate-y-1/2" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#050505]/80 to-transparent pointer-events-none z-20" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050505]/80 to-transparent pointer-events-none z-20" />
 
-          {/* Render SVG Traces connecting chips to the center bus */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-            <motion.path 
-              d="M 20% 30% L 20% 50%" 
-              stroke="rgba(16,185,129,0.3)" strokeWidth="2" fill="none"
-              initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} transition={{ duration: 1 }}
-            />
-            <motion.path 
-              d="M 50% 70% L 50% 50%" 
-              stroke="rgba(6,182,212,0.3)" strokeWidth="2" fill="none"
-              initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} transition={{ duration: 1, delay: 0.2 }}
-            />
-            <motion.path 
-              d="M 80% 30% L 80% 50%" 
-              stroke="rgba(217,70,239,0.3)" strokeWidth="2" fill="none"
-              initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} transition={{ duration: 1, delay: 0.4 }}
-            />
-          </svg>
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ perspective: "1100px" }}
+          >
+            <motion.div
+              className="relative"
+              style={{
+                width: CARD_WIDTH,
+                height: 150,
+                transformStyle: "preserve-3d",
+              }}
+              animate={{ rotateY: -frontIndex * angleStep }}
+              transition={{ type: "spring", stiffness: 70, damping: 18 }}
+            >
+              {projects.map((project, idx) => {
+                const isFront = idx === frontIndex;
+                const styles = getColor(project.color);
+                return (
+                  <div
+                    key={project.id}
+                    className="absolute left-0 top-0"
+                    style={{
+                      width: CARD_WIDTH,
+                      height: 150,
+                      transform: `rotateY(${idx * angleStep}deg) translateZ(${radius}px)`,
+                      transformStyle: "preserve-3d",
+                      backfaceVisibility: "hidden",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (isFront) {
+                          setActiveId(project.id);
+                        } else {
+                          setFrontIndex(idx);
+                        }
+                      }}
+                      className={`group relative h-full w-full cursor-pointer border-2 bg-[#0a0f1a]/95 text-left transition-all duration-300 ${
+                        isFront
+                          ? `${styles.border} ${styles.shadow} scale-105`
+                          : "border-white/15 opacity-55 scale-95"
+                      }`}
+                    >
+                      <div className="absolute -top-2 left-4 right-4 flex justify-between">
+                        {Array.from({ length: 6 }).map((_, pin) => (
+                          <div
+                            key={pin}
+                            className={`h-3 w-1.5 ${isFront ? styles.bg : "bg-white/25"}`}
+                          />
+                        ))}
+                      </div>
+                      <div className="absolute -bottom-2 left-4 right-4 flex justify-between">
+                        {Array.from({ length: 6 }).map((_, pin) => (
+                          <div
+                            key={pin}
+                            className={`h-3 w-1.5 ${isFront ? styles.bg : "bg-white/25"}`}
+                          />
+                        ))}
+                      </div>
 
-          {/* Render data core chips dynamically for every project */}
-          {projects.map((project, idx) => {
-            const cols = 4;
-            const col = idx % cols;
-            const row = Math.floor(idx / cols);
-            return (
-              <Microchip
-                key={project.id}
-                project={project}
-                position={{
-                  left: `${12 + col * 24}%`,
-                  top: `${18 + row * 30}%`,
-                }}
-                isActive={activeId === project.id}
-                onClick={() => setActiveId(project.id)}
-              />
-            );
-          })}
+                      <div className={`absolute inset-3 border ${isFront ? styles.border : "border-white/10"} bg-[#050505] flex flex-col items-center justify-center px-3`}>
+                        <div className={`font-mono text-[9px] uppercase tracking-[0.25em] ${isFront ? styles.text : "text-white/30"}`}>
+                          {project.cpu}
+                        </div>
+                        <div className={`mt-2 font-mono text-sm md:text-base font-bold uppercase tracking-tight text-center leading-tight ${isFront ? "text-white" : "text-white/55"}`}>
+                          {project.name}
+                        </div>
+                        <div className="mt-2 font-mono text-[8px] uppercase tracking-widest text-white/35 truncate max-w-full">
+                          {project.type}
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                );
+              })}
+            </motion.div>
+          </div>
 
+          {/* Front project readout + controls */}
+          <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center gap-3 px-4">
+            <AnimatePresence mode="wait">
+              {frontProject && (
+                <motion.div
+                  key={frontProject.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="text-center"
+                >
+                  <div className={`font-mono text-[10px] uppercase tracking-[0.3em] ${getColor(frontProject.color).text}`}>
+                    Core {String(frontIndex + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+                  </div>
+                  <div className="mt-1 font-mono text-sm md:text-base text-white/90 uppercase tracking-widest">
+                    {frontProject.name}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                aria-label="Previous project"
+                onClick={() => setFrontIndex((prev) => (prev - 1 + count) % count)}
+                className="font-mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white border border-white/15 px-3 py-1.5 transition-colors"
+              >
+                ◂ Prev
+              </button>
+              <div className="flex gap-1.5">
+                {projects.map((p, i) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    aria-label={`Show ${p.name}`}
+                    onClick={() => setFrontIndex(i)}
+                    className={`h-1.5 w-1.5 rounded-full transition-all ${
+                      i === frontIndex ? `${getColor(p.color).bg} w-4` : "bg-white/25"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                aria-label="Next project"
+                onClick={() => setFrontIndex((prev) => (prev + 1) % count)}
+                className="font-mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white border border-white/15 px-3 py-1.5 transition-colors"
+              >
+                Next ▸
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Massive Expanding Tooltip (Data Core) - Rendered outside overflow-hidden */}
         <AnimatePresence>
           {activeProject && (
             <motion.div
@@ -296,149 +311,86 @@ export default function Projects() {
               className="fixed inset-0 z-[150] flex items-center justify-center p-2 md:p-6"
               onClick={() => setActiveId(null)}
             >
-              {/* Blur backdrop */}
               <div className="absolute inset-0 bg-black/80 backdrop-blur-md pointer-events-none" />
-              
-              <div 
-                className={`relative w-full max-w-4xl max-h-[60vh] md:max-h-[85vh] bg-[#0a0f1a] border border-white/20 p-4 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col overflow-hidden pointer-events-auto`}
+
+              <div
+                className="relative w-full max-w-4xl max-h-[60vh] md:max-h-[85vh] bg-[#0a0f1a] border border-white/20 p-4 md:p-12 shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-xl flex flex-col overflow-hidden pointer-events-auto"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className={`absolute top-0 left-0 w-full h-1 ${getColor(activeProject.color).bg}`} />
-                
-                {/* Fixed Close Button */}
-                <button 
+
+                <button
                   onClick={() => setActiveId(null)}
                   className="absolute top-4 right-4 md:top-6 md:right-6 z-20 font-mono text-[10px] text-white/50 hover:text-white uppercase tracking-widest bg-black/80 backdrop-blur px-2 py-1 rounded border border-white/10 md:bg-transparent md:border-transparent cursor-pointer"
                 >
                   [ Close ]
                 </button>
 
-                {/* Scrollable Content */}
                 <div className="overflow-y-auto custom-scrollbar flex-1 min-h-0 -mx-2 px-2 mt-8 md:mt-0">
-
-                <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-                  
-                  {/* Data Pane */}
-                  <div className="flex-1">
-                    <div className={`mb-2 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${getColor(activeProject.color).text}`}>
-                      {activeProject.label}
-                    </div>
-                    <h3 className="text-xl md:text-5xl font-bold uppercase tracking-tight text-white mb-3 md:mb-6">
-                      {activeProject.name}
-                    </h3>
-                    
-                    <p className="text-xs md:text-base text-white/70 leading-relaxed mb-4 md:mb-8">
-                      {activeProject.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
-                      {activeProject.stack.map(s => (
-                        <span key={s} className="border border-white/10 bg-white/[0.05] px-2 md:px-3 py-1 font-mono text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-white/60">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-6 font-mono text-[11px] uppercase tracking-widest mt-auto">
-                      <a href={activeProject.live} target="_blank" rel="noopener noreferrer" className={`transition-colors hover:text-white ${getColor(activeProject.color).text}`}>
-                        Execute Live ↗
-                      </a>
-                      <a href={activeProject.code} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
-                        Source Code ↗
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Hardware Schema Diagram (Desktop Only) */}
-                  <div className="hidden md:flex w-full md:w-1/3 border border-white/10 bg-[#050505] p-6 flex-col justify-between font-mono">
-                    <div>
-                      <div className="text-[9px] text-white/40 tracking-[0.3em] uppercase border-b border-white/10 pb-2 mb-4">
-                        Hardware Specs
+                  <div className="flex flex-col md:flex-row gap-6 md:gap-12">
+                    <div className="flex-1">
+                      <div className={`mb-2 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${getColor(activeProject.color).text}`}>
+                        {activeProject.label}
                       </div>
-                      <div className="text-xs text-white/60 space-y-3">
-                        <div className="flex justify-between"><span>CPU_ID</span> <span className="text-white">{activeProject.cpu}</span></div>
-                        <div className="flex justify-between"><span>TYPE</span> <span className="text-white">{activeProject.type}</span></div>
-                        <div className="flex justify-between"><span>STATUS</span> <span className="text-green-400">ONLINE</span></div>
-                        <div className="flex justify-between"><span>MEM</span> <span className="text-white">OPTIMIZED</span></div>
+                      <h3 className="text-xl md:text-5xl font-bold uppercase tracking-tight text-white mb-3 md:mb-6">
+                        {activeProject.name}
+                      </h3>
+
+                      <p className="text-xs md:text-base text-white/70 leading-relaxed mb-4 md:mb-8">
+                        {activeProject.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
+                        {activeProject.stack.map((s) => (
+                          <span key={s} className="border border-white/10 bg-white/[0.05] px-2 md:px-3 py-1 font-mono text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-white/60">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-6 font-mono text-[11px] uppercase tracking-widest mt-auto">
+                        {activeProject.live && (
+                          <a href={activeProject.live} target="_blank" rel="noopener noreferrer" className={`transition-colors hover:text-white ${getColor(activeProject.color).text}`}>
+                            Execute Live ↗
+                          </a>
+                        )}
+                        <a href={activeProject.code} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+                          Source Code ↗
+                        </a>
                       </div>
                     </div>
 
-                    {/* Cool animated diagram */}
-                    <div className="mt-8 relative h-24 border border-white/10 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] [background-size:10px_10px]">
-                      <motion.div 
-                        className={`absolute top-1/2 left-1/4 h-8 w-8 -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-20 blur-md`}
-                        animate={{ opacity: [0.2, 0.6, 0.2] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                      <div className={`absolute top-1/2 left-1/4 h-2 w-2 -translate-y-1/2 ${getColor(activeProject.color).bg}`} />
-                      <div className={`absolute top-1/2 left-1/4 w-1/2 h-px -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-50`} />
-                      <div className={`absolute top-1/2 right-1/4 h-4 w-4 -translate-y-1/2 border border-white/40`} />
+                    <div className="hidden md:flex w-full md:w-1/3 border border-white/10 bg-[#050505] p-6 flex-col justify-between font-mono">
+                      <div>
+                        <div className="text-[9px] text-white/40 tracking-[0.3em] uppercase border-b border-white/10 pb-2 mb-4">
+                          Hardware Specs
+                        </div>
+                        <div className="text-xs text-white/60 space-y-3">
+                          <div className="flex justify-between"><span>CPU_ID</span> <span className="text-white">{activeProject.cpu}</span></div>
+                          <div className="flex justify-between"><span>TYPE</span> <span className="text-white">{activeProject.type}</span></div>
+                          <div className="flex justify-between"><span>STATUS</span> <span className="text-green-400">ONLINE</span></div>
+                          <div className="flex justify-between"><span>MEM</span> <span className="text-white">OPTIMIZED</span></div>
+                        </div>
+                      </div>
+
+                      <div className="mt-8 relative h-24 border border-white/10 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] [background-size:10px_10px]">
+                        <motion.div
+                          className={`absolute top-1/2 left-1/4 h-8 w-8 -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-20 blur-md`}
+                          animate={{ opacity: [0.2, 0.6, 0.2] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                        <div className={`absolute top-1/2 left-1/4 h-2 w-2 -translate-y-1/2 ${getColor(activeProject.color).bg}`} />
+                        <div className={`absolute top-1/2 left-1/4 w-1/2 h-px -translate-y-1/2 ${getColor(activeProject.color).bg} opacity-50`} />
+                        <div className="absolute top-1/2 right-1/4 h-4 w-4 -translate-y-1/2 border border-white/40" />
+                      </div>
                     </div>
                   </div>
-
-                </div>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </section>
-  );
-}
-
-function Microchip({ 
-  project, 
-  position, 
-  isActive, 
-  onClick 
-}: { 
-  project: typeof projects[0], 
-  position: { left: string, top: string },
-  isActive: boolean,
-  onClick: () => void
-}) {
-  const styles = getColor(project.color);
-
-  // Generate little pins for the microchip
-  const pins = Array.from({ length: 5 }).map((_, i) => (
-    <div key={i} className={`w-1.5 h-3 ${isActive ? styles.bg : 'bg-white/20'} transition-colors duration-500`} />
-  ));
-
-  return (
-    <div 
-      onClick={onClick}
-      className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10"
-      style={position}
-    >
-      {/* Glow aura */}
-      <div className={`absolute inset-0 ${styles.bg} blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
-      {isActive && <div className={`absolute inset-0 ${styles.bg} blur-2xl opacity-50`} />}
-
-      {/* Pins Top */}
-      <div className="absolute -top-2 left-4 right-4 flex justify-between z-0">
-        {pins}
-      </div>
-      {/* Pins Bottom */}
-      <div className="absolute -bottom-2 left-4 right-4 flex justify-between z-0">
-        {pins}
-      </div>
-
-      {/* The Chip Body */}
-      <div className={`relative w-28 h-20 md:w-36 md:h-24 bg-[#0a0f1a] border-2 transition-colors duration-300 ${isActive ? styles.border : 'border-white/20 group-hover:border-white/40'} flex flex-col items-center justify-center shadow-2xl z-10`}>
-        {/* Core indentation */}
-        <div className={`absolute inset-2 bg-[#050505] border transition-colors duration-300 flex items-center justify-center ${isActive ? styles.border : 'border-white/5 group-hover:border-white/10'}`}>
-          <div className="text-center">
-            <div className={`font-mono text-[8px] uppercase tracking-widest transition-colors duration-300 ${isActive ? styles.text : 'text-white/30'}`}>
-              {project.cpu}
-            </div>
-            <div className={`font-mono text-xs md:text-sm font-bold uppercase tracking-tight transition-colors duration-300 mt-1 ${isActive ? 'text-white' : 'text-white/70'}`}>
-              {project.name}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
