@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import * as React from "react";
 import TextScramble from "./TextScramble";
+import SolarSystem3D from "./SolarSystem3D";
 
 type NavigationNode = {
   id: string;
@@ -274,89 +275,25 @@ function ExperienceSection() {
       <div className="relative mx-auto w-full max-w-5xl z-10">
         <div className="mb-12 md:mb-16 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-4 border border-white/10 px-4 py-1.5 rounded-full bg-white/[0.02] backdrop-blur-sm">
-            <span className="flex h-1.5 w-1.5 rounded-full bg-fuchsia-500 animate-pulse" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-fuchsia-400/80">
-              Orbital Command
+            <span className="flex h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan-300">
+              3D Orbital Galaxy // Experience
             </span>
           </div>
           <h2 className="font-mono text-3xl font-light tracking-widest text-white md:text-5xl uppercase">
             <TextScramble text="EXPERIENCE" />
           </h2>
-          <p className="mt-4 font-mono text-xs text-white/40 tracking-widest uppercase">
-            [ Select a stellar node to extract data ]
+          <p className="mt-4 font-mono text-xs text-white/50 tracking-widest uppercase">
+            [ Drag to rotate 3D view • Scroll to zoom • Select stellar node for transmission ]
           </p>
         </div>
 
-        {/* Galaxy Map Box (Matching Projects Section) */}
-        <div className="relative h-[400px] lg:h-[500px] w-full max-w-4xl mx-auto border border-white/10 bg-[#070b14]/50 backdrop-blur-sm rounded-xl overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] flex items-center justify-center">
-          
-          <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
-             {/* Elegant orbital tracks */}
-             <circle cx="50" cy="50" r="20" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
-             <circle cx="50" cy="50" r="32" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
-             <circle cx="50" cy="50" r="44" stroke="white" strokeWidth="0.05" fill="none" strokeDasharray="0.5 1" />
-          </svg>
-
-          {/* The Central Star */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full flex items-center justify-center z-10 pointer-events-none">
-            <div className="absolute w-24 h-24 rounded-full bg-white/5 blur-[30px]" />
-            <div className="absolute w-4 h-4 rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,1)] animate-pulse" />
-          </div>
-
-          {/* Orbital Nodes */}
-          {dataShards.map((shard, index) => {
-             const isActive = activeId === shard.id;
-             const styles = accentClassesMap[shard.color];
-             const angle = (index / dataShards.length) * 360;
-             // Distribute across the 3 orbital rings (18, 28, 38)
-             const radiusLevels = [18, 28, 38];
-             const radiusPercent = radiusLevels[index % radiusLevels.length]; 
-             const left = 50 + Math.cos(angle * (Math.PI / 180)) * radiusPercent;
-             const top = 50 + Math.sin(angle * (Math.PI / 180)) * radiusPercent;
-             
-             return (
-               <div key={shard.id} className="absolute z-20 group cursor-pointer" style={{ top: `${top}%`, left: `${left}%`, transform: `translate(-50%, -50%)` }} onClick={() => setActiveId(shard.id)}>
-                  
-                  {/* Node body */}
-                  <div className={`relative w-8 h-8 md:w-10 md:h-10 rounded-full transition-all duration-500 flex items-center justify-center ${isActive ? 'scale-125' : 'group-hover:scale-110'}`}>
-                    
-                    {/* Glowing Core */}
-                    <div className={`absolute w-1.5 h-1.5 md:w-2 md:h-2 rounded-full z-10 transition-colors duration-300 ${isActive ? styles.bg + ' shadow-[0_0_15px_currentColor]' : 'bg-white/40 group-hover:bg-white'}`} />
-                    
-                    {/* Outer Aura */}
-                    <div className={`absolute inset-0 rounded-full blur-md opacity-0 transition-opacity duration-300 ${styles.bg} ${isActive ? 'opacity-60' : 'group-hover:opacity-30'}`} />
-                    
-                    {isActive && (
-                      <>
-                        <div className={`absolute inset-0 rounded-full animate-ping opacity-40 ${styles.bg}`} />
-                        {/* Orbital ring around the active node */}
-                        <div className={`absolute -inset-4 rounded-full border border-current opacity-30 animate-[spin_4s_linear_infinite] ${styles.text}`} style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }} />
-                      </>
-                    )}
-                  </div>
-                  
-                  {/* Label */}
-                  <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 flex flex-col items-center transition-all duration-300 ${isActive ? 'opacity-100 translate-y-1' : 'opacity-50 group-hover:opacity-100 group-hover:translate-y-1'}`}>
-                     <span className={`font-mono text-[9px] md:text-[10px] tracking-widest uppercase whitespace-nowrap transition-colors ${isActive ? styles.text : 'text-white/60 group-hover:text-white'}`}>
-                       {shard.org}
-                     </span>
-                  </div>
-
-                  {/* Laser Beam to Center when active */}
-                  {isActive && (
-                    <svg className="absolute top-1/2 left-1/2 w-[800px] h-[800px] pointer-events-none overflow-visible -translate-x-1/2 -translate-y-1/2 -z-10">
-                      <line x1="50%" y1="50%" x2={`${left}%`} y2={`${top}%`} stroke="currentColor" strokeWidth="1" className={`${styles.text} opacity-40`} strokeDasharray="2 6" />
-                      <circle cx={`${left}%`} cy={`${top}%`} r="2" fill="currentColor" className={styles.text}>
-                        <animate attributeName="cx" values={`${left}%; 50%`} dur="2s" repeatCount="indefinite" />
-                        <animate attributeName="cy" values={`${top}%; 50%`} dur="2s" repeatCount="indefinite" />
-                      </circle>
-                    </svg>
-                  )}
-               </div>
-             )
-          })}
-
-        </div>
+        {/* 3D Solar System Viewport */}
+        <SolarSystem3D
+          shards={dataShards}
+          activeId={activeId}
+          onSelectShard={(id) => setActiveId(id)}
+        />
 
         {/* Data HUD Overlay (Rendered outside overflow-hidden) */}
         <AnimatePresence mode="wait">

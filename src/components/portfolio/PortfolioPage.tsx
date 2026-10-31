@@ -14,7 +14,7 @@ import AmbientSnake from "./AmbientSnake";
 import CometShower from "./CometShower";
 import Terminal from "./Terminal";
 
-import CertificationsVault from "./CertificationsVault";
+
 import CommandPalette from "./CommandPalette";
 
 export default function PortfolioPage() {
@@ -55,7 +55,7 @@ export default function PortfolioPage() {
       <main>
         <Hero />
         <Skills />
-        <CertificationsVault />
+
         <Education />
         <Projects />
         <Contact />
