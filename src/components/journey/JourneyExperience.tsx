@@ -2,9 +2,23 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { journeyAudio } from "./audioManager";
+import { journeyAudio, SurfaceType, AudioState } from "./audioManager";
+import {
+  renderChildhoodScene,
+  renderCovidScene,
+  renderCatchingUpScene,
+  renderGrade11CorridorScene,
+  renderGrade12RecoveryScene,
+  renderCollegeCampusScene,
+  renderProgrammingScene,
+  renderDevFestScene,
+  renderCommunityScene,
+  renderPresentStudioScene,
+} from "./art/sceneRenderers";
+import { drawInteractiveObject } from "./art/objectRenderers";
+import { drawPlayer, PlayerState } from "./art/characterRenderers";
 
-type ChapterId =
+export type ChapterId =
   | "childhood"
   | "covid"
   | "catching-up"
@@ -16,7 +30,7 @@ type ChapterId =
   | "community"
   | "present";
 
-type SceneObject = {
+export type SceneObject = {
   id: string;
   label: string;
   x: number;
@@ -27,7 +41,7 @@ type SceneObject = {
   avoidable?: boolean;
 };
 
-type Chapter = {
+export type Chapter = {
   id: ChapterId;
   title: string;
   subtitle: string;
@@ -35,6 +49,9 @@ type Chapter = {
   palette: { sky: string; back: string; mid: string; floor: string; accent: string };
   objects: SceneObject[];
   exitX: number;
+  surface: SurfaceType;
+  audioAmbienceDesc: string;
+  audioMusicDesc: string;
 };
 
 const chapters: Chapter[] = [
@@ -43,12 +60,43 @@ const chapters: Chapter[] = [
     title: "Childhood",
     subtitle: "Before everything changed",
     objective: "Inspect three school memories.",
-    palette: { sky: "#18243d", back: "#263c5a", mid: "#40566d", floor: "#263a42", accent: "#f6ca52" },
-    exitX: 1080,
+    palette: { sky: "#c9baa2", back: "#877360", mid: "#5a4332", floor: "#855836", accent: "#f6ca52" },
+    exitX: 1160,
+    surface: "wood",
+    audioAmbienceDesc: "Classroom ceiling fan hum, outside sparrow whistles, faint bell",
+    audioMusicDesc: "Soothing felt-piano pentatonic melody in C major",
     objects: [
-      { id: "blackboard", label: "blackboard", x: 620, kind: "desk", required: true, dialogue: ["I was usually in the top three at school.", "I liked the feeling of understanding something before the bell rang."] },
-      { id: "book", label: "notebook", x: 340, kind: "book", required: true, dialogue: ["This is what confidence looked like back then: a notebook full of answers and plans."] },
-      { id: "trophy", label: "trophy", x: 890, kind: "book", required: true, dialogue: ["Not a perfect story. Just a small reminder that I kept showing up."] },
+      {
+        id: "blackboard",
+        label: "teacher's desk & blackboard",
+        x: 580,
+        kind: "desk",
+        required: true,
+        dialogue: [
+          "I was usually in the top three at school. I loved when a proof clicked on the board.",
+          "We solved equations like (X² + B²) = C² and x² + y² = r² before the bell rang: it made me feel like any problem could be broken down.",
+        ],
+      },
+      {
+        id: "book",
+        label: "open notebook",
+        x: 340,
+        kind: "book",
+        required: true,
+        dialogue: [
+          "This is what confidence looked like back then: pages of formulas, neat step-by-step solutions, and big plans.",
+        ],
+      },
+      {
+        id: "trophy",
+        label: "honor trophy",
+        x: 890,
+        kind: "book",
+        required: true,
+        dialogue: [
+          "Not a perfect story, but a quiet reminder that consistency and showing up always mattered.",
+        ],
+      },
     ],
   },
   {
@@ -56,11 +104,34 @@ const chapters: Chapter[] = [
     title: "COVID",
     subtitle: "Learning from a quiet room",
     objective: "Start the online class and finish the first lesson.",
-    palette: { sky: "#0d1426", back: "#1d2b45", mid: "#293d54", floor: "#20293a", accent: "#72d9e8" },
-    exitX: 980,
+    palette: { sky: "#182333", back: "#213e4a", mid: "#475c75", floor: "#3b2820", accent: "#72d9e8" },
+    exitX: 1040,
+    surface: "carpet",
+    audioAmbienceDesc: "Quiet room tone, ticking clock, outside breeze & sweet sparrows",
+    audioMusicDesc: "Gentle, reflective electric piano chords in A minor",
     objects: [
-      { id: "laptop", label: "laptop", x: 590, kind: "laptop", required: true, dialogue: ["At first, my parents did not want online classes for 9th.", "Eventually we realised waiting would cost me a year. I began studying online by myself."] },
-      { id: "lesson", label: "lesson notes", x: 350, kind: "book", required: true, dialogue: ["Ten days before the result, I finally joined school online.", "I crossed 80%. It was the first proof that I could learn without the old routine."] },
+      {
+        id: "laptop",
+        label: "online class laptop",
+        x: 590,
+        kind: "laptop",
+        required: true,
+        dialogue: [
+          "At first, my parents did not want online classes for 9th.",
+          "Eventually we realised waiting would cost me a year. I began studying online by myself.",
+        ],
+      },
+      {
+        id: "lesson",
+        label: "lesson notes",
+        x: 350,
+        kind: "book",
+        required: true,
+        dialogue: [
+          "Ten days before the result, I finally joined school online.",
+          "I crossed 80%. It was the first proof that I could learn without the old routine.",
+        ],
+      },
     ],
   },
   {
@@ -68,388 +139,442 @@ const chapters: Chapter[] = [
     title: "Catching Up",
     subtitle: "Starting from behind",
     objective: "Arrange the missed timetable pages.",
-    palette: { sky: "#22233b", back: "#443c58", mid: "#66516a", floor: "#39344b", accent: "#f0abfc" },
-    exitX: 1060,
+    palette: { sky: "#101626", back: "#1c253b", mid: "#593d22", floor: "#1c1410", accent: "#f0abfc" },
+    exitX: 1080,
+    surface: "wood",
+    audioAmbienceDesc: "Late-night clock ticking, paper rustles, quiet night wind",
+    audioMusicDesc: "Quiet, determined study cadence in D minor",
     objects: [
-      { id: "timetable", label: "timetable", x: 380, kind: "document", dialogue: ["I entered 10th after half the year had passed.", "A lot of the material felt like seeing it for the first time. I had to build a route through it."] },
-      { id: "papers", label: "exam papers", x: 760, kind: "book", dialogue: ["I finished with 71%. It was difficult, but it was still a finish line."] },
+      {
+        id: "timetable",
+        label: "revision timetable",
+        x: 380,
+        kind: "document",
+        dialogue: [
+          "I entered 10th after half the year was gone. The syllabus felt like a wall: quadratic equations x = (-b ± √(b² - 4ac)) / 2a, science modules, and grammar.",
+          "I had to build a route through it day by day.",
+        ],
+      },
+      {
+        id: "papers",
+        label: "exam papers",
+        x: 760,
+        kind: "book",
+        dialogue: [
+          "I finished with 71%. It was difficult, but it proved I could catch up from behind under immense pressure.",
+        ],
+      },
     ],
   },
   {
     id: "grade-11",
     title: "11th Grade",
-    subtitle: "A new school, a difficult room",
+    subtitle: "A new school, a difficult corridor",
     objective: "Find a quiet place to breathe.",
-    palette: { sky: "#1b182c", back: "#33243e", mid: "#4b3150", floor: "#2d263c", accent: "#d69bf1" },
-    exitX: 1320,
+    palette: { sky: "#44344d", back: "#543d60", mid: "#36263f", floor: "#6d5875", accent: "#d69bf1" },
+    exitX: 1360,
+    surface: "tile",
+    audioAmbienceDesc: "Cavernous corridor echo, distant locker clatter, subtle hallway hum",
+    audioMusicDesc: "Moody, tense atmospheric minor chords reflecting social tension",
     objects: [
-      { id: "loud-group", label: "students by the noticeboard", x: 360, kind: "npc", required: false, avoidable: true, dialogue: ["A loud group filled the corridor. I could take the long route past the benches instead."] },
-      { id: "shoulder-check", label: "passing student", x: 650, kind: "npc", required: true, trigger: "pass", dialogue: ["Some encounters were not avoidable. A shoulder caught mine as I passed.", "I kept walking. I did not have words for what was happening yet."] },
-      { id: "quiet-bench", label: "quiet bench", x: 920, kind: "bench", required: true, dialogue: ["I found a quiet bench between classes. No friends, no conversation—just a minute to breathe."] },
-      { id: "classroom-door", label: "classroom door", x: 1130, kind: "doorway", required: true, dialogue: ["The bell rang. Getting through the next room was the only goal."] },
+      {
+        id: "loud-group",
+        label: "crowded clique by the lockers",
+        x: 380,
+        kind: "npc",
+        required: false,
+        avoidable: true,
+        dialogue: [
+          "A loud group filled the corridor. I took the longer, quieter route past the benches instead.",
+        ],
+      },
+      {
+        id: "shoulder-check",
+        label: "passing student",
+        x: 670,
+        kind: "npc",
+        required: true,
+        trigger: "pass",
+        dialogue: [
+          "Some encounters were not avoidable. A shoulder caught mine as I passed.",
+          "I kept walking. I did not have words for what was happening yet.",
+        ],
+      },
+      {
+        id: "quiet-bench",
+        label: "quiet alcove bench",
+        x: 940,
+        kind: "bench",
+        required: true,
+        dialogue: [
+          "I found a quiet bench between classes. No friends, no conversation—just a minute to breathe.",
+        ],
+      },
+      {
+        id: "classroom-door",
+        label: "classroom door",
+        x: 1180,
+        kind: "doorway",
+        required: true,
+        dialogue: ["The bell rang. Getting through the next room was the only goal."],
+      },
     ],
   },
   {
     id: "grade-12",
     title: "12th Grade",
-    subtitle: "The hardest stretch",
-    objective: "Open the window and let the room breathe.",
-    palette: { sky: "#171622", back: "#302d3a", mid: "#4c4146", floor: "#352f3c", accent: "#ed9a9a" },
-    exitX: 1040,
+    subtitle: "The hardest stretch & recovery",
+    objective: "Open the window and check the recovery progress.",
+    palette: { sky: "#2d2633", back: "#594348", mid: "#7ebbe6", floor: "#423235", accent: "#ed9a9a" },
+    exitX: 1080,
+    surface: "wood",
+    audioAmbienceDesc: "Morning breeze through sheer curtains, outside sparrows, soothing silence",
+    audioMusicDesc: "Tender, healing acoustic ambient progression in D major",
     objects: [
-      { id: "window", label: "window", x: 350, kind: "door", dialogue: ["Typhoid, dengue, stress, and the fear of returning to the same environment.", "I lost a lot of weight and my health suffered. Recovery did not happen quickly."] },
-      { id: "calendar", label: "calendar", x: 780, kind: "document", dialogue: ["It took around two and a half years to feel like I was finding myself again. I am still recovering."] },
+      {
+        id: "window",
+        label: "morning window",
+        x: 350,
+        kind: "door",
+        dialogue: [
+          "Typhoid, dengue, stress, and the fear of returning to the same environment.",
+          "I lost weight and my health suffered. Recovery did not happen overnight, but each sunrise brought a little more strength.",
+        ],
+      },
+      {
+        id: "calendar",
+        label: "recovery calendar",
+        x: 780,
+        kind: "document",
+        dialogue: [
+          "It took around two and a half years to feel like I was finding myself again. Healing is a quiet, continuous journey.",
+        ],
+      },
     ],
   },
   {
     id: "after-school",
     title: "After School",
-    subtitle: "Asking for a way forward",
+    subtitle: "College admissions & campus pathways",
     objective: "Choose the next application.",
-    palette: { sky: "#19223a", back: "#2d4161", mid: "#53627c", floor: "#314052", accent: "#8fe2c0" },
-    exitX: 1120,
+    palette: { sky: "#2b6399", back: "#6d3935", mid: "#3c7536", floor: "#8f99a3", accent: "#8fe2c0" },
+    exitX: 1180,
+    surface: "grass",
+    audioAmbienceDesc: "Outdoor park breeze, rustling leaves, sparrows singing across campus",
+    audioMusicDesc: "Uplifting, expansive outdoor acoustic arpeggios in E major",
     objects: [
-      { id: "ignou", label: "IGNOU form", x: 420, kind: "document", dialogue: ["I did not really understand what college was supposed to look like.", "I only knew I wanted to continue. Somehow, an IGNOU form from a cyber café became part of the route."] },
-      { id: "iics", label: "IICS admission", x: 820, kind: "document", dialogue: ["I ended up in IICS and IGNOU together. It was not a perfect plan, but it was a beginning."] },
+      {
+        id: "ignou",
+        label: "IGNOU application folder",
+        x: 420,
+        kind: "document",
+        dialogue: [
+          "I did not really understand what college was supposed to look like.",
+          "I only knew I wanted to continue. An IGNOU form from a cyber café became part of the route.",
+        ],
+      },
+      {
+        id: "iics",
+        label: "IICS admission desk",
+        x: 820,
+        kind: "document",
+        dialogue: [
+          "I ended up in IICS and IGNOU together. It was not a conventional plan, but it was an authentic beginning.",
+        ],
+      },
     ],
   },
   {
     id: "programming",
     title: "Learning Programming",
-    subtitle: "Finding the right way to learn",
-    objective: "Complete the tiny logic circuit.",
-    palette: { sky: "#071525", back: "#102d45", mid: "#16475a", floor: "#102c37", accent: "#67e8f9" },
-    exitX: 1120,
+    subtitle: "Digital workspace & logic lab",
+    objective: "Inspect the terminal and complete the logic circuit.",
+    palette: { sky: "#090d16", back: "#1e1e1e", mid: "#00ffcc", floor: "#0e131d", accent: "#67e8f9" },
+    exitX: 1140,
+    surface: "tile",
+    audioAmbienceDesc: "Mechanical keyboard typing clicks, quiet cooling fan hum, circuit beep",
+    audioMusicDesc: "Mellow retro synthwave arpeggiated chords in F minor",
     objects: [
-      { id: "terminal", label: "terminal", x: 430, kind: "terminal", dialogue: ["For a long time I studied random things because I did not know what tech really was.", "It took time to learn how to learn it properly."] },
-      { id: "logic", label: "logic puzzle", x: 820, kind: "terminal", dialogue: ["Now I am building the skill one small problem at a time: understand, make, break, repeat."] },
+      {
+        id: "terminal",
+        label: "development terminal",
+        x: 430,
+        kind: "terminal",
+        dialogue: [
+          "For a long time I studied random tutorials because I did not know what real software engineering was.",
+          "It took time and patience to learn how to learn properly.",
+        ],
+      },
+      {
+        id: "logic",
+        label: "interactive logic circuit",
+        x: 820,
+        kind: "terminal",
+        dialogue: [
+          "Building the skill one small problem at a time: understand the requirements, make, break, and iterate.",
+        ],
+      },
     ],
   },
   {
     id: "devfest",
     title: "DevFest 2025",
-    subtitle: "The map gets bigger",
-    objective: "Talk to the organiser and visit the stage.",
-    palette: { sky: "#17152e", back: "#30235a", mid: "#5b3e78", floor: "#352650", accent: "#f0abfc" },
-    exitX: 1220,
+    subtitle: "The map gets bigger — Grand Conference",
+    objective: "Talk to the organiser and visit the main stage.",
+    palette: { sky: "#0f0c1a", back: "#2b1c45", mid: "#9333ea", floor: "#181329", accent: "#f0abfc" },
+    exitX: 1280,
+    surface: "carpet",
+    audioAmbienceDesc: "Subtle convention hall atmosphere, distant murmurs, periodic warm applause",
+    audioMusicDesc: "Inspiring, warm festival synth progression in G major",
     objects: [
-      { id: "organiser", label: "organiser", x: 380, kind: "npc", dialogue: ["An online friend guided me to GDG Noida DevFest in 2025.", "That first event showed me a whole world of people building and learning together."] },
-      { id: "stage", label: "stage", x: 820, kind: "microphone", dialogue: ["I did not know yet how much hosting, volunteering, mentoring and organising would become part of my life."] },
+      {
+        id: "organiser",
+        label: "GDG organiser",
+        x: 380,
+        kind: "npc",
+        dialogue: [
+          "An online friend guided me to GDG Noida DevFest in 2025.",
+          "That first event showed me an inspiring world of people building, mentoring, and learning together.",
+        ],
+      },
+      {
+        id: "stage",
+        label: "main keynote stage",
+        x: 820,
+        kind: "microphone",
+        dialogue: [
+          "I did not know yet how much hosting, volunteering, mentoring, and community organizing would become central to my journey.",
+        ],
+      },
     ],
   },
   {
     id: "community",
     title: "Community",
-    subtitle: "Finding my people",
+    subtitle: "Open collaboration makerspace & hackathon hub",
     objective: "Help three community stations.",
-    palette: { sky: "#0e202d", back: "#174452", mid: "#23716b", floor: "#194a4b", accent: "#75e0bd" },
-    exitX: 1240,
+    palette: { sky: "#263f3c", back: "#142523", mid: "#45b39d", floor: "#182a28", accent: "#75e0bd" },
+    exitX: 1260,
+    surface: "tile",
+    audioAmbienceDesc: "Gentle workshop activity, keyboard taps, collaborative chatter",
+    audioMusicDesc: "Warm, collaborative electric piano melody in A major",
     objects: [
-      { id: "mentor", label: "mentor station", x: 340, kind: "npc", dialogue: ["I started mentoring and sharing what I knew, even while I was still learning myself."] },
-      { id: "host", label: "host station", x: 620, kind: "microphone", dialogue: ["Hosting and organising taught me that making a space welcoming is a real technical skill too."] },
-      { id: "hackathon", label: "hackathon table", x: 900, kind: "booth", dialogue: ["Hackathons, volunteering, open source and new contacts made tech feel less lonely."] },
+      {
+        id: "mentor",
+        label: "mentor station",
+        x: 340,
+        kind: "npc",
+        dialogue: [
+          "I started mentoring and sharing what I knew, even while I was still learning myself.",
+        ],
+      },
+      {
+        id: "host",
+        label: "host podium",
+        x: 620,
+        kind: "microphone",
+        dialogue: [
+          "Hosting and organizing taught me that making technical spaces welcoming and empathetic is an essential skill.",
+        ],
+      },
+      {
+        id: "hackathon",
+        label: "hackathon team table",
+        x: 920,
+        kind: "booth",
+        dialogue: [
+          "Hackathons, open-source projects, and new friends made the tech journey feel collaborative and inspiring.",
+        ],
+      },
     ],
   },
   {
     id: "present",
     title: "Present",
-    subtitle: "Still becoming",
+    subtitle: "Nandini's studio — Still becoming",
     objective: "Sit at the desk and save the next chapter.",
-    palette: { sky: "#080d19", back: "#142238", mid: "#1e3a52", floor: "#162c39", accent: "#8ee7bb" },
-    exitX: 1100,
+    palette: { sky: "#0c1524", back: "#2b1c47", mid: "#c86846", floor: "#1a1820", accent: "#8ee7bb" },
+    exitX: 1140,
+    surface: "wood",
+    audioAmbienceDesc: "Gentle rain against twilight window, warm lo-fi tape hum, vinyl warmth",
+    audioMusicDesc: "Soothing lo-fi chillhop soul chords in Fmaj7 with mellow Rhodes voicing",
     objects: [
-      { id: "workspace", label: "developer desk", x: 510, kind: "terminal", dialogue: ["Right now I am balancing studies, programming, projects, content and community work.", "I still do not know exactly where it takes me. I am learning to be okay with that."] },
-      { id: "plant", label: "small plant", x: 850, kind: "plant", dialogue: ["The journey is not finished. This is the save point, not the ending."] },
+      {
+        id: "workspace",
+        label: "developer battle station",
+        x: 520,
+        kind: "terminal",
+        dialogue: [
+          "Right now I am balancing university studies, programming, open source projects, tech content, and community leadership.",
+          "I still do not know exactly where it all leads. I am learning to appreciate the process.",
+        ],
+      },
+      {
+        id: "plant",
+        label: "ceramic monstera plant",
+        x: 860,
+        kind: "plant",
+        dialogue: [
+          "The journey is not finished. This is the save point, not the ending.",
+        ],
+      },
     ],
   },
 ];
 
-function drawPixelScene(context: CanvasRenderingContext2D, width: number, height: number, chapter: Chapter, playerX: number) {
-  context.imageSmoothingEnabled = false;
-  const horizon = height * 0.6;
-  context.fillStyle = chapter.palette.sky;
-  context.fillRect(0, 0, width, height);
-  const fill = (color: string, x: number, y: number, w: number, h: number) => {
-    context.fillStyle = color;
-    context.fillRect(x, y, w, h);
-  };
-  const stroke = (color: string, x: number, y: number, w: number, h: number) => {
-    context.strokeStyle = color;
-    context.lineWidth = 3;
-    context.strokeRect(x, y, w, h);
-  };
+// Helper: Formats mathematical formulas or equations with dedicated overflow-safe badge styling
+function formatDialogueContent(text: string) {
+  const mathRegex = /(\([A-Za-z0-9²\+\-\*\/\s\.]+\)\s*=\s*[A-Za-z0-9²\+\-\*\/\s\.]+|[A-Za-z0-9\(\)]*[²³\^][A-Za-z0-9\+\-\*\/\s\(\)]*|\b[xyzabcXYZABC]²\s*[\+\-\*\/]\s*[xyzabcXYZABC]²(?:\s*=\s*[xyzabcXYZABC]²)?|\([Xx]²\s*[\+]\s*[Bb]²\)\s*=\s*[Cc]²|\([Xx]²\s*[\+]\s*[Bb]²\)|x\s*=\s*\([^\)]+\)\s*\/\s*2a)/g;
 
-  if (chapter.id === "childhood") {
-    fill("#344c66", 0, horizon - 170, width, 170);
-    fill("#9c744b", 0, horizon, width, height - horizon);
-    for (let x = 30; x < width; x += 150) {
-      fill("#b8e3ee", x, horizon - 140, 92, 56);
-      stroke("#e8d6a4", x, horizon - 140, 92, 56);
-      fill("#d8a65a", x + 44, horizon - 140, 4, 56);
-    }
-    fill("#5f4738", 0, horizon - 16, width, 16);
-    for (let x = 70; x < width; x += 190) {
-      fill("#6b4935", x, horizon - 34, 88, 12);
-      fill("#6b4935", x + 12, horizon - 22, 8, 28);
-      fill("#6b4935", x + 68, horizon - 22, 8, 28);
-    }
-  } else if (chapter.id === "covid") {
-    fill("#25344c", 0, horizon - 210, width, 210);
-    fill("#171e2e", 0, horizon, width, height - horizon);
-    fill("#5c3b4b", 60, horizon - 180, 260, 100);
-    fill("#1b263b", 80, horizon - 150, 220, 70);
-    fill("#6e4f65", 45, horizon - 78, 290, 18);
-    fill("#40365d", 0, horizon - 230, width, 10);
-    fill("#202c3e", 720, horizon - 125, 170, 125);
-    fill("#72d9e8", 740, horizon - 105, 130, 60);
-    stroke("#a5eaf2", 740, horizon - 105, 130, 60);
-    fill("#c99764", 680, horizon - 30, 250, 12);
-  } else if (chapter.id === "catching-up") {
-    fill("#56616e", 0, horizon - 180, width, 180);
-    fill("#9a9b91", 0, horizon, width, height - horizon);
-    fill("#3e4650", 0, horizon - 10, width, 10);
-    for (let x = 0; x < width; x += 150) {
-      fill("#727d88", x, horizon - 145, 90, 110);
-      fill("#d0c59d", x + 14, horizon - 126, 62, 34);
-      fill("#424a54", x + 105, horizon - 150, 5, 150);
-    }
-    fill("#4b5560", 0, horizon + 75, width, 8);
-    context.globalAlpha = 0.35;
-    context.beginPath();
-    context.moveTo(0, horizon + 10);
-    context.lineTo(width, horizon - 20);
-    context.lineTo(width, height);
-    context.lineTo(0, height);
-    context.fill();
-    context.globalAlpha = 1;
-  } else if (chapter.id === "grade-11") {
-    fill("#4c3b53", 0, horizon - 210, width, 210);
-    fill("#8b7182", 0, horizon, width, height - horizon);
-    fill("#302839", 0, horizon - 8, width, 8);
-    for (let x = 30; x < width; x += 210) {
-      fill("#3d3044", x, horizon - 175, 120, 115);
-      stroke("#bc93b7", x, horizon - 175, 120, 115);
-      fill("#d2ab67", x + 42, horizon - 140, 38, 34);
-      fill("#644861", x + 8, horizon - 45, 104, 8);
-    }
-    for (let x = 110; x < width; x += 270) {
-      fill("#6d4c50", x, horizon - 28, 110, 12);
-      fill("#4b3944", x + 10, horizon - 16, 8, 35);
-      fill("#4b3944", x + 92, horizon - 16, 8, 35);
-    }
-    fill("#e1b4c6", 30, horizon - 202, 180, 34);
-    context.fillStyle = "#392b42";
-    context.font = "12px monospace";
-    context.fillText("NEW TERM / NEW ROOM", 42, horizon - 180);
-  } else if (chapter.id === "grade-12") {
-    fill("#3c3540", 0, horizon - 230, width, 230);
-    fill("#5b4b4d", 0, horizon, width, height - horizon);
-    fill("#20202d", 90, horizon - 195, 190, 130);
-    fill("#9b7c88", 105, horizon - 180, 160, 100);
-    stroke("#d8b8b2", 105, horizon - 180, 160, 100);
-    fill("#312f3d", 500, horizon - 220, 300, 180);
-    fill("#776273", 530, horizon - 190, 240, 120);
-    fill("#bd9f75", 0, horizon - 10, width, 10);
-    fill("#d3b3ac", 820, horizon - 155, 70, 125);
-  } else if (chapter.id === "after-school") {
-    fill("#6d8b9b", 0, horizon - 210, width, 210);
-    fill("#61727c", 0, horizon, width, height - horizon);
-    fill("#d7bd77", 0, horizon - 12, width, 12);
-    for (let x = 50; x < width; x += 210) {
-      fill("#e7e2ca", x, horizon - 160, 120, 95);
-      stroke("#2d4352", x, horizon - 160, 120, 95);
-      fill("#2d4352", x + 18, horizon - 138, 84, 18);
-      fill("#3f5964", x + 20, horizon - 105, 80, 8);
-    }
-    fill("#355a6c", 0, horizon - 45, width, 25);
-  } else if (chapter.id === "programming") {
-    fill("#071525", 0, horizon - 220, width, 220);
-    fill("#0b2637", 0, horizon, width, height - horizon);
-    for (let x = -20; x < width; x += 80) {
-      context.strokeStyle = "rgba(103,232,249,.12)";
-      context.beginPath();
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
-      context.stroke();
-    }
-    for (let y = 40; y < horizon; y += 50) {
-      context.strokeStyle = "rgba(103,232,249,.1)";
-      context.beginPath();
-      context.moveTo(0, y);
-      context.lineTo(width, y);
-      context.stroke();
-    }
-    fill("#123f51", 90, horizon - 170, 300, 110);
-    fill("#67e8f9", 108, horizon - 150, 264, 70);
-    fill("#102c37", 540, horizon - 150, 230, 70);
-    context.fillStyle = "#9cecf5";
-    context.font = "14px monospace";
-    context.fillText("> build();", 560, horizon - 115);
-  } else if (chapter.id === "devfest") {
-    fill("#34205e", 0, horizon - 220, width, 220);
-    fill("#251a42", 0, horizon, width, height - horizon);
-    fill("#f0abfc", 0, horizon - 205, width, 8);
-    fill("#6b3f91", 150, horizon - 170, 260, 120);
-    fill("#9d6bd0", 180, horizon - 150, 200, 80);
-    fill("#c6f4f2", 620, horizon - 190, 220, 135);
-    fill("#423064", 650, horizon - 170, 160, 90);
-    fill("#f0abfc", 0, horizon - 12, width, 12);
-    for (let x = 40; x < width; x += 180) fill("#4b3470", x, horizon - 35, 100, 20);
-  } else if (chapter.id === "community") {
-    fill("#1c555b", 0, horizon - 220, width, 220);
-    fill("#1a3e45", 0, horizon, width, height - horizon);
-    for (let x = 40; x < width; x += 210) {
-      fill("#efcb85", x, horizon - 180, 150, 110);
-      fill("#1c555b", x + 15, horizon - 160, 120, 70);
-      fill("#75e0bd", x + 28, horizon - 145, 90, 8);
-    }
-    fill("#a8e7c7", 0, horizon - 12, width, 12);
-    fill("#2d6c61", 100, horizon - 55, 100, 18);
-    fill("#2d6c61", 420, horizon - 55, 100, 18);
-    fill("#2d6c61", 740, horizon - 55, 100, 18);
-  } else {
-    fill("#172b40", 0, horizon - 220, width, 220);
-    fill("#10232e", 0, horizon, width, height - horizon);
-    fill("#29485b", 80, horizon - 170, 420, 120);
-    fill("#8ee7bb", 110, horizon - 145, 360, 65);
-    fill("#1b3341", 580, horizon - 190, 220, 140);
-    fill("#263e4d", 600, horizon - 170, 180, 100);
-    fill("#8ee7bb", 0, horizon - 10, width, 10);
-    fill("#496d65", 830, horizon - 100, 30, 90);
-    fill("#7abb82", 800, horizon - 130, 90, 45);
-  }
+  const parts = text.split(mathRegex);
 
-  context.fillStyle = chapter.palette.accent;
-  context.globalAlpha = 0.1;
-  context.beginPath();
-  context.arc(playerX, horizon - 90, 120, 0, Math.PI * 2);
-  context.fill();
-  context.globalAlpha = 1;
+  return (
+    <span className="inline leading-relaxed break-words [overflow-wrap:anywhere]">
+      {parts.map((part, index) => {
+        if (!part) return null;
+        if (
+          part.includes("²") ||
+          part.includes("³") ||
+          part.includes("√") ||
+          part.match(/\([Xx]²\s*[\+]\s*[Bb]²\)/) ||
+          part.match(/[A-Za-z0-9]+²/)
+        ) {
+          return (
+            <span
+              key={index}
+              className="inline-flex items-center px-2 py-0.5 my-0.5 mx-1 rounded-md bg-white/10 border border-cyan-400/30 font-mono text-cyan-300 font-bold max-w-full overflow-x-auto whitespace-nowrap text-sm sm:text-base align-middle shadow-sm"
+              title="Mathematical expression"
+            >
+              {part}
+            </span>
+          );
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </span>
+  );
 }
 
-function drawObject(context: CanvasRenderingContext2D, object: SceneObject, cameraX: number, horizon: number, accent: string) {
-  const x = object.x - cameraX;
-  if (x < -140 || x > 1100) return;
-  context.fillStyle = "rgba(0,0,0,.2)";
-  context.fillRect(x - 35, horizon + 28, 70, 10);
-  context.strokeStyle = accent;
-  context.lineWidth = 3;
-  context.fillStyle = "#182033";
+// Architectural scene-specific exits
+function drawChapterExit(
+  ctx: CanvasRenderingContext2D,
+  chapterId: ChapterId,
+  exitX: number,
+  cameraX: number,
+  horizon: number,
+  accent: string
+) {
+  const sx = exitX - cameraX;
+  if (sx < -140 || sx > 1200) return;
 
-  if (object.kind === "desk" || object.kind === "book") {
-    context.fillRect(x - 52, horizon - 30, 104, 18);
-    context.fillRect(x - 42, horizon - 12, 8, 42);
-    context.fillRect(x + 34, horizon - 12, 8, 42);
-    if (object.kind === "book") {
-      context.fillStyle = accent;
-      context.fillRect(x - 20, horizon - 48, 40, 16);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(sx, horizon + 2, 35, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  switch (chapterId) {
+    case "childhood": {
+      ctx.fillStyle = "#4a3322";
+      ctx.fillRect(sx - 35, horizon - 120, 70, 120);
+      ctx.fillStyle = "#6d4c33";
+      ctx.fillRect(sx - 30, horizon - 115, 60, 115);
+      ctx.fillStyle = "#a8d8ea";
+      ctx.fillRect(sx - 22, horizon - 105, 44, 45);
+      ctx.fillStyle = "#ffd700";
+      ctx.fillRect(sx + 16, horizon - 58, 6, 12);
+      ctx.fillStyle = accent;
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("CORRIDOR ➜", sx - 28, horizon - 130);
+      break;
     }
-  } else if (object.kind === "laptop" || object.kind === "terminal") {
-    context.fillRect(x - 45, horizon - 55, 90, 55);
-    context.strokeRect(x - 45, horizon - 55, 90, 55);
-    context.fillStyle = accent;
-    context.fillRect(x - 31, horizon - 41, 62, 25);
-    context.fillStyle = "#27374a";
-    context.fillRect(x - 58, horizon, 116, 10);
-  } else if (object.kind === "document") {
-    context.fillStyle = "#f4ead4";
-    context.fillRect(x - 28, horizon - 70, 56, 76);
-    context.strokeRect(x - 28, horizon - 70, 56, 76);
-    context.fillStyle = "#8c7d72";
-    for (let line = 0; line < 4; line += 1) context.fillRect(x - 18, horizon - 53 + line * 12, 36, 3);
-  } else if (object.kind === "door" || object.kind === "booth") {
-    context.fillRect(x - 48, horizon - 150, 96, 150);
-    context.strokeRect(x - 48, horizon - 150, 96, 150);
-    context.fillStyle = accent;
-    context.fillRect(x - 5, horizon - 78, 10, 10);
-  } else if (object.kind === "microphone") {
-    context.fillRect(x - 5, horizon - 104, 10, 104);
-    context.beginPath();
-    context.arc(x, horizon - 116, 22, 0, Math.PI * 2);
-    context.fill();
-  } else if (object.kind === "plant") {
-    context.fillRect(x - 22, horizon - 10, 44, 38);
-    context.fillStyle = accent;
-    context.fillRect(x - 5, horizon - 75, 10, 66);
-    context.fillRect(x - 42, horizon - 72, 42, 10);
-    context.fillRect(x + 5, horizon - 50, 42, 10);
-  } else if (object.kind === "bench") {
-    context.fillStyle = "#6d4c50";
-    context.fillRect(x - 58, horizon - 28, 116, 12);
-    context.fillRect(x - 45, horizon - 16, 8, 34);
-    context.fillRect(x + 37, horizon - 16, 8, 34);
-  } else if (object.kind === "window") {
-    context.fillStyle = "#9b7c88";
-    context.fillRect(x - 55, horizon - 140, 110, 110);
-    context.strokeRect(x - 55, horizon - 140, 110, 110);
-    context.fillStyle = "#d6b5c5";
-    context.fillRect(x - 48, horizon - 133, 96, 96);
-  } else if (object.kind === "noticeboard") {
-    context.fillStyle = "#8c694d";
-    context.fillRect(x - 70, horizon - 120, 140, 90);
-    context.fillStyle = accent;
-    for (let note = 0; note < 4; note += 1) context.fillRect(x - 52 + note * 28, horizon - 100, 18, 22);
-  } else if (object.kind === "stage") {
-    context.fillStyle = "#6b3f91";
-    context.fillRect(x - 80, horizon - 70, 160, 70);
-    context.fillStyle = accent;
-    context.fillRect(x - 65, horizon - 52, 130, 8);
-    context.fillRect(x - 65, horizon - 32, 90, 8);
-  } else if (object.kind === "doorway") {
-    context.fillStyle = "#392b42";
-    context.fillRect(x - 42, horizon - 150, 84, 150);
-    context.strokeRect(x - 42, horizon - 150, 84, 150);
-    context.fillStyle = accent;
-    context.fillRect(x - 5, horizon - 78, 10, 10);
-  } else if (object.kind === "npc") {
-    const variant = object.id.length % 3;
-    context.fillStyle = variant === 0 ? "#d29a83" : variant === 1 ? "#b97768" : "#e0b08f";
-    context.fillRect(x - 13, horizon - 78, 26, 26);
-    context.fillStyle = variant === 0 ? "#d05d75" : variant === 1 ? "#4c8ca4" : "#d5a94e";
-    context.fillRect(x - 17, horizon - 52, 34, 36);
-    context.fillStyle = "#252238";
-    context.fillRect(x - 14, horizon - 16, 9, 20);
-    context.fillRect(x + 5, horizon - 16, 9, 20);
-    if (object.avoidable) {
-      context.fillStyle = "rgba(255,255,255,.32)";
-      context.fillRect(x - 25, horizon - 92, 50, 3);
+    case "devfest": {
+      ctx.fillStyle = "#1e1338";
+      ctx.fillRect(sx - 45, horizon - 130, 90, 130);
+      ctx.fillStyle = "#2d1f4f";
+      ctx.fillRect(sx - 40, horizon - 125, 80, 125);
+      ctx.fillStyle = "#ff007f";
+      ctx.fillRect(sx - 1, horizon - 125, 2, 125);
+      ctx.fillStyle = "#ffd700";
+      ctx.fillRect(sx - 32, horizon - 62, 28, 6);
+      ctx.fillRect(sx + 4, horizon - 62, 28, 6);
+      ctx.fillStyle = "#022c22";
+      ctx.fillRect(sx - 24, horizon - 150, 48, 16);
+      ctx.fillStyle = "#00ff66";
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("EXIT ➜", sx - 16, horizon - 138);
+      break;
     }
-  } else {
-    context.fillRect(x - 40, horizon - 100, 80, 100);
+    case "after-school": {
+      ctx.fillStyle = "#5c6b73";
+      ctx.fillRect(sx - 45, horizon - 140, 90, 140);
+      ctx.fillStyle = "#25537d";
+      ctx.fillRect(sx - 32, horizon - 130, 64, 130);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("CAMPUS GATE", sx - 32, horizon - 148);
+      break;
+    }
+    case "programming": {
+      ctx.fillStyle = "#051824";
+      ctx.fillRect(sx - 38, horizon - 135, 76, 135);
+      ctx.strokeStyle = "#00ffcc";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(sx - 38, horizon - 135, 76, 135);
+      ctx.fillStyle = "#00e5ff";
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("PORTAL // NEXT", sx - 35, horizon - 145);
+      break;
+    }
+    default: {
+      ctx.fillStyle = "#182033";
+      ctx.fillRect(sx - 40, horizon - 130, 80, 130);
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(sx - 40, horizon - 130, 80, 130);
+      ctx.fillStyle = accent;
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("CONTINUE ➜", sx - 28, horizon - 140);
+      break;
+    }
   }
-}
-
-function drawExit(context: CanvasRenderingContext2D, x: number, cameraX: number, horizon: number, accent: string) {
-  const screenX = x - cameraX;
-  if (screenX < -120 || screenX > 1100) return;
-  context.fillStyle = "#182033";
-  context.fillRect(screenX - 46, horizon - 154, 92, 154);
-  context.strokeStyle = accent;
-  context.lineWidth = 4;
-  context.strokeRect(screenX - 46, horizon - 154, 92, 154);
-  context.fillStyle = accent;
-  context.fillRect(screenX - 6, horizon - 80, 12, 12);
-  context.font = "11px monospace";
-  context.fillText("EXIT", screenX - 19, horizon - 170);
 }
 
 export default function JourneyExperience() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const keys = useRef(new Set<string>());
-  const player = useRef({ x: 180, y: 0, velocityY: 0, walking: false });
+  const player = useRef<PlayerState>({ x: 180, y: 0, walking: false, facing: "right", stepFrame: 0 });
+  const playerVelY = useRef(0);
   const camera = useRef(0);
+  const tickRef = useRef(0);
   const animation = useRef<number | null>(null);
+
   const completedRef = useRef<string[]>([]);
   const dialogueRef = useRef<{ speaker: string; lines: string[] } | null>(null);
   const encounteredRef = useRef(new Set<string>());
   const reachedExitRef = useRef(false);
   const justCompletedRef = useRef(false);
   const transitionRef = useRef(false);
+  const lastFootstepTime = useRef(0);
+
   const [chapter, setChapter] = useState(0);
   const [near, setNear] = useState<SceneObject | null>(null);
   const [dialogue, setDialogue] = useState<{ speaker: string; lines: string[] } | null>(null);
   const [lineIndex, setLineIndex] = useState(0);
   const [typed, setTyped] = useState("");
+  const [chapterMenu, setChapterMenu] = useState(false);
+  const [audioMenu, setAudioMenu] = useState(false);
+  const [reachedExit, setReachedExit] = useState(false);
+
+  // Audio mixer state
+  const [audioLevels, setAudioLevels] = useState<AudioState>(() => journeyAudio.getState());
+
+  // Interactive logic puzzle state for Programming chapter
+  const [showLogicPuzzle, setShowLogicPuzzle] = useState(false);
+  const [gateInputA, setGateInputA] = useState(false);
+  const [gateInputB, setGateInputB] = useState(false);
+  const [gateType, setGateType] = useState<"AND" | "XOR">("AND");
+  const [puzzleSolved, setPuzzleSolved] = useState(false);
+
   const [completed, setCompleted] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
     try {
@@ -459,9 +584,6 @@ export default function JourneyExperience() {
       return [];
     }
   });
-  const [chapterMenu, setChapterMenu] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [reachedExit, setReachedExit] = useState(false);
 
   const activeChapter = chapters[chapter];
   const requiredObjects = activeChapter.objects.filter((object) => object.required !== false);
@@ -472,10 +594,19 @@ export default function JourneyExperience() {
     completedRef.current = completed;
   }, [completed]);
 
+  // Audio ducking: When dialogue is active, smoothly duck background music and voices
   useEffect(() => {
     dialogueRef.current = dialogue;
+    journeyAudio.setDucking(dialogue !== null);
+    setAudioLevels(journeyAudio.getState());
   }, [dialogue]);
 
+  // Sync Audio Chapter & Soundscapes
+  useEffect(() => {
+    journeyAudio.setChapter(activeChapter.id);
+  }, [activeChapter.id]);
+
+  // Keyboard controls
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
       keys.current.add(event.code);
@@ -490,6 +621,7 @@ export default function JourneyExperience() {
     };
   }, []);
 
+  // Typewriter effect for dialogue
   useEffect(() => {
     if (!dialogue) return;
     const text = dialogue.lines[lineIndex] ?? "";
@@ -499,7 +631,7 @@ export default function JourneyExperience() {
       index += 1;
       setTyped(text.slice(0, index));
       if (index >= text.length) window.clearInterval(timer);
-    }, 22);
+    }, 18);
     return () => {
       window.clearTimeout(resetTimer);
       window.clearInterval(timer);
@@ -519,11 +651,13 @@ export default function JourneyExperience() {
     }
   };
 
+  // Main Canvas Render & Game Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
+
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = canvas.clientWidth * ratio;
@@ -533,29 +667,96 @@ export default function JourneyExperience() {
     resize();
     window.addEventListener("resize", resize);
 
+    const renderScene = (width: number, height: number, camX: number, t: number) => {
+      const sCtx = { ctx: context, width, height, cameraX: camX, tick: t };
+      switch (activeChapter.id) {
+        case "childhood":
+          renderChildhoodScene(sCtx);
+          break;
+        case "covid":
+          renderCovidScene(sCtx);
+          break;
+        case "catching-up":
+          renderCatchingUpScene(sCtx);
+          break;
+        case "grade-11":
+          renderGrade11CorridorScene(sCtx);
+          break;
+        case "grade-12":
+          renderGrade12RecoveryScene(sCtx);
+          break;
+        case "after-school":
+          renderCollegeCampusScene(sCtx);
+          break;
+        case "programming":
+          renderProgrammingScene(sCtx);
+          break;
+        case "devfest":
+          renderDevFestScene(sCtx);
+          break;
+        case "community":
+          renderCommunityScene(sCtx);
+          break;
+        case "present":
+          renderPresentStudioScene(sCtx);
+          break;
+      }
+    };
+
     const tick = () => {
+      tickRef.current += 1;
+      const t = tickRef.current;
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
+      const horizon = height * (activeChapter.id === "after-school" ? 0.58 : 0.62);
+
       const left = keys.current.has("ArrowLeft") || keys.current.has("KeyA");
       const right = keys.current.has("ArrowRight") || keys.current.has("KeyD");
       const jump = keys.current.has("ArrowUp") || keys.current.has("KeyW");
+
       if (dialogueRef.current) {
         player.current.walking = false;
-        drawPixelScene(context, width, height, activeChapter, player.current.x - camera.current);
-        activeChapter.objects.forEach((object) => drawObject(context, object, camera.current, height * 0.6, activeChapter.palette.accent));
+        renderScene(width, height, camera.current, t);
+        activeChapter.objects.forEach((object) =>
+          drawInteractiveObject(context, object, camera.current, horizon, activeChapter.palette.accent, t, activeChapter.id)
+        );
+        drawChapterExit(context, activeChapter.id, activeChapter.exitX, camera.current, horizon, activeChapter.palette.accent);
+        drawPlayer(context, player.current, player.current.x - camera.current, horizon, t);
         animation.current = window.requestAnimationFrame(tick);
         return;
       }
+
+      // Walking physics & sound
       player.current.walking = left || right;
-      player.current.x += (right ? 3 : left ? -3 : 0);
+      if (left) {
+        player.current.facing = "left";
+        player.current.x -= 3.2;
+      } else if (right) {
+        player.current.facing = "right";
+        player.current.x += 3.2;
+      }
       player.current.x = Math.max(90, Math.min(activeChapter.exitX + 80, player.current.x));
-      if (jump && player.current.y === 0) player.current.velocityY = -10;
-      player.current.y += player.current.velocityY;
-      player.current.velocityY += 0.45;
+
+      // Trigger realistic footsteps on chapter-specific surface
+      const now = performance.now();
+      if (player.current.walking && player.current.y === 0 && now - lastFootstepTime.current > 290) {
+        journeyAudio.playFootstep(activeChapter.surface);
+        lastFootstepTime.current = now;
+      }
+
+      // Jump physics
+      if (jump && player.current.y === 0) {
+        playerVelY.current = -9.5;
+        journeyAudio.playFootstep(activeChapter.surface);
+      }
+      player.current.y += playerVelY.current;
+      playerVelY.current += 0.46;
       if (player.current.y > 0) {
         player.current.y = 0;
-        player.current.velocityY = 0;
+        playerVelY.current = 0;
       }
+
+      // 11th Grade scripted encounters
       if (activeChapter.id === "grade-11") {
         const scripted = activeChapter.objects.find((object) => object.trigger === "pass" && player.current.x >= object.x);
         if (scripted && !encounteredRef.current.has(scripted.id)) {
@@ -567,46 +768,50 @@ export default function JourneyExperience() {
             setCompleted(next);
             localStorage.setItem("journey-completed", JSON.stringify(next));
           }
-          journeyAudio.start();
           journeyAudio.play("memory");
           setDialogue({ speaker: scripted.label, lines: scripted.dialogue });
         }
       }
+
+      // Exit detection
       if (player.current.x >= activeChapter.exitX && !reachedExitRef.current) {
         reachedExitRef.current = true;
         setReachedExit(true);
+        journeyAudio.play("door");
         const requiredComplete = activeChapter.objects
           .filter((object) => object.required !== false)
           .every((object) => completedRef.current.includes(`${activeChapter.id}:${object.id}`));
         if (requiredComplete) justCompletedRef.current = true;
       }
 
-      camera.current += ((player.current.x - width * 0.35) - camera.current) * 0.08;
+      // Smooth camera follow
+      camera.current += (player.current.x - width * 0.35 - camera.current) * 0.08;
       camera.current = Math.max(0, Math.min(Math.max(0, activeChapter.exitX - width * 0.6), camera.current));
-      drawPixelScene(context, width, height, activeChapter, player.current.x - camera.current);
-      const horizon = height * 0.6;
-      activeChapter.objects.forEach((object) => drawObject(context, object, camera.current, horizon, activeChapter.palette.accent));
-      drawExit(context, activeChapter.exitX, camera.current, horizon, activeChapter.palette.accent);
 
-      const characterX = player.current.x - camera.current;
-      const characterY = horizon + player.current.y;
-      context.fillStyle = "#c6866a";
-      context.fillRect(characterX - 14, characterY - 62, 28, 28);
-      context.fillStyle = "#6554c0";
-      context.fillRect(characterX - 17, characterY - 34, 34, 32);
-      context.fillStyle = "#20203b";
-      context.fillRect(characterX - 15, characterY - 4, 10, 24);
-      context.fillRect(characterX + 5, characterY - 4, 10, 24);
-      context.fillStyle = "#231b2b";
-      context.fillRect(characterX - 15, characterY - 66, 30, 8);
+      // Render layers
+      renderScene(width, height, camera.current, t);
 
+      // Objects
+      activeChapter.objects.forEach((object) =>
+        drawInteractiveObject(context, object, camera.current, horizon, activeChapter.palette.accent, t, activeChapter.id)
+      );
+
+      // Exit Doorway
+      drawChapterExit(context, activeChapter.id, activeChapter.exitX, camera.current, horizon, activeChapter.palette.accent);
+
+      // Player
+      drawPlayer(context, player.current, player.current.x - camera.current, horizon, t);
+
+      // Nearby object detection
       const nearest = activeChapter.objects
         .map((object) => ({ object, distance: Math.abs(object.x - player.current.x) }))
-        .filter(({ object, distance }) => object.trigger !== "pass" && distance < 130)
+        .filter(({ object, distance }) => object.trigger !== "pass" && distance < 120)
         .sort((a, b) => a.distance - b.distance)[0]?.object ?? null;
       setNear(nearest);
+
       animation.current = window.requestAnimationFrame(tick);
     };
+
     animation.current = window.requestAnimationFrame(tick);
     return () => {
       window.removeEventListener("resize", resize);
@@ -622,20 +827,37 @@ export default function JourneyExperience() {
     completedRef.current = next;
     setCompleted(next);
     localStorage.setItem("journey-completed", JSON.stringify(next));
-    const requiredComplete = requiredObjects
-      .every((object) => next.includes(`${activeChapter.id}:${object.id}`));
+    const requiredComplete = requiredObjects.every((object) => next.includes(`${activeChapter.id}:${object.id}`));
     if (requiredComplete && reachedExitRef.current) justCompletedRef.current = true;
   };
 
   const interact = () => {
     if (!near || dialogue) return;
-    journeyAudio.start();
-    journeyAudio.play("memory");
+
+    if (activeChapter.id === "programming" && near.id === "logic") {
+      setShowLogicPuzzle(true);
+      journeyAudio.play("terminalBeep");
+      return;
+    }
+
+    if (activeChapter.id === "devfest" && near.id === "stage") {
+      journeyAudio.play("applause");
+    } else if (near.id === "trophy") {
+      journeyAudio.play("bell");
+    } else if (near.id === "window") {
+      journeyAudio.play("sparrow");
+    } else if (near.id === "terminal") {
+      journeyAudio.play("terminalBeep");
+    } else {
+      journeyAudio.play("memory");
+    }
+
     const memoryId = `${activeChapter.id}:${near.id}`;
     recordCompletion(memoryId);
     setDialogue({ speaker: near.label, lines: near.dialogue });
   };
 
+  // Auto transition to next chapter
   useEffect(() => {
     if (!isComplete || !justCompletedRef.current || dialogue || transitionRef.current) return;
     transitionRef.current = true;
@@ -654,6 +876,7 @@ export default function JourneyExperience() {
     return () => window.clearTimeout(timer);
   }, [chapter, dialogue, isComplete]);
 
+  // Keybindings for interact & dialogue
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.code === "KeyE" || event.code === "Space") {
@@ -681,62 +904,425 @@ export default function JourneyExperience() {
     setChapterMenu(false);
   };
 
-  const chapterStatus = useMemo(() => chapters.map((item, index) => ({
-    ...item,
-    done: item.objects.filter((object) => object.required !== false).every((object) => completed.includes(`${item.id}:${object.id}`)),
-    index,
-  })), [completed]);
+  // Logic Gate Puzzle solver handler
+  const evaluateCircuit = (inA: boolean, inB: boolean, type: "AND" | "XOR") => {
+    const output = type === "AND" ? inA && inB : inA !== inB;
+    if (output) {
+      setPuzzleSolved(true);
+      journeyAudio.play("applause");
+      recordCompletion("programming:logic");
+    } else {
+      journeyAudio.play("terminalBeep");
+    }
+  };
+
+  const chapterStatus = useMemo(
+    () =>
+      chapters.map((item, index) => ({
+        ...item,
+        done: item.objects.filter((object) => object.required !== false).every((object) => completed.includes(`${item.id}:${object.id}`)),
+        index,
+      })),
+    [completed]
+  );
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#080b12] text-white">
-      <canvas ref={canvasRef} className="h-[min(100vh,760px)] min-h-[560px] w-full" onPointerDown={interact} />
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-5 md:p-8">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em]" style={{ color: activeChapter.palette.accent }}>THE JOURNEY // {String(chapter + 1).padStart(2, "0")}</p>
-          <h1 className="mt-2 text-2xl font-black md:text-4xl">{activeChapter.title}</h1>
-          <p className="mt-1 text-sm text-white/55">{activeChapter.subtitle}</p>
+    <main className="relative min-h-screen overflow-hidden bg-[#080b12] text-white select-none">
+      <canvas
+        ref={canvasRef}
+        className="h-[min(100vh,800px)] min-h-[560px] w-full block cursor-pointer"
+        onPointerDown={interact}
+      />
+
+      {/* Top Header HUD (Responsive & overflow safe) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 sm:p-6 md:p-8 max-w-full">
+        <div className="min-w-0 max-w-full">
+          <p
+            className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em]"
+            style={{ color: activeChapter.palette.accent }}
+          >
+            THE JOURNEY // {String(chapter + 1).padStart(2, "0")} OF 10
+          </p>
+          <h1 className="mt-1 text-xl sm:text-2xl md:text-4xl font-black tracking-tight drop-shadow-md break-words max-w-full">
+            {activeChapter.title}
+          </h1>
+          <p className="mt-1 text-[11px] sm:text-xs md:text-sm text-white/70 max-w-md break-words leading-normal">
+            {activeChapter.subtitle}
+          </p>
         </div>
-        <div className="pointer-events-auto flex gap-2">
-          <button type="button" onClick={() => setMuted(journeyAudio.toggleMute())} className="rounded border border-white/15 bg-black/30 px-3 py-2 font-mono text-[10px] uppercase tracking-widest">{muted ? "sound off" : "sound on"}</button>
-          <button type="button" onClick={() => setChapterMenu((open) => !open)} className="rounded border border-white/15 bg-black/30 px-3 py-2 font-mono text-[10px] uppercase tracking-widest">chapters</button>
+
+        {/* Audio & Menu Actions */}
+        <div className="pointer-events-auto flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setAudioMenu((open) => !open)}
+            className="flex items-center gap-2 rounded-lg border border-white/20 bg-black/50 px-3 py-2 font-mono text-[11px] uppercase tracking-wider backdrop-blur-md transition hover:bg-white/15 active:scale-95 shadow-lg"
+          >
+            <span>AUDIO ⚙</span>
+            <span className={audioLevels.isMuted ? "text-red-400" : "text-emerald-400"}>
+              {audioLevels.isMuted ? "MUTED" : `${Math.round(audioLevels.masterVolume * 100)}%`}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setChapterMenu((open) => !open)}
+            className="rounded-lg border border-white/20 bg-black/50 px-3 py-2 font-mono text-[11px] uppercase tracking-wider backdrop-blur-md transition hover:bg-white/15 active:scale-95 shadow-lg"
+          >
+            CHAPTERS
+          </button>
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-7 left-1/2 -translate-x-1/2 text-center">
-        <div className="pointer-events-auto rounded-full border border-white/15 bg-black/35 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-white/70 backdrop-blur-md">
-          {near ? `E — inspect ${near.label}` : "A / D or ← / → move · W / ↑ jump"}
+      {/* Bottom Center Status & Objective Pill (Contained & non-overflowing) */}
+      <div className="pointer-events-none absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 text-center w-[min(540px,calc(100vw-2rem))] max-w-[calc(100vw-2rem)]">
+        <div className="pointer-events-auto inline-block max-w-full truncate rounded-full border border-white/20 bg-black/60 px-4 sm:px-5 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-white/90 shadow-2xl backdrop-blur-md transition hover:border-white/40">
+          {near ? `[ E ] — Inspect ${near.label}` : "A / D Move · W Jump · E Interact"}
         </div>
-        <p className="mt-2 text-xs text-white/45">{activeChapter.objective} · {requiredFound}/{requiredObjects.length} · {reachedExit ? "exit reached" : "find the exit"}</p>
+        <p className="mt-1.5 text-[10px] sm:text-xs font-mono text-white/60 drop-shadow break-words leading-tight">
+          {activeChapter.objective} · {requiredFound}/{requiredObjects.length} Found ·{" "}
+          {reachedExit ? "Exit Reached ✓" : "Walk to Exit"}
+        </p>
       </div>
 
-      <Link href="/" className="absolute bottom-7 left-5 rounded border border-white/15 bg-black/30 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-white/60 backdrop-blur-md hover:text-white">← portfolio</Link>
+      {/* Back to Portfolio Link */}
+      <Link
+        href="/"
+        className="absolute bottom-5 sm:bottom-7 left-3 sm:left-5 rounded-lg border border-white/20 bg-black/50 px-3 py-2 font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70 backdrop-blur-md transition hover:bg-white/20 hover:text-white shadow-lg"
+      >
+        ← PORTFOLIO
+      </Link>
 
+      {/* Dialogue Modal Overlay (Non-overflowing, handles math & equations cleanly) */}
       {dialogue && (
-        <button type="button" onClick={advanceDialogue} className="absolute inset-x-4 bottom-24 z-10 text-left md:inset-x-auto md:left-1/2 md:w-[min(720px,calc(100%-3rem))] md:-translate-x-1/2">
-          <div className="border-2 border-dashed border-white/35 bg-[#0b101b]/95 p-5 shadow-2xl shadow-black/50 backdrop-blur-md md:p-7">
-            <p className="font-mono text-xs uppercase tracking-[0.25em]" style={{ color: activeChapter.palette.accent }}>{dialogue.speaker}</p>
-            <p className="mt-3 min-h-14 text-base leading-7 text-white/85 md:text-lg">{typed}<span className="animate-pulse text-cyan-300">▮</span></p>
-            <p className="mt-4 text-right font-mono text-[10px] uppercase tracking-widest text-white/35">E / click to continue</p>
+        <div
+          role="dialog"
+          aria-label="Dialogue"
+          className="absolute inset-x-3 sm:inset-x-6 bottom-20 sm:bottom-24 z-20 mx-auto w-[min(740px,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)]"
+        >
+          <div
+            onClick={advanceDialogue}
+            className="cursor-pointer border-2 border-white/30 bg-[#0c1322]/95 p-4 sm:p-6 md:p-7 shadow-2xl shadow-black/80 backdrop-blur-xl rounded-2xl max-h-[55vh] overflow-y-auto box-border transition hover:border-white/45"
+          >
+            <div className="flex items-center justify-between border-b border-white/15 pb-2.5 mb-3">
+              <p
+                className="font-mono text-xs font-bold uppercase tracking-[0.25em]"
+                style={{ color: activeChapter.palette.accent }}
+              >
+                {dialogue.speaker}
+              </p>
+              <span className="font-mono text-[10px] text-white/50 tracking-wider">
+                STEP {lineIndex + 1}/{dialogue.lines.length}
+              </span>
+            </div>
+            <div className="min-h-[3.8rem] text-sm sm:text-base md:text-lg leading-relaxed text-white/95 font-sans break-words [overflow-wrap:anywhere]">
+              {formatDialogueContent(typed)}
+              <span className="inline-block animate-pulse text-cyan-400 font-mono ml-0.5">▮</span>
+            </div>
+            <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[10px] sm:text-xs font-mono text-white/40 uppercase tracking-widest">
+              <span>Click or press [ E ] to advance</span>
+              <span>{lineIndex < dialogue.lines.length - 1 ? "Next ➜" : "Finish ✓"}</span>
+            </div>
           </div>
-        </button>
-      )}
-
-      {chapter === chapters.length - 1 && isComplete && !dialogue && (
-        <div className="absolute right-5 top-32 max-w-xs border border-emerald-300/30 bg-[#081b18]/90 p-4 backdrop-blur-md">
-          <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-300">Journey complete</p>
-          <p className="mt-2 text-sm text-white/70">You reached the present. Thank you for walking through it.</p>
         </div>
       )}
 
-      {chapterMenu && (
-        <div className="absolute right-5 top-20 z-20 max-h-[70vh] w-72 overflow-y-auto border border-white/15 bg-[#0a101b]/95 p-3 backdrop-blur-xl">
-          <p className="mb-3 px-2 font-mono text-[10px] uppercase tracking-widest text-white/40">Chapter select</p>
-          {chapterStatus.map((item) => (
-            <button type="button" key={item.id} onClick={() => selectChapter(item.index)} className={`mb-1 flex w-full items-center justify-between p-3 text-left text-sm transition hover:bg-white/10 ${item.index === chapter ? "bg-white/10" : ""}`}>
-              <span><span className="mr-2 font-mono text-xs text-white/35">{String(item.index + 1).padStart(2, "0")}</span>{item.title}</span>
-              <span className={item.done ? "text-emerald-300" : "text-white/25"}>{item.done ? "✓" : "·"}</span>
+      {/* Interactive Logic Gate Puzzle Modal (Programming Chapter) */}
+      {showLogicPuzzle && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="w-full max-w-md rounded-2xl border border-cyan-500/40 bg-[#09111e] p-5 sm:p-6 shadow-2xl shadow-cyan-900/40 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="font-mono text-xs sm:text-sm uppercase tracking-widest text-cyan-400 font-bold">
+                LOGIC CIRCUIT PUZZLE
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowLogicPuzzle(false)}
+                className="text-white/50 hover:text-white text-lg font-mono px-2 py-1"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="mt-3 text-xs text-white/70 leading-relaxed">
+              Toggle the circuit inputs so the output state equals{" "}
+              <span className="text-cyan-400 font-bold font-mono">1 (TRUE)</span>.
+            </p>
+
+            {/* Circuit Diagram Visual */}
+            <div className="my-5 rounded-xl border border-white/10 bg-black/60 p-4 font-mono text-xs">
+              <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !gateInputA;
+                    setGateInputA(next);
+                    journeyAudio.play("terminalBeep");
+                    evaluateCircuit(next, gateInputB, gateType);
+                  }}
+                  className={`rounded-lg px-3.5 py-2 font-bold transition shadow ${
+                    gateInputA ? "bg-cyan-500 text-black" : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  INPUT A: {gateInputA ? "1" : "0"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextType = gateType === "AND" ? "XOR" : "AND";
+                    setGateType(nextType);
+                    journeyAudio.play("inspect");
+                    evaluateCircuit(gateInputA, gateInputB, nextType);
+                  }}
+                  className="rounded-lg border border-purple-400/50 bg-purple-900/40 px-3 py-2 text-purple-300 hover:bg-purple-800/60 transition shadow"
+                >
+                  GATE: {gateType}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = !gateInputB;
+                    setGateInputB(next);
+                    journeyAudio.play("terminalBeep");
+                    evaluateCircuit(gateInputA, next, gateType);
+                  }}
+                  className={`rounded-lg px-3.5 py-2 font-bold transition shadow ${
+                    gateInputB ? "bg-cyan-500 text-black" : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  INPUT B: {gateInputB ? "1" : "0"}
+                </button>
+              </div>
+
+              <div className="mt-4 text-center border-t border-white/10 pt-3">
+                <p className="text-[10px] text-white/50 uppercase tracking-widest">CIRCUIT OUTPUT</p>
+                <p
+                  className={`text-xl sm:text-2xl font-black mt-1 ${
+                    puzzleSolved ? "text-emerald-400 animate-bounce" : "text-amber-400"
+                  }`}
+                >
+                  {(gateType === "AND" ? gateInputA && gateInputB : gateInputA !== gateInputB)
+                    ? "1 (SOLVED! ✓)"
+                    : "0 (OFF)"}
+                </p>
+              </div>
+            </div>
+
+            {puzzleSolved && (
+              <p className="text-center font-mono text-xs text-emerald-400">
+                Circuit closed! Problem analyzed, broken down, and solved.
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setShowLogicPuzzle(false)}
+              className="mt-4 w-full rounded-lg bg-cyan-600/80 py-2.5 font-mono text-xs uppercase tracking-widest text-white hover:bg-cyan-500 transition"
+            >
+              {puzzleSolved ? "CONTINUE JOURNEY" : "CLOSE PUZZLE"}
             </button>
-          ))}
+          </div>
+        </div>
+      )}
+
+      {/* Audio Mixer / Settings Modal (Proper independent audio buses) */}
+      {audioMenu && (
+        <div className="absolute right-2 sm:right-6 top-16 sm:top-20 z-30 w-[min(360px,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] rounded-2xl border border-white/20 bg-[#0c1424]/95 p-4 sm:p-5 shadow-2xl shadow-black/90 backdrop-blur-2xl max-h-[82vh] overflow-y-auto box-border">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3">
+            <div>
+              <h3 className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">
+                AUDIO MIXER
+              </h3>
+              <p className="text-[10px] text-white/50">5-Bus Balanced Audio Architecture</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAudioMenu(false)}
+              className="text-white/50 hover:text-white text-base font-mono px-2 py-1"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="mt-4 space-y-3.5">
+            {/* Master Volume */}
+            <div>
+              <div className="flex justify-between text-[11px] font-mono text-white/80">
+                <span>MASTER VOLUME</span>
+                <span>{Math.round(audioLevels.masterVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={audioLevels.masterVolume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  journeyAudio.setMasterVolume(val);
+                  setAudioLevels(journeyAudio.getState());
+                }}
+                className="mt-1 w-full accent-cyan-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Music Volume */}
+            <div>
+              <div className="flex justify-between text-[11px] font-mono text-white/80">
+                <span>SOUNDTRACK / MUSIC</span>
+                <span>{Math.round(audioLevels.musicVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={audioLevels.musicVolume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  journeyAudio.setMusicVolume(val);
+                  setAudioLevels(journeyAudio.getState());
+                }}
+                className="mt-1 w-full accent-purple-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Ambient Environment (Birds, Wind, Fans, Leaves) */}
+            <div>
+              <div className="flex justify-between text-[11px] font-mono text-white/80">
+                <span>AMBIENT ENVIRONMENT (BIRDS/WIND/FAN)</span>
+                <span>{Math.round(audioLevels.ambientVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={audioLevels.ambientVolume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  journeyAudio.setAmbientVolume(val);
+                  setAudioLevels(journeyAudio.getState());
+                }}
+                className="mt-1 w-full accent-emerald-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Background Voices (Subtle, Distant) */}
+            <div>
+              <div className="flex justify-between text-[11px] font-mono text-white/80">
+                <span>BACKGROUND VOICES (SUBTLE)</span>
+                <span>{Math.round(audioLevels.voicesVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={audioLevels.voicesVolume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  journeyAudio.setVoicesVolume(val);
+                  setAudioLevels(journeyAudio.getState());
+                }}
+                className="mt-1 w-full accent-blue-400 cursor-pointer"
+              />
+            </div>
+
+            {/* SFX Volume */}
+            <div>
+              <div className="flex justify-between text-[11px] font-mono text-white/80">
+                <span>SOUND EFFECTS & FOOTSTEPS</span>
+                <span>{Math.round(audioLevels.effectsVolume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={audioLevels.effectsVolume}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  journeyAudio.setEffectsVolume(val);
+                  setAudioLevels(journeyAudio.getState());
+                }}
+                className="mt-1 w-full accent-amber-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Dialogue Ducking status */}
+            <div className="flex items-center justify-between text-[10px] font-mono rounded bg-white/5 px-2.5 py-1.5 border border-white/10">
+              <span className="text-white/60">DIALOGUE DUCKING:</span>
+              <span className={audioLevels.isDucked ? "text-cyan-300 font-bold" : "text-emerald-400"}>
+                {audioLevels.isDucked ? "ACTIVE (DUCKED -60%)" : "READY"}
+              </span>
+            </div>
+
+            {/* Current Active Soundscape info */}
+            <div className="rounded-lg border border-white/10 bg-black/40 p-3 text-[10px] font-mono space-y-1">
+              <p className="text-white/40 uppercase tracking-widest">ACTIVE SOUNDSCAPE</p>
+              <p className="text-emerald-300 font-bold break-words">{activeChapter.audioAmbienceDesc}</p>
+              <p className="text-purple-300 break-words">{activeChapter.audioMusicDesc}</p>
+            </div>
+
+            {/* Mute Button */}
+            <button
+              type="button"
+              onClick={() => {
+                journeyAudio.toggleMute();
+                setAudioLevels(journeyAudio.getState());
+              }}
+              className={`w-full rounded-lg py-2 font-mono text-xs uppercase tracking-widest transition ${
+                audioLevels.isMuted
+                  ? "bg-red-500/80 text-white hover:bg-red-500"
+                  : "border border-white/20 bg-white/10 text-white hover:bg-white/20"
+              }`}
+            >
+              {audioLevels.isMuted ? "UNMUTE ALL AUDIO" : "MUTE ALL AUDIO"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Chapter Selection Menu (Responsive, non-overflowing) */}
+      {chapterMenu && (
+        <div className="absolute right-2 sm:right-6 top-16 sm:top-20 z-30 max-h-[75vh] w-[min(360px,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] overflow-y-auto rounded-2xl border border-white/20 bg-[#0c1424]/95 p-3 shadow-2xl backdrop-blur-2xl box-border">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
+            <p className="font-mono text-xs uppercase tracking-widest text-white/50">Select Chapter</p>
+            <button
+              type="button"
+              onClick={() => setChapterMenu(false)}
+              className="text-white/50 hover:text-white font-mono px-2 py-1"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="mt-2 space-y-1">
+            {chapterStatus.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                onClick={() => selectChapter(item.index)}
+                className={`flex w-full items-center justify-between rounded-xl p-3 text-left text-xs transition ${
+                  item.index === chapter
+                    ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+                    : "text-white/80 hover:bg-white/10"
+                }`}
+              >
+                <div className="min-w-0 pr-2">
+                  <span className="font-mono text-[10px] text-white/40 mr-2">
+                    {String(item.index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-bold">{item.title}</span>
+                  <p className="text-[10px] text-white/45 truncate mt-0.5">{item.subtitle}</p>
+                </div>
+                <span className={item.done ? "text-emerald-400 font-bold shrink-0" : "text-white/20 shrink-0"}>
+                  {item.done ? "✓" : "·"}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </main>
